@@ -378,6 +378,7 @@ namespace KartGame.EditorTools
 
             trainingSceneManager.RegisterAgent(kartAgent);
             kartAgent.MaxStep = 5000;
+            kartAgent.AutoAssignReferences(trainingSceneManager, trackData);
 
             behaviorParameters.BehaviorName = "KartAgent";
             behaviorParameters.BehaviorType = BehaviorType.Default;

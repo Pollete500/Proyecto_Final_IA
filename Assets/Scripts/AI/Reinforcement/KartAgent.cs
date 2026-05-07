@@ -51,31 +51,14 @@ namespace KartGame.AI.Reinforcement
 
         private void Awake()
         {
-            trainingSceneManager ??= FindFirstObjectByType<TrainingSceneManager>();
-            rewardManager ??= GetComponent<AgentRewardManager>();
-            trackData ??= FindFirstObjectByType<TrackData>();
-            kartController ??= GetComponent<KartController>();
-            checkpointTracker ??= GetComponent<CheckpointTracker>();
-            kartRigidbody ??= GetComponent<Rigidbody>();
-            playerKartInputToDisable ??= GetComponent<PlayerKartInput>();
-            aiKartInputToDisable ??= GetComponent<AIKartInput>();
-
-            if (playerKartInputToDisable != null)
-            {
-                playerKartInputToDisable.enabled = false;
-            }
-
-            if (aiKartInputToDisable != null)
-            {
-                aiKartInputToDisable.enabled = false;
-            }
-
-            checkpointTracker.SetPlayerFlag(false);
-            checkpointTracker.SetTrackData(trackData);
+            CacheReferences();
+            ApplyRuntimeSetup();
         }
 
         protected override void OnEnable()
         {
+            CacheReferences();
+            ApplyRuntimeSetup();
             base.OnEnable();
 
             if (checkpointTracker != null)
@@ -108,7 +91,13 @@ namespace KartGame.AI.Reinforcement
 
         private void FixedUpdate()
         {
+            CacheReferences();
             if (!_episodeRunning)
+            {
+                return;
+            }
+
+            if (rewardManager == null)
             {
                 return;
             }
@@ -122,8 +111,14 @@ namespace KartGame.AI.Reinforcement
 
         public override void OnEpisodeBegin()
         {
-            trainingSceneManager ??= FindFirstObjectByType<TrainingSceneManager>();
-            rewardManager ??= GetComponent<AgentRewardManager>();
+            CacheReferences();
+
+            if (!HasRequiredReferences())
+            {
+                enabled = false;
+                return;
+            }
+
             trackData = trainingSceneManager != null && trainingSceneManager.TrackData != null
                 ? trainingSceneManager.TrackData
                 : trackData != null
@@ -161,6 +156,22 @@ namespace KartGame.AI.Reinforcement
 
         public override void CollectObservations(VectorSensor sensor)
         {
+            CacheReferences();
+            if (!HasRequiredReferences())
+            {
+                sensor.AddObservation(Vector3.zero);
+                sensor.AddObservation(Vector2.zero);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(false);
+                sensor.AddObservation(false);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(1f);
+                return;
+            }
+
             var localVelocity = transform.InverseTransformDirection(kartRigidbody.linearVelocity);
             var maxSpeed = Mathf.Max(0.01f, kartController.MaxSpeed);
             sensor.AddObservation(Mathf.Clamp(localVelocity.x / maxSpeed, -1f, 1f));
@@ -201,6 +212,12 @@ namespace KartGame.AI.Reinforcement
 
         public override void OnActionReceived(ActionBuffers actions)
         {
+            CacheReferences();
+            if (!HasRequiredReferences())
+            {
+                return;
+            }
+
             var acceleration = 0f;
             var steering = 0f;
             var brake = 0f;
@@ -297,6 +314,14 @@ namespace KartGame.AI.Reinforcement
             }
         }
 
+        public void AutoAssignReferences(TrainingSceneManager manager, TrackData assignedTrackData)
+        {
+            trainingSceneManager = manager != null ? manager : FindFirstObjectByType<TrainingSceneManager>();
+            trackData = assignedTrackData != null ? assignedTrackData : FindFirstObjectByType<TrackData>();
+            CacheReferences();
+            ApplyRuntimeSetup();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (!_episodeRunning)
@@ -389,6 +414,79 @@ namespace KartGame.AI.Reinforcement
         private bool IsWallCollision(Collider other)
         {
             return other != null && other.CompareTag(wallTag);
+        }
+
+        private void CacheReferences()
+        {
+            if (trainingSceneManager == null)
+            {
+                trainingSceneManager = FindFirstObjectByType<TrainingSceneManager>();
+            }
+
+            if (rewardManager == null)
+            {
+                rewardManager = GetComponent<AgentRewardManager>();
+            }
+
+            if (trackData == null)
+            {
+                trackData = FindFirstObjectByType<TrackData>();
+            }
+
+            if (kartController == null)
+            {
+                kartController = GetComponent<KartController>();
+            }
+
+            if (checkpointTracker == null)
+            {
+                checkpointTracker = GetComponent<CheckpointTracker>();
+            }
+
+            if (kartRigidbody == null)
+            {
+                kartRigidbody = GetComponent<Rigidbody>();
+            }
+
+            if (playerKartInputToDisable == null)
+            {
+                playerKartInputToDisable = GetComponent<PlayerKartInput>();
+            }
+
+            if (aiKartInputToDisable == null)
+            {
+                aiKartInputToDisable = GetComponent<AIKartInput>();
+            }
+        }
+
+        private void ApplyRuntimeSetup()
+        {
+            if (playerKartInputToDisable != null)
+            {
+                playerKartInputToDisable.enabled = false;
+            }
+
+            if (aiKartInputToDisable != null)
+            {
+                aiKartInputToDisable.enabled = false;
+            }
+
+            if (checkpointTracker != null)
+            {
+                checkpointTracker.SetPlayerFlag(false);
+                checkpointTracker.SetTrackData(trackData);
+            }
+        }
+
+        private bool HasRequiredReferences()
+        {
+            if (rewardManager != null && kartController != null && checkpointTracker != null && kartRigidbody != null)
+            {
+                return true;
+            }
+
+            Debug.LogError($"KartAgent on '{name}' is missing required references. RewardManager: {rewardManager != null}, KartController: {kartController != null}, CheckpointTracker: {checkpointTracker != null}, Rigidbody: {kartRigidbody != null}", this);
+            return false;
         }
     }
 }

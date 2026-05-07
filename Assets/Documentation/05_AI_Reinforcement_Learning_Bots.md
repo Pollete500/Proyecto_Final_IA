@@ -211,6 +211,8 @@ Wall collisions do not end the episode by default, because the agent often learn
    `./Assets/Python/train_kart_agent.ps1`
 5. When the trainer starts listening, press Play in Unity
 
+The training helper scripts use base port `5004`, which matches the default editor communicator port used by Unity ML-Agents.
+
 ### Imitation-assisted training
 
 1. Record a demonstration into `Assets/Data/demos/kart_demo.demo`
@@ -243,6 +245,38 @@ Wall collisions do not end the episode by default, because the agent often learn
 6. Start the trainer from PowerShell.
 7. Press Play in Unity.
 8. Confirm the console shows connection to the external communicator and the kart starts taking actions.
+
+## Troubleshooting
+
+### `Registered Communicator in Academy.`
+
+This log line is normal. It only means ML-Agents initialized its communication layer.
+
+### `Couldn't connect to trainer on port 5004 ... Will perform inference instead.`
+
+This means Unity started, but no Python trainer was listening on the same port.
+
+Check:
+
+1. The trainer is running before pressing Play:
+   `./Assets/Python/train_kart_agent.ps1`
+2. You did not override the base port to a different value.
+3. The training scene uses `Behavior Type = Default`.
+
+### `UnassignedReferenceException` on `kartRigidbody` or other `KartAgent` references
+
+The agent must live on the same GameObject as:
+
+- `Rigidbody`
+- `KartController`
+- `CheckpointTracker`
+- `AgentRewardManager`
+
+If the scene was created before the latest tooling update, rerun:
+
+- `Tools > Kart Racing > ML-Agents > Build Training Prototype In Current Scene`
+
+The latest version of `KartAgent` also auto-caches these references at runtime.
 
 ## Current Limitations
 

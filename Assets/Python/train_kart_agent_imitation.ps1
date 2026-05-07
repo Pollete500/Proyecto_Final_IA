@@ -1,6 +1,6 @@
 param(
     [string]$RunId = "kart_imitation",
-    [int]$BasePort = 5005,
+    [int]$BasePort = 5004,
     [switch]$Resume
 )
 

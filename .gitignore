@@ -36,6 +36,8 @@
 
 # Visual Studio cache directory
 .vs/
+.venv/
+venv/
 
 # Gradle cache directory
 .gradle/
@@ -104,3 +106,8 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Python / ML-Agents local environments and generated training outputs
+/results/
+/Assets/MLAgents/TrainingLogs/
+/Assets/ML-Agents/
