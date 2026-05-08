@@ -107,6 +107,10 @@ The current implementation assumes:
 
 For the prototype generator, this is handled automatically. If you build a custom track manually, keep that rule in mind.
 
+If you already have checkpoint objects nested inside modular track pieces, you can repair or populate the `TrackData` array with:
+
+- `Tools > Kart Racing > Track Data > Populate Checkpoints From Source`
+
 ## Inspector Setup
 
 ### `TrackData`
@@ -115,6 +119,8 @@ For the prototype generator, this is handled automatically. If you build a custo
 - Fill `SpawnPoints` in grid order.
 - Fill `RespawnPoints` for safe recovery.
 - Set `Laps To Win` to `3` for the MVP.
+- Use `Draw Gizmos` to show checkpoint routing and `Close Checkpoint Loop Gizmo` if you want the last gizmo line to connect back to the first checkpoint.
+- For modular scenes, use the Track Data populate tool to collect checkpoint transforms recursively from another hierarchy root.
 
 ### `RaceManager`
 

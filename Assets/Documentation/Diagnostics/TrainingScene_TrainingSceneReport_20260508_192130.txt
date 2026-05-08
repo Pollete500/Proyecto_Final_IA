@@ -1,0 +1,122 @@
+﻿Kart Racing ML-Agents Training Scene Report
+==========================================
+Generated: 2026-05-08 19:21:30
+Scene: TrainingScene
+Scene Path: Assets/Scenes/TrainingScene.unity
+
+Scene Overview
+--------------
+Root Objects: 10
+TrackData Count: 1
+TrainingSceneManager Count: 1
+KartAgent Count: 1
+CheckpointTracker Count: 2
+Wall Collider Count (tagged 'Wall'): 50
+Checkpoint Trigger Count (tagged 'Checkpoint'): 44
+OffTrack Trigger Count (tagged 'OffTrack'): 0
+
+TrackData Analysis
+------------------
+TrackData [0] : TrackRoot (1)
+  Laps To Win: 1
+  Checkpoints: 16
+  Spawn Points: 4
+  Respawn Points: 8
+  PowerUp Boxes: 0
+  Checkpoints[0] : TrackRoot (1)/Checkpoints/Checkpoint_1
+  Checkpoints[1] : TrackRoot (1)/Checkpoints/Checkpoint_1 (1)
+  Checkpoints[2] : TrackRoot (1)/Checkpoints/Checkpoint_1 (2)
+  Checkpoints[3] : TrackRoot (1)/Checkpoints/Checkpoint_1 (3)
+  Checkpoints[4] : TrackRoot (1)/Checkpoints/Checkpoint_1 (4)
+  Checkpoints[5] : TrackRoot (1)/Checkpoints/Checkpoint_1 (5)
+  Checkpoints[6] : TrackRoot (1)/Checkpoints/Checkpoint_1 (6)
+  Checkpoints[7] : TrackRoot (1)/Checkpoints/Checkpoint_1 (7)
+  Checkpoints[8] : TrackRoot (1)/Checkpoints/Checkpoint_1 (8)
+  Checkpoints[9] : TrackRoot (1)/Checkpoints/Checkpoint_1 (9)
+  Checkpoints[10] : TrackRoot (1)/Checkpoints/Checkpoint_1 (10)
+  Checkpoints[11] : TrackRoot (1)/Checkpoints/Checkpoint_1 (11)
+  Checkpoints[12] : TrackRoot (1)/Checkpoints/Checkpoint_1 (12)
+  Checkpoints[13] : TrackRoot (1)/Checkpoints/Checkpoint_1 (13)
+  Checkpoints[14] : TrackRoot (1)/Checkpoints/Checkpoint_1 (14)
+  Checkpoints[15] : TrackRoot (1)/Checkpoints/Checkpoint_1 (15)
+  SpawnPoints[0] : TrackRoot (1)/SpawnPoints/Spawn_00
+  SpawnPoints[1] : TrackRoot (1)/SpawnPoints/Spawn_01
+  SpawnPoints[2] : TrackRoot (1)/SpawnPoints/Spawn_02
+  SpawnPoints[3] : TrackRoot (1)/SpawnPoints/Spawn_03
+  RespawnPoints[0] : TrackRoot (1)/RespawnPoints/Respawn_00
+  RespawnPoints[1] : TrackRoot (1)/RespawnPoints/Respawn_01
+  RespawnPoints[2] : TrackRoot (1)/RespawnPoints/Respawn_02
+  RespawnPoints[3] : TrackRoot (1)/RespawnPoints/Respawn_03
+  RespawnPoints[4] : TrackRoot (1)/RespawnPoints/Respawn_04
+  RespawnPoints[5] : TrackRoot (1)/RespawnPoints/Respawn_05
+  RespawnPoints[6] : TrackRoot (1)/RespawnPoints/Respawn_06
+  RespawnPoints[7] : TrackRoot (1)/RespawnPoints/Respawn_07
+
+TrainingSceneManager Analysis
+-----------------------------
+TrainingSceneManager [0] : TrainingSceneManager
+  TrackData Assigned: TrackRoot (1)
+  Auto Discover Agents: True
+  Randomize Spawn Point: True
+  Spawn Position Jitter: 0,75
+  Spawn Yaw Jitter: 8
+  Spawn Lift: 0,35
+  Registered Agents: 1
+
+KartAgent Analysis
+------------------
+KartAgent [0] : TrainingKartAgent
+  Rigidbody: OK
+  KartController: OK
+  CheckpointTracker: OK
+  AgentRewardManager: OK
+  BehaviorParameters: OK
+  DecisionRequester: OK
+  RayPerceptionSensorComponent3D: OK
+  MaxStep: 5000
+  Tracker IsPlayer: False
+  Tracker TrackData: None
+  Auto Respawn If Stuck: True
+  Seconds Before Auto Respawn: 4
+  Allow Player Auto Respawn: False
+  Behavior Name: KartAgent
+  Behavior Type: Default
+  Model Assigned: None
+  Vector Observation Size: 13
+  Stacked Vectors: 1
+  Continuous Actions: 0
+  Discrete Branches: 2
+  Branch Sizes: [3, 3]
+  Team ID: 0
+  Decision Period: 1
+  Decision Step: 0
+  Take Actions Between Decisions: True
+  Ray Sensor Name: KartRaySensor
+  Rays Per Direction: 3
+  Max Ray Degrees: 70
+  Sphere Cast Radius: 0,45
+  Ray Length: 14
+  Start Vertical Offset: 0,75
+  End Vertical Offset: 0
+  Detectable Tags: [Wall, Checkpoint]
+  Ray Layer Mask: KartWall, KartCheckpoint
+  End Episode On Lap Completion: True
+  End Episode On Off Track: True
+  End Episode On Strong Wall Collision: False
+  Normalized Distance Reference: 25
+  Out Of Bounds Height: -2
+
+Summary
+-------
+Blockers: 0
+Warnings: 0
+Notes: 4
+  - TrackData 'TrackRoot (1)' has no OffTrackZones children. endEpisodeOnOffTrack will never trigger unless other off-track triggers exist elsewhere.
+  - TrainingSceneManager 'TrainingSceneManager' uses spawn randomization or jitter. This is normal for training but causes visible teleport-like spawn changes between episodes.
+  - KartAgent 'TrainingKartAgent' has CheckpointTracker auto-respawn enabled. This can look like short teleport jumps during training.
+  - KartAgent 'TrainingKartAgent' ends episodes on lap completion. This is fine, but it creates visible reset teleports after a completed loop.
+
+Recommended Status
+------------------
+READY
+No obvious blockers or warnings were detected in the static scene analysis.

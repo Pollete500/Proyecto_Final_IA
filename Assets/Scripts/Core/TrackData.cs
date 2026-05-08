@@ -19,6 +19,7 @@ namespace KartGame.Core
         [SerializeField] private Transform[] respawnPoints = Array.Empty<Transform>();
         [SerializeField] private int lapsToWin = 3;
         [SerializeField] private bool drawGizmos = true;
+        [SerializeField] private bool closeCheckpointLoopGizmo = true;
         [SerializeField] private Color checkpointGizmoColor = new Color(1f, 0.78f, 0.2f, 0.9f);
 
         public int LapsToWin => Mathf.Max(1, lapsToWin);
@@ -139,7 +140,16 @@ namespace KartGame.Core
 
                 Gizmos.DrawSphere(current.position, 0.65f);
 
-                var next = checkpoints[(index + 1) % checkpoints.Length];
+                Transform next = null;
+                if (index < checkpoints.Length - 1)
+                {
+                    next = checkpoints[index + 1];
+                }
+                else if (closeCheckpointLoopGizmo && checkpoints.Length > 1)
+                {
+                    next = checkpoints[0];
+                }
+
                 if (next != null)
                 {
                     Gizmos.DrawLine(current.position, next.position);

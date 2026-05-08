@@ -10,7 +10,7 @@ namespace KartGame.AI.Reinforcement
 {
     /*
      * Script: KartAgent.cs
-     * Purpose: Trains or runs a kart policy with ML-Agents using checkpoint progress, ray sensors and shaped rewards.
+     * Purpose: Trains or runs a kart policy with ML-Agents using checkpoint progress, ray sensors and shaped rewards centered on checkpoint following.
      * Attach To: A training kart root GameObject.
      * Required Components: KartController, CheckpointTracker, Rigidbody, Behavior Parameters.
      * Dependencies: AgentRewardManager, TrainingSceneManager, TrackData, DecisionRequester, optional RayPerceptionSensorComponent3D.
@@ -45,14 +45,31 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private string checkpointTag = "Checkpoint";
         [SerializeField] private string offTrackTag = "OffTrack";
 
+        [Header("Reward Feedback")]
+        [SerializeField] private bool showRewardFlash = true;
+        [SerializeField] private Renderer[] rewardFlashRenderers;
+        [SerializeField] private Color positiveRewardColor = new Color(0.22f, 0.9f, 0.52f);
+        [SerializeField] private Color negativeRewardColor = new Color(0.95f, 0.2f, 0.2f);
+        [SerializeField] private float rewardFlashDuration = 0.5f;
+
+        private static readonly int BaseColorPropertyId = Shader.PropertyToID("_BaseColor");
+        private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
+        private MaterialPropertyBlock _rewardFlashPropertyBlock;
         private float _lastDistanceToCheckpoint = float.PositiveInfinity;
+        private float _rewardFlashTimeRemaining;
         private bool _episodeRunning;
         private bool _isOffTrack;
 
         private void Awake()
         {
+            EnsureRewardFlashResources();
             CacheReferences();
             ApplyRuntimeSetup();
+        }
+
+        private void Update()
+        {
+            UpdateRewardFlash(Time.deltaTime);
         }
 
         protected override void OnEnable()
@@ -104,7 +121,7 @@ namespace KartGame.AI.Reinforcement
 
             if (transform.position.y <= outOfBoundsHeight)
             {
-                AddReward(-rewardManager.OutOfBoundsPenalty);
+                ApplyAgentReward(-rewardManager.OutOfBoundsPenalty);
                 EndEpisode();
             }
         }
@@ -159,8 +176,11 @@ namespace KartGame.AI.Reinforcement
             CacheReferences();
             if (!HasRequiredReferences())
             {
-                sensor.AddObservation(Vector3.zero);
-                sensor.AddObservation(Vector2.zero);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(0f);
+                sensor.AddObservation(0f);
                 sensor.AddObservation(0f);
                 sensor.AddObservation(0f);
                 sensor.AddObservation(0f);
@@ -264,23 +284,24 @@ namespace KartGame.AI.Reinforcement
             kartController.SetInput(acceleration, steering, brake);
 
             var currentDistance = checkpointTracker.DistanceToNextCheckpoint;
-            AddReward(rewardManager.EvaluateProgressReward(_lastDistanceToCheckpoint, currentDistance, normalizedDistanceReference));
-            AddReward(rewardManager.GetIdlePenalty(kartController.GetCurrentSpeed(), idleSpeedThreshold, Time.fixedDeltaTime));
-            AddReward(rewardManager.GetStepPenalty());
+            var rewardDelta = rewardManager.EvaluateProgressReward(_lastDistanceToCheckpoint, currentDistance, normalizedDistanceReference);
+            rewardDelta += rewardManager.GetIdlePenalty(kartController.GetCurrentSpeed(), idleSpeedThreshold, Time.fixedDeltaTime);
+            rewardDelta += rewardManager.GetStepPenalty();
 
             var nextCheckpoint = checkpointTracker.NextCheckpoint;
             if (nextCheckpoint != null)
             {
                 var directionToCheckpoint = (nextCheckpoint.position - transform.position).normalized;
                 var alignment = Vector3.Dot(transform.forward, directionToCheckpoint);
-                AddReward(rewardManager.GetWrongDirectionPenalty(alignment, Time.fixedDeltaTime));
+                rewardDelta += rewardManager.GetWrongDirectionPenalty(alignment, Time.fixedDeltaTime);
             }
 
+            ApplyAgentReward(rewardDelta);
             _lastDistanceToCheckpoint = currentDistance;
 
             if (MaxStep > 0 && StepCount >= MaxStep - 1 && rewardManager != null)
             {
-                AddReward(-rewardManager.EpisodeTimeoutPenalty);
+                ApplyAgentReward(-rewardManager.EpisodeTimeoutPenalty);
                 EpisodeInterrupted();
             }
         }
@@ -334,7 +355,7 @@ namespace KartGame.AI.Reinforcement
             {
                 if (other.CompareTag(checkpointTag) && checkpoint.CheckpointIndex != checkpointTracker.NextCheckpointIndex)
                 {
-                    AddReward(-rewardManager.WrongCheckpointPenalty);
+                    ApplyAgentReward(-rewardManager.WrongCheckpointPenalty);
                 }
 
                 return;
@@ -343,7 +364,7 @@ namespace KartGame.AI.Reinforcement
             if (other.CompareTag(offTrackTag))
             {
                 _isOffTrack = true;
-                AddReward(-rewardManager.OffTrackPenalty);
+                ApplyAgentReward(-rewardManager.OffTrackPenalty);
 
                 if (endEpisodeOnOffTrack)
                 {
@@ -367,7 +388,7 @@ namespace KartGame.AI.Reinforcement
                 return;
             }
 
-            AddReward(-rewardManager.WallCollisionPenalty);
+            ApplyAgentReward(-rewardManager.WallCollisionPenalty);
 
             if (endEpisodeOnStrongWallCollision && collision.relativeVelocity.magnitude >= hardCollisionSpeedThreshold)
             {
@@ -382,7 +403,7 @@ namespace KartGame.AI.Reinforcement
                 return;
             }
 
-            AddReward(rewardManager.GetWallContactPenalty(Time.fixedDeltaTime));
+            ApplyAgentReward(rewardManager.GetWallContactPenalty(Time.fixedDeltaTime));
         }
 
         private void HandleCheckpointPassed(CheckpointTracker tracker, Checkpoint checkpoint)
@@ -392,18 +413,16 @@ namespace KartGame.AI.Reinforcement
                 return;
             }
 
-            AddReward(rewardManager.CheckpointReward);
+            ApplyAgentReward(rewardManager.CheckpointReward);
             _lastDistanceToCheckpoint = checkpointTracker.DistanceToNextCheckpoint;
         }
 
         private void HandleLapCompleted(CheckpointTracker tracker, int completedLaps)
         {
-            if (tracker != checkpointTracker || rewardManager == null)
+            if (tracker != checkpointTracker)
             {
                 return;
             }
-
-            AddReward(rewardManager.LapReward);
 
             if (endEpisodeOnLapCompletion)
             {
@@ -457,6 +476,11 @@ namespace KartGame.AI.Reinforcement
             {
                 aiKartInputToDisable = GetComponent<AIKartInput>();
             }
+
+            if (rewardFlashRenderers == null || rewardFlashRenderers.Length == 0)
+            {
+                rewardFlashRenderers = GetComponentsInChildren<Renderer>(true);
+            }
         }
 
         private void ApplyRuntimeSetup()
@@ -487,6 +511,120 @@ namespace KartGame.AI.Reinforcement
 
             Debug.LogError($"KartAgent on '{name}' is missing required references. RewardManager: {rewardManager != null}, KartController: {kartController != null}, CheckpointTracker: {checkpointTracker != null}, Rigidbody: {kartRigidbody != null}", this);
             return false;
+        }
+
+        private void ApplyAgentReward(float rewardDelta)
+        {
+            if (Mathf.Approximately(rewardDelta, 0f))
+            {
+                return;
+            }
+
+            AddReward(rewardDelta);
+            TriggerRewardFlash(rewardDelta);
+        }
+
+        private void TriggerRewardFlash(float rewardDelta)
+        {
+            if (!showRewardFlash || rewardFlashDuration <= 0f)
+            {
+                return;
+            }
+
+            if (rewardDelta > 0f)
+            {
+                ApplyRewardFlashColor(positiveRewardColor);
+                _rewardFlashTimeRemaining = rewardFlashDuration;
+            }
+            else if (rewardDelta < 0f)
+            {
+                ApplyRewardFlashColor(negativeRewardColor);
+                _rewardFlashTimeRemaining = rewardFlashDuration;
+            }
+        }
+
+        private void UpdateRewardFlash(float deltaTime)
+        {
+            if (_rewardFlashTimeRemaining <= 0f)
+            {
+                return;
+            }
+
+            _rewardFlashTimeRemaining -= deltaTime;
+            if (_rewardFlashTimeRemaining > 0f)
+            {
+                return;
+            }
+
+            ClearRewardFlash();
+        }
+
+        private void ApplyRewardFlashColor(Color color)
+        {
+            EnsureRewardFlashResources();
+            if (rewardFlashRenderers == null || rewardFlashRenderers.Length == 0)
+            {
+                rewardFlashRenderers = GetComponentsInChildren<Renderer>(true);
+            }
+
+            foreach (var rewardRenderer in rewardFlashRenderers)
+            {
+                if (rewardRenderer == null)
+                {
+                    continue;
+                }
+
+                var sharedMaterial = rewardRenderer.sharedMaterial;
+                if (sharedMaterial == null)
+                {
+                    continue;
+                }
+
+                _rewardFlashPropertyBlock.Clear();
+
+                if (sharedMaterial.HasProperty(BaseColorPropertyId))
+                {
+                    _rewardFlashPropertyBlock.SetColor(BaseColorPropertyId, color);
+                }
+                else if (sharedMaterial.HasProperty(ColorPropertyId))
+                {
+                    _rewardFlashPropertyBlock.SetColor(ColorPropertyId, color);
+                }
+                else
+                {
+                    continue;
+                }
+
+                rewardRenderer.SetPropertyBlock(_rewardFlashPropertyBlock);
+            }
+        }
+
+        private void ClearRewardFlash()
+        {
+            _rewardFlashTimeRemaining = 0f;
+
+            if (rewardFlashRenderers == null)
+            {
+                return;
+            }
+
+            foreach (var rewardRenderer in rewardFlashRenderers)
+            {
+                if (rewardRenderer == null)
+                {
+                    continue;
+                }
+
+                rewardRenderer.SetPropertyBlock(null);
+            }
+        }
+
+        private void EnsureRewardFlashResources()
+        {
+            if (_rewardFlashPropertyBlock == null)
+            {
+                _rewardFlashPropertyBlock = new MaterialPropertyBlock();
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ Responsibilities:
 - Reset the kart at the start of each episode.
 - Collect structured observations for the policy.
 - Convert ML-Agents actions into `KartController.SetInput(...)`.
-- Award checkpoint, lap and progress rewards.
+- Award checkpoint and progress rewards.
 - Penalize collisions, wrong direction, idling and off-track behavior.
 
 Attach to:
@@ -76,6 +76,7 @@ Open:
 Then run:
 
 - `Tools > Kart Racing > ML-Agents > Build Training Prototype In Current Scene`
+- `Tools > Kart Racing > ML-Agents > Export Training Scene Report` when you want a plain-text diagnostics dump of the active scene
 
 This generates:
 
@@ -173,7 +174,6 @@ Configured in `AgentRewardManager.cs` and used by `KartAgent.cs`.
 Positive:
 
 - Correct checkpoint reward
-- Lap completion reward
 - Small shaped reward for moving closer to the next checkpoint
 
 Negative:
@@ -198,6 +198,8 @@ By default the episode ends when:
 - The agent reaches `Max Step` and the trainer interrupts the episode
 
 Wall collisions do not end the episode by default, because the agent often learns faster if it can continue after making a mistake.
+
+Lap completion is used to close the episode, but it does not add an extra reward. The learning signal is intentionally centered on correct checkpoint order and consistent forward progress.
 
 ## How To Train
 
@@ -245,6 +247,14 @@ The training helper scripts use base port `5004`, which matches the default edit
 6. Start the trainer from PowerShell.
 7. Press Play in Unity.
 8. Confirm the console shows connection to the external communicator and the kart starts taking actions.
+
+If you want a shareable diagnostics snapshot for external review, export:
+
+- `Tools > Kart Racing > ML-Agents > Export Training Scene Report`
+
+The tool writes a `.txt` report under:
+
+- `Assets/Documentation/Diagnostics/`
 
 ## Troubleshooting
 

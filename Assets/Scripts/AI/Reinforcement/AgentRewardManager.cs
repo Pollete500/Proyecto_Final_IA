@@ -8,13 +8,12 @@ namespace KartGame.AI.Reinforcement
      * Attach To: The same GameObject as KartAgent or a dedicated training root object.
      * Required Components: None.
      * Dependencies: KartAgent.
-     * Inspector Setup: Tune checkpoint, lap, progress and collision penalties based on how aggressively or safely you want the agent to learn.
+     * Inspector Setup: Tune checkpoint, progress and collision penalties based on how aggressively or safely you want the agent to learn.
      */
     public class AgentRewardManager : MonoBehaviour
     {
         [Header("Positive Rewards")]
         [SerializeField] private float checkpointReward = 1f;
-        [SerializeField] private float lapReward = 5f;
         [SerializeField] private float forwardProgressRewardScale = 0.03f;
 
         [Header("Negative Rewards")]
@@ -30,7 +29,6 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private float episodeTimeoutPenalty = 0.25f;
 
         public float CheckpointReward => checkpointReward;
-        public float LapReward => lapReward;
         public float WrongCheckpointPenalty => wrongCheckpointPenalty;
         public float WallCollisionPenalty => wallCollisionPenalty;
         public float OffTrackPenalty => offTrackPenalty;
