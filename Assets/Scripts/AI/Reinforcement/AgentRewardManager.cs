@@ -13,20 +13,20 @@ namespace KartGame.AI.Reinforcement
     public class AgentRewardManager : MonoBehaviour
     {
         [Header("Positive Rewards")]
-        [SerializeField] private float checkpointReward = 1f;
-        [SerializeField] private float forwardProgressRewardScale = 0.03f;
+        [SerializeField] private float checkpointReward = 1f; //1
+        [SerializeField] private float forwardProgressRewardScale = 0f; //0,03
 
         [Header("Negative Rewards")]
-        [SerializeField] private float backwardProgressPenaltyScale = 0.02f;
-        [SerializeField] private float idlePenaltyPerSecond = 0.01f;
-        [SerializeField] private float wrongDirectionPenaltyPerSecond = 0.0125f;
-        [SerializeField] private float wrongCheckpointPenalty = 0.15f;
-        [SerializeField] private float wallCollisionPenalty = 0.35f;
-        [SerializeField] private float wallContactPenaltyPerSecond = 0.02f;
-        [SerializeField] private float offTrackPenalty = 0.5f;
-        [SerializeField] private float outOfBoundsPenalty = 1f;
-        [SerializeField] private float stepPenaltyPerDecision = 0.0005f;
-        [SerializeField] private float episodeTimeoutPenalty = 0.25f;
+        [SerializeField] private float backwardProgressPenaltyScale = 0f; //0,02
+        [SerializeField] private float idlePenaltyPerSecond = 0f; //0,01
+        [SerializeField] private float wrongDirectionPenaltyPerSecond = 0f; //0.0125
+        [SerializeField] private float wrongCheckpointPenalty = 0f; //0,15
+        [SerializeField] private float wallCollisionPenalty = 0f; //0,035
+        [SerializeField] private float wallContactPenaltyPerSecond = 0f; //0.02
+        [SerializeField] private float offTrackPenalty = 0f; //0.05
+        [SerializeField] private float outOfBoundsPenalty = 1f; //1
+        [SerializeField] private float stepPenaltyPerDecision = 0f; //0.005
+        [SerializeField] private float episodeTimeoutPenalty = 0f; //0.25
 
         public float CheckpointReward => checkpointReward;
         public float WrongCheckpointPenalty => wrongCheckpointPenalty;
