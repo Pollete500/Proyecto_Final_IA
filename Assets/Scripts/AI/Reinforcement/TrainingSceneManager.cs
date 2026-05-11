@@ -16,6 +16,7 @@ namespace KartGame.AI.Reinforcement
     {
         [SerializeField] private TrackData trackData;
         [SerializeField] private bool autoDiscoverAgents = true;
+        [SerializeField] private bool refreshRegisteredAgentsOnStart = true;
         [SerializeField] private bool randomizeSpawnPoint = true;
         [SerializeField] private float spawnPositionJitter = 0.75f;
         [SerializeField] private float spawnYawJitter = 8f;
@@ -34,6 +35,14 @@ namespace KartGame.AI.Reinforcement
             trackData ??= FindFirstObjectByType<TrackData>();
 
             if (autoDiscoverAgents)
+            {
+                RefreshAgents();
+            }
+        }
+
+        private void Start()
+        {
+            if (autoDiscoverAgents && refreshRegisteredAgentsOnStart)
             {
                 RefreshAgents();
             }

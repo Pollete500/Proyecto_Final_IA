@@ -19,11 +19,17 @@ namespace KartGame.Kart
         [SerializeField] private bool isPlayer;
         [SerializeField] private bool autoRespawnIfStuck = true;
         [SerializeField] private bool allowPlayerAutoRespawn;
+        [SerializeField] private bool respawnAtInitialSpawnPoint = true;
+        [SerializeField] private bool logAutoRespawns = true;
         [SerializeField] private float stuckSpeedThreshold = 0.9f;
         [SerializeField] private float secondsBeforeAutoRespawn = 4f;
         [SerializeField] private float respawnLift = 0.35f;
 
         private float _stuckTimer;
+        private bool _hasInitialSpawnPose;
+        private Vector3 _initialSpawnPosition;
+        private Quaternion _initialSpawnRotation;
+        private Transform _initialSpawnReference;
         private Transform _lastRecoveryReference;
 
         public int CompletedLaps { get; private set; }
@@ -86,7 +92,22 @@ namespace KartGame.Kart
 
         public void SetRecoveryReference(Transform value)
         {
+            _initialSpawnReference = value;
             _lastRecoveryReference = value;
+
+            if (value != null)
+            {
+                _initialSpawnPosition = value.position + Vector3.up * respawnLift;
+                _initialSpawnRotation = value.rotation;
+                _hasInitialSpawnPose = true;
+            }
+        }
+
+        public void SetInitialSpawnPose(Vector3 position, Quaternion rotation)
+        {
+            _initialSpawnPosition = position;
+            _initialSpawnRotation = rotation;
+            _hasInitialSpawnPose = true;
         }
 
         public void SetPlayerFlag(bool value)
@@ -96,6 +117,15 @@ namespace KartGame.Kart
             if (isPlayer)
             {
                 allowPlayerAutoRespawn = false;
+            }
+        }
+
+        public void SetAutoRespawnIfStuck(bool value)
+        {
+            autoRespawnIfStuck = value;
+            if (!autoRespawnIfStuck)
+            {
+                _stuckTimer = 0f;
             }
         }
 
@@ -112,7 +142,15 @@ namespace KartGame.Kart
             HasFinishedRace = false;
             FinishPlacement = 0;
             _stuckTimer = 0f;
-            _lastRecoveryReference ??= trackData != null ? trackData.GetSpawnPoint(0) : null;
+            _initialSpawnReference ??= trackData != null ? trackData.GetSpawnPoint(0) : null;
+            _lastRecoveryReference = _initialSpawnReference;
+
+            if (!_hasInitialSpawnPose && _initialSpawnReference != null)
+            {
+                _initialSpawnPosition = _initialSpawnReference.position + Vector3.up * respawnLift;
+                _initialSpawnRotation = _initialSpawnReference.rotation;
+                _hasInitialSpawnPose = true;
+            }
         }
 
         public bool ProcessCheckpoint(Checkpoint checkpoint)
@@ -173,6 +211,18 @@ namespace KartGame.Kart
             Vector3 position;
             Quaternion rotation;
 
+            if (respawnAtInitialSpawnPoint && _hasInitialSpawnPose)
+            {
+                kartController.ResetKart(_initialSpawnPosition, _initialSpawnRotation);
+                _stuckTimer = 0f;
+                if (logAutoRespawns)
+                {
+                    Debug.Log($"AUTO RESPAWN: initial-spawn=({_initialSpawnPosition.x:0.##}, {_initialSpawnPosition.y:0.##}, {_initialSpawnPosition.z:0.##})", this);
+                }
+                Respawned?.Invoke(this);
+                return;
+            }
+
             if (_lastRecoveryReference != null)
             {
                 position = _lastRecoveryReference.position;
@@ -189,6 +239,11 @@ namespace KartGame.Kart
 
             kartController.ResetKart(position + Vector3.up * respawnLift, rotation);
             _stuckTimer = 0f;
+            if (logAutoRespawns)
+            {
+                var respawnPosition = position + Vector3.up * respawnLift;
+                Debug.Log($"AUTO RESPAWN: recovery=({respawnPosition.x:0.##}, {respawnPosition.y:0.##}, {respawnPosition.z:0.##})", this);
+            }
             Respawned?.Invoke(this);
         }
 

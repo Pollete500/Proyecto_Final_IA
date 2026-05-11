@@ -215,6 +215,10 @@ Lap completion is used to close the episode, but it does not add an extra reward
 
 The training helper scripts use base port `5004`, which matches the default editor communicator port used by Unity ML-Agents.
 
+If training crashes while saving or exporting the model with `ModuleNotFoundError: No module named 'onnxscript'`, the usual cause is a too-new `torch` version in the virtual environment. This project pins `torch<2.9` because PyTorch `2.9+` changed the default ONNX exporter path. Reinstall the environment dependencies:
+
+- `pip install -r Assets/Python/requirements-mlagents.txt`
+
 ### Imitation-assisted training
 
 1. Record a demonstration into `Assets/Data/demos/kart_demo.demo`

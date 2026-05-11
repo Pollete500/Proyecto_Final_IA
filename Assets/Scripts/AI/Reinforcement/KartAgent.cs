@@ -36,6 +36,7 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private bool endEpisodeOnLapCompletion = true;
         [SerializeField] private bool endEpisodeOnOffTrack = true;
         [SerializeField] private bool endEpisodeOnStrongWallCollision;
+        [SerializeField] private bool disableCheckpointAutoRespawnDuringTraining = true;
         [SerializeField] private float normalizedDistanceReference = 25f;
         [SerializeField] private float idleSpeedThreshold = 1f;
         [SerializeField] private float reverseActivationSpeedThreshold = 1.5f;
@@ -47,10 +48,14 @@ namespace KartGame.AI.Reinforcement
 
         [Header("Reward Feedback")]
         [SerializeField] private bool showRewardFlash = true;
+        [SerializeField] private bool logRewardEvents = true;
+        [SerializeField] private bool logEpisodeResets = true;
         [SerializeField] private Renderer[] rewardFlashRenderers;
         [SerializeField] private Color positiveRewardColor = new Color(0.22f, 0.9f, 0.52f);
         [SerializeField] private Color negativeRewardColor = new Color(0.95f, 0.2f, 0.2f);
         [SerializeField] private float rewardFlashDuration = 0.5f;
+        [SerializeField] private float positiveRewardFlashMinimumMagnitude = 0.00005f;
+        [SerializeField] private float negativeRewardFlashMinimumMagnitude = 0.01f;
 
         private static readonly int BaseColorPropertyId = Shader.PropertyToID("_BaseColor");
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
@@ -164,11 +169,17 @@ namespace KartGame.AI.Reinforcement
             }
 
             checkpointTracker.SetRecoveryReference(trackData != null ? trackData.GetSpawnPoint(0) : null);
+            checkpointTracker.SetInitialSpawnPose(spawnPosition, spawnRotation);
             kartController.ResetKart(spawnPosition, spawnRotation);
 
             _isOffTrack = false;
             _episodeRunning = true;
             _lastDistanceToCheckpoint = checkpointTracker.DistanceToNextCheckpoint;
+
+            if (logEpisodeResets)
+            {
+                Debug.Log($"EPISODIO REINICIADO: step={StepCount}, spawn=({spawnPosition.x:0.##}, {spawnPosition.y:0.##}, {spawnPosition.z:0.##})", this);
+            }
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -284,19 +295,18 @@ namespace KartGame.AI.Reinforcement
             kartController.SetInput(acceleration, steering, brake);
 
             var currentDistance = checkpointTracker.DistanceToNextCheckpoint;
-            var rewardDelta = rewardManager.EvaluateProgressReward(_lastDistanceToCheckpoint, currentDistance, normalizedDistanceReference);
-            rewardDelta += rewardManager.GetIdlePenalty(kartController.GetCurrentSpeed(), idleSpeedThreshold, Time.fixedDeltaTime);
-            rewardDelta += rewardManager.GetStepPenalty();
+            ApplyAgentReward(rewardManager.EvaluateProgressReward(_lastDistanceToCheckpoint, currentDistance, normalizedDistanceReference));
+            ApplyAgentReward(rewardManager.GetIdlePenalty(kartController.GetCurrentSpeed(), idleSpeedThreshold, Time.fixedDeltaTime));
+            ApplyAgentReward(rewardManager.GetStepPenalty());
 
             var nextCheckpoint = checkpointTracker.NextCheckpoint;
             if (nextCheckpoint != null)
             {
                 var directionToCheckpoint = (nextCheckpoint.position - transform.position).normalized;
                 var alignment = Vector3.Dot(transform.forward, directionToCheckpoint);
-                rewardDelta += rewardManager.GetWrongDirectionPenalty(alignment, Time.fixedDeltaTime);
+                ApplyAgentReward(rewardManager.GetWrongDirectionPenalty(alignment, Time.fixedDeltaTime));
             }
 
-            ApplyAgentReward(rewardDelta);
             _lastDistanceToCheckpoint = currentDistance;
 
             if (MaxStep > 0 && StepCount >= MaxStep - 1 && rewardManager != null)
@@ -499,6 +509,7 @@ namespace KartGame.AI.Reinforcement
             {
                 checkpointTracker.SetPlayerFlag(false);
                 checkpointTracker.SetTrackData(trackData);
+                checkpointTracker.SetAutoRespawnIfStuck(!disableCheckpointAutoRespawnDuringTraining);
             }
         }
 
@@ -520,6 +531,11 @@ namespace KartGame.AI.Reinforcement
                 return;
             }
 
+            if (logRewardEvents)
+            {
+                Debug.Log($"RECOMPENSA: {rewardDelta:+0.###;-0.###;0}", this);
+            }
+
             AddReward(rewardDelta);
             TriggerRewardFlash(rewardDelta);
         }
@@ -531,13 +547,24 @@ namespace KartGame.AI.Reinforcement
                 return;
             }
 
+            var magnitude = Mathf.Abs(rewardDelta);
             if (rewardDelta > 0f)
             {
+                if (magnitude < positiveRewardFlashMinimumMagnitude)
+                {
+                    return;
+                }
+
                 ApplyRewardFlashColor(positiveRewardColor);
                 _rewardFlashTimeRemaining = rewardFlashDuration;
             }
             else if (rewardDelta < 0f)
             {
+                if (magnitude < negativeRewardFlashMinimumMagnitude)
+                {
+                    return;
+                }
+
                 ApplyRewardFlashColor(negativeRewardColor);
                 _rewardFlashTimeRemaining = rewardFlashDuration;
             }

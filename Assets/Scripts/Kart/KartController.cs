@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KartGame.Kart
@@ -33,8 +34,11 @@ namespace KartGame.Kart
         [Header("Physics")]
         [SerializeField] private float mass = 140f;
         [SerializeField] private float angularDrag = 3f;
+        [SerializeField] private bool ignoreCollisionsWithOtherKarts = true;
 
+        private static readonly List<KartController> ActiveKarts = new List<KartController>();
         private Rigidbody _rigidbody;
+        private Collider[] _kartColliders;
         private float _accelerationInput;
         private float _steeringInput;
         private float _brakeInput;
@@ -53,11 +57,22 @@ namespace KartGame.Kart
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            _kartColliders = GetComponentsInChildren<Collider>(true);
             _rigidbody.mass = mass;
             _rigidbody.angularDamping = angularDrag;
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             _rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
+
+        private void OnEnable()
+        {
+            RegisterKartCollisionIgnores();
+        }
+
+        private void OnDisable()
+        {
+            UnregisterKartCollisionIgnores();
         }
 
         private void FixedUpdate()
@@ -113,13 +128,21 @@ namespace KartGame.Kart
 
         public void ResetKart(Vector3 position, Quaternion rotation)
         {
-            transform.SetPositionAndRotation(position, rotation);
+            if (_rigidbody == null)
+            {
+                transform.SetPositionAndRotation(position, rotation);
+                return;
+            }
+
+            _rigidbody.position = position;
+            _rigidbody.rotation = rotation;
             _rigidbody.linearVelocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             _boostTimer = 0f;
             _boostMultiplier = 1f;
             _stunTimer = 0f;
             SetInput(0f, 0f, 0f);
+            Physics.SyncTransforms();
         }
 
         private void TickStatusEffects(float deltaTime)
@@ -223,6 +246,79 @@ namespace KartGame.Kart
 
             var limitedPlanarVelocity = planarVelocity.normalized * currentTopSpeed;
             _rigidbody.linearVelocity = new Vector3(limitedPlanarVelocity.x, _rigidbody.linearVelocity.y, limitedPlanarVelocity.z);
+        }
+
+        private void RegisterKartCollisionIgnores()
+        {
+            if (ActiveKarts.Contains(this))
+            {
+                return;
+            }
+
+            for (var index = 0; index < ActiveKarts.Count; index++)
+            {
+                var otherKart = ActiveKarts[index];
+                if (otherKart == null)
+                {
+                    continue;
+                }
+
+                SyncKartCollisionIgnore(otherKart, true);
+            }
+
+            ActiveKarts.Add(this);
+        }
+
+        private void UnregisterKartCollisionIgnores()
+        {
+            ActiveKarts.Remove(this);
+
+            for (var index = 0; index < ActiveKarts.Count; index++)
+            {
+                var otherKart = ActiveKarts[index];
+                if (otherKart == null)
+                {
+                    continue;
+                }
+
+                SyncKartCollisionIgnore(otherKart, false);
+            }
+        }
+
+        private void SyncKartCollisionIgnore(KartController otherKart, bool ignore)
+        {
+            if (otherKart == null || otherKart == this)
+            {
+                return;
+            }
+
+            if (!ignoreCollisionsWithOtherKarts || !otherKart.ignoreCollisionsWithOtherKarts)
+            {
+                return;
+            }
+
+            _kartColliders ??= GetComponentsInChildren<Collider>(true);
+            otherKart._kartColliders ??= otherKart.GetComponentsInChildren<Collider>(true);
+
+            for (var thisIndex = 0; thisIndex < _kartColliders.Length; thisIndex++)
+            {
+                var thisCollider = _kartColliders[thisIndex];
+                if (thisCollider == null)
+                {
+                    continue;
+                }
+
+                for (var otherIndex = 0; otherIndex < otherKart._kartColliders.Length; otherIndex++)
+                {
+                    var otherCollider = otherKart._kartColliders[otherIndex];
+                    if (otherCollider == null)
+                    {
+                        continue;
+                    }
+
+                    Physics.IgnoreCollision(thisCollider, otherCollider, ignore);
+                }
+            }
         }
     }
 }

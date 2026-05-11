@@ -267,6 +267,7 @@ namespace KartGame.Core
                 }
 
                 tracker.SetRecoveryReference(spawnPoint);
+                tracker.SetInitialSpawnPose(spawnPoint.position, spawnPoint.rotation);
             }
         }
 
