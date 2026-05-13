@@ -1,7 +1,8 @@
 param(
     [string]$RunId = "kart_ppo",
     [int]$BasePort = 5005,
-    [switch]$Resume
+    [switch]$Resume,
+    [switch]$Force
 )
 
 $projectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -15,10 +16,14 @@ $arguments = @(
     "--results-dir", $resultsDir
 )
 
-if ($Resume) {
-    $arguments += "--resume"
-}
+if ($Resume) { $arguments += "--resume" }
+if ($Force)  { $arguments += "--force" }
 
-Write-Host "Starting PPO training with run-id '$RunId'."
-Write-Host "After the trainer starts listening, return to Unity and press Play in the training scene."
+Write-Host ""
+Write-Host "Run ID   : $RunId"
+Write-Host "Config   : $configPath"
+Write-Host "Logs dir : $resultsDir"
+Write-Host ""
+Write-Host "WAIT for 'Listening on port...' before pressing Play in Unity."
+Write-Host ""
 mlagents-learn @arguments

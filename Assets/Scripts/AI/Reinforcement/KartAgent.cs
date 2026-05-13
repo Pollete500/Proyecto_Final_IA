@@ -161,6 +161,16 @@ namespace KartGame.AI.Reinforcement
 
         public override void CollectObservations(VectorSensor sensor)
         {
+            if (kartRigidbody == null) kartRigidbody = GetComponent<Rigidbody>();
+            if (kartController == null) kartController = GetComponent<KartController>();
+            if (checkpointTracker == null) checkpointTracker = GetComponent<CheckpointTracker>();
+
+            if (kartRigidbody == null || kartController == null || checkpointTracker == null)
+            {
+                for (var i = 0; i < 13; i++) sensor.AddObservation(0f);
+                return;
+            }
+
             var localVelocity = transform.InverseTransformDirection(kartRigidbody.linearVelocity);
             var maxSpeed = Mathf.Max(0.01f, kartController.MaxSpeed);
             sensor.AddObservation(Mathf.Clamp(localVelocity.x / maxSpeed, -1f, 1f));
