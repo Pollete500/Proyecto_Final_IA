@@ -923,6 +923,77 @@ PrefabInstance:
       addedObject: {fileID: 812385891}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 228e7851e7613b84aa90adc8c4cd7c72, type: 3}
+--- !u!1 &49611905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 49611906}
+  - component: {fileID: 49611908}
+  - component: {fileID: 49611907}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (49)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &49611906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49611905}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920654, y: 1, z: 3.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &49611907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49611905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &49611908
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49611905}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &57510071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1531,6 +1602,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 76103174}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &85115358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 85115359}
+  - component: {fileID: 85115361}
+  - component: {fileID: 85115360}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (38)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &85115359
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85115358}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920578, y: 1, z: 58.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &85115360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85115358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &85115361
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85115358}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &96625399
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1602,6 +1744,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1720902652844190546, guid: 04fa3fe8dbd6a71408ffc91e7f013d1e, type: 3}
   m_PrefabInstance: {fileID: 96625399}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &103350357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 103350358}
+  - component: {fileID: 103350360}
+  - component: {fileID: 103350359}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (35)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &103350358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103350357}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920563, y: 1, z: 73.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &103350359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103350357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &103350360
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103350357}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &108823137
 GameObject:
   m_ObjectHideFlags: 0
@@ -1826,6 +2039,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 108912684}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &128594426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 128594427}
+  - component: {fileID: 128594429}
+  - component: {fileID: 128594428}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (58)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &128594427
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128594426}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071064, z: -0, w: -0.7071072}
+  m_LocalPosition: {x: -17.7, y: 1, z: -32.800014}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 450, z: 0}
+--- !u!114 &128594428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128594426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &128594429
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128594426}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &146071812 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3175690600813304213, guid: 9aff0b3303e30d74daea3ce0be429387, type: 3}
@@ -2176,6 +2460,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &167792491
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2773,6 +3060,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &210631388
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2808,7 +3098,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (8)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2821,7 +3111,7 @@ Transform:
   m_GameObject: {fileID: 214716264}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.96592575, z: -0, w: -0.25881946}
-  m_LocalPosition: {x: -54.6899, y: 0, z: 47.51758}
+  m_LocalPosition: {x: -54.6899, y: 1, z: 47.51758}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2841,6 +3131,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 8
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &214716267
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2848,6 +3141,77 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 214716264}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &220423782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 220423783}
+  - component: {fileID: 220423785}
+  - component: {fileID: 220423784}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (51)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &220423783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220423782}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.92067, y: 1, z: -9.332756}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &220423784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220423782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &220423785
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220423782}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3283,7 +3647,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (7)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3296,7 +3660,7 @@ Transform:
   m_GameObject: {fileID: 231639394}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.0000009089707}
-  m_LocalPosition: {x: -60.689915, y: 0, z: 39.51759}
+  m_LocalPosition: {x: -60.689915, y: 1, z: 39.51759}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3316,6 +3680,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 7
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &231639397
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3733,6 +4100,77 @@ PrefabInstance:
       addedObject: {fileID: 1772128706}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd6879052dec46d4086772e836d7e148, type: 3}
+--- !u!1 &257020758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 257020759}
+  - component: {fileID: 257020761}
+  - component: {fileID: 257020760}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (45)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &257020759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257020758}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920624, y: 1, z: 23.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &257020760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257020758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &257020761
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257020758}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &263260827
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4445,6 +4883,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &334583422
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4452,6 +4893,77 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 334583419}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &339261680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 339261681}
+  - component: {fileID: 339261683}
+  - component: {fileID: 339261682}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (40)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &339261681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339261680}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920586, y: 1, z: 48.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &339261682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339261680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &339261683
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339261680}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4670,9 +5182,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
-  accelerationForce: 125
+  accelerationForce: 55
   reverseAccelerationForce: 1
-  maxSpeed: 24
+  maxSpeed: 18
   steeringStrength: 110
   brakingForce: 18
   lateralGrip: 0.88
@@ -4751,6 +5263,148 @@ Transform:
   - {fileID: 907474990}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -3.534, z: 0}
+--- !u!1 &347971098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 347971099}
+  - component: {fileID: 347971101}
+  - component: {fileID: 347971100}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (17)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &347971099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347971098}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.96592575, z: -0, w: -0.25881946}
+  m_LocalPosition: {x: -47.622864, y: 1, z: 101.75795}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 210, z: 0}
+--- !u!114 &347971100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347971098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &347971101
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347971098}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &354827647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 354827648}
+  - component: {fileID: 354827650}
+  - component: {fileID: 354827649}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (34)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &354827648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354827647}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920555, y: 1, z: 78.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &354827649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354827647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &354827650
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354827647}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &355639128
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4840,7 +5494,7 @@ Transform:
   m_GameObject: {fileID: 361413698}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000044703478}
-  m_LocalPosition: {x: -49.07, y: 0, z: 0.92}
+  m_LocalPosition: {x: -49.07, y: 1, z: 0.92}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4860,6 +5514,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 1
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &361413701
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5427,6 +6084,77 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2000710724}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &391944804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 391944805}
+  - component: {fileID: 391944807}
+  - component: {fileID: 391944806}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (60)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &391944805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391944804}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071064, z: -0, w: -0.7071072}
+  m_LocalPosition: {x: -33.7, y: 1, z: -32.80003}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 450, z: 0}
+--- !u!114 &391944806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391944804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &391944807
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391944804}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &408615477
 GameObject:
   m_ObjectHideFlags: 0
@@ -5895,6 +6623,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427998458}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &428482007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 428482008}
+  - component: {fileID: 428482010}
+  - component: {fileID: 428482009}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (64)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &428482008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428482007}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.0000011324881}
+  m_LocalPosition: {x: -49.53017, y: 1, z: -14.505825}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 540, z: 0}
+--- !u!114 &428482009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428482007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &428482010
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428482007}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &456862885
 GameObject:
   m_ObjectHideFlags: 0
@@ -6171,6 +6970,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &499901354
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6411,17 +7213,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.AI.Reinforcement.AgentRewardManager
   checkpointReward: 1
-  forwardProgressRewardScale: 0.03
-  backwardProgressPenaltyScale: 0.02
-  idlePenaltyPerSecond: 0.01
-  wrongDirectionPenaltyPerSecond: 0.0125
-  wrongCheckpointPenalty: 0.15
-  wallCollisionPenalty: 0.35
-  wallContactPenaltyPerSecond: 0.02
-  offTrackPenalty: 0.5
+  forwardProgressRewardScale: 0
+  backwardProgressPenaltyScale: 0
+  idlePenaltyPerSecond: 0
+  wrongDirectionPenaltyPerSecond: 0
+  wrongCheckpointPenalty: 0
+  wallCollisionPenalty: 0
+  wallContactPenaltyPerSecond: 0
+  offTrackPenalty: 0
   outOfBoundsPenalty: 1
-  stepPenaltyPerDecision: 0.0005
-  episodeTimeoutPenalty: 0.25
+  stepPenaltyPerDecision: 0
+  episodeTimeoutPenalty: 0
 --- !u!114 &509535620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6456,9 +7258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
-  accelerationForce: 125
+  accelerationForce: 55
   reverseAccelerationForce: 1
-  maxSpeed: 24
+  maxSpeed: 18
   steeringStrength: 110
   brakingForce: 18
   lateralGrip: 0.88
@@ -6888,6 +7690,77 @@ PrefabInstance:
       addedObject: {fileID: 1556043921}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 441c341f63c17254fa98170409a3f386, type: 3}
+--- !u!1 &544602488
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 544602489}
+  - component: {fileID: 544602491}
+  - component: {fileID: 544602490}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (56)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &544602489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544602488}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071064, z: -0, w: -0.7071072}
+  m_LocalPosition: {x: -1.7, y: 1, z: -32.8}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 450, z: 0}
+--- !u!114 &544602490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544602488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &544602491
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544602488}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &548318252
 GameObject:
   m_ObjectHideFlags: 0
@@ -6902,7 +7775,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (10)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -6915,7 +7788,7 @@ Transform:
   m_GameObject: {fileID: 548318252}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000041723246}
-  m_LocalPosition: {x: -48.555912, y: 0, z: 60.14193}
+  m_LocalPosition: {x: -48.555912, y: 1, z: 60.14193}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6935,6 +7808,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 10
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &548318255
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7905,6 +8781,219 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 595355196}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &611409425
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 611409426}
+  - component: {fileID: 611409428}
+  - component: {fileID: 611409427}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (37)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &611409426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611409425}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.92057, y: 1, z: 63.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &611409427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611409425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &611409428
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611409425}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &617166275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 617166276}
+  - component: {fileID: 617166278}
+  - component: {fileID: 617166277}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (55)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &617166276
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617166275}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071064, z: -0, w: -0.7071072}
+  m_LocalPosition: {x: 5.2604294, y: 1, z: -32.79687}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 450, z: 0}
+--- !u!114 &617166277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617166275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &617166278
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617166275}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &623512190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 623512191}
+  - component: {fileID: 623512193}
+  - component: {fileID: 623512192}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (46)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &623512191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623512190}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920631, y: 1, z: 18.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &623512192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623512190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &623512193
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623512190}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &640968437
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8377,6 +9466,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656561518}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &671135495
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 671135496}
+  - component: {fileID: 671135498}
+  - component: {fileID: 671135497}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (29)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &671135496
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671135495}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.3826842, z: -0, w: -0.92387927}
+  m_LocalPosition: {x: 14.79921, y: 1, z: 104.61699}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 315, z: 0}
+--- !u!114 &671135497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671135495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &671135498
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671135495}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &675835907
 GameObject:
   m_ObjectHideFlags: 0
@@ -8585,6 +9745,77 @@ Transform:
   - {fileID: 981298962}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &680925822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 680925823}
+  - component: {fileID: 680925825}
+  - component: {fileID: 680925824}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (50)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &680925823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680925822}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920662, y: 1, z: -1.332756}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &680925824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680925822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &680925825
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680925822}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &682442732
 GameObject:
   m_ObjectHideFlags: 0
@@ -8599,7 +9830,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (15)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -8612,7 +9843,7 @@ Transform:
   m_GameObject: {fileID: 682442732}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000041723246}
-  m_LocalPosition: {x: -48.55589, y: 0, z: 89.14193}
+  m_LocalPosition: {x: -48.55589, y: 1, z: 89.14193}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8632,6 +9863,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &682442735
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9045,9 +10279,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
-  accelerationForce: 125
+  accelerationForce: 55
   reverseAccelerationForce: 1
-  maxSpeed: 24
+  maxSpeed: 18
   steeringStrength: 110
   brakingForce: 18
   lateralGrip: 0.88
@@ -9285,6 +10519,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &712063567
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9418,6 +10655,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 719612823}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &722213399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 722213400}
+  - component: {fileID: 722213402}
+  - component: {fileID: 722213401}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (44)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &722213400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722213399}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920616, y: 1, z: 28.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &722213401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722213399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &722213402
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722213399}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &730118199
 GameObject:
   m_ObjectHideFlags: 0
@@ -9432,7 +10740,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (14)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -9445,7 +10753,7 @@ Transform:
   m_GameObject: {fileID: 730118199}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000041723246}
-  m_LocalPosition: {x: -48.555893, y: 0, z: 84.14193}
+  m_LocalPosition: {x: -48.555893, y: 1, z: 84.14193}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9465,6 +10773,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 14
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &730118202
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9472,6 +10783,219 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 730118199}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &731466569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 731466570}
+  - component: {fileID: 731466572}
+  - component: {fileID: 731466571}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (63)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &731466570
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731466569}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.0000011324881}
+  m_LocalPosition: {x: -49.530155, y: 1, z: -20.505825}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 540, z: 0}
+--- !u!114 &731466571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731466569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &731466572
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731466569}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &736749744
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 736749745}
+  - component: {fileID: 736749747}
+  - component: {fileID: 736749746}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (43)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &736749745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736749744}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920609, y: 1, z: 33.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &736749746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736749744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &736749747
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736749744}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &737276170
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 737276171}
+  - component: {fileID: 737276173}
+  - component: {fileID: 737276172}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (48)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &737276171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737276170}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920647, y: 1, z: 8.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &737276172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737276170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &737276173
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737276170}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -9682,7 +11206,7 @@ Transform:
   m_GameObject: {fileID: 743074339}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000044703478}
-  m_LocalPosition: {x: -49.069, y: 0, z: 10.652267}
+  m_LocalPosition: {x: -49.069, y: 1, z: 10.652267}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9702,6 +11226,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 3
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &743074342
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10060,7 +11587,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (11)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -10073,7 +11600,7 @@ Transform:
   m_GameObject: {fileID: 778435799}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000041723246}
-  m_LocalPosition: {x: -48.55591, y: 0, z: 67.14193}
+  m_LocalPosition: {x: -48.55591, y: 1, z: 67.14193}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10093,6 +11620,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 11
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &778435802
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10847,6 +12377,77 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &842395407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 842395408}
+  - component: {fileID: 842395410}
+  - component: {fileID: 842395409}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (32)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &842395408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842395407}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920547, y: 1, z: 88.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &842395409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842395407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &842395410
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842395407}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &849302730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11344,6 +12945,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &889477896
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11569,9 +13173,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
-  accelerationForce: 125
+  accelerationForce: 55
   reverseAccelerationForce: 1
-  maxSpeed: 24
+  maxSpeed: 18
   steeringStrength: 110
   brakingForce: 18
   lateralGrip: 0.88
@@ -11650,6 +13254,77 @@ Transform:
   - {fileID: 2131823812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -3.534, z: 0}
+--- !u!1 &894462111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 894462112}
+  - component: {fileID: 894462114}
+  - component: {fileID: 894462113}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (28)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &894462112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894462111}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.50000054, z: -0, w: -0.86602515}
+  m_LocalPosition: {x: 9.81015, y: 1, z: 107.775894}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 300, z: 0}
+--- !u!114 &894462113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894462111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &894462114
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894462111}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &905580143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13438,6 +15113,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4937712520193489725, guid: bc68127de78b04047b5a033bfcdbd53e, type: 3}
   m_PrefabInstance: {fileID: 1009492044}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &998864924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 998864925}
+  - component: {fileID: 998864927}
+  - component: {fileID: 998864926}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (33)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &998864925
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998864924}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920547, y: 1, z: 83.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &998864926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998864924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &998864927
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998864924}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1005568868
 GameObject:
   m_ObjectHideFlags: 0
@@ -13452,7 +15198,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (5)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -13465,7 +15211,7 @@ Transform:
   m_GameObject: {fileID: 1005568868}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.96592605, z: -0, w: 0.25881815}
-  m_LocalPosition: {x: -52.301033, y: 0, z: 28.250349}
+  m_LocalPosition: {x: -52.301033, y: 1, z: 28.250349}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13485,6 +15231,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 5
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1005568871
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13688,6 +15437,148 @@ PrefabInstance:
       addedObject: {fileID: 2066879513}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f18e52109b7a8547839227621e2a806, type: 3}
+--- !u!1 &1019288222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1019288223}
+  - component: {fileID: 1019288225}
+  - component: {fileID: 1019288224}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (19)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1019288223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019288222}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -35.555878, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1019288224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019288222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1019288225
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019288222}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1031250500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1031250501}
+  - component: {fileID: 1031250503}
+  - component: {fileID: 1031250502}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (47)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1031250501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031250500}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920639, y: 1, z: 13.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &1031250502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031250500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1031250503
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031250500}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1037395660
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14156,9 +16047,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
-  accelerationForce: 125
+  accelerationForce: 55
   reverseAccelerationForce: 1
-  maxSpeed: 24
+  maxSpeed: 18
   steeringStrength: 110
   brakingForce: 18
   lateralGrip: 0.88
@@ -14911,6 +16802,77 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!1 &1121687154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1121687155}
+  - component: {fileID: 1121687157}
+  - component: {fileID: 1121687156}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (24)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1121687155
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121687154}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -10.555878, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1121687156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121687154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1121687157
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121687154}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1127710373
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15971,6 +17933,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1197372566}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1206309238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1206309239}
+  - component: {fileID: 1206309241}
+  - component: {fileID: 1206309240}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (20)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1206309239
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206309238}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -30.555878, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1206309240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206309238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1206309241
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206309238}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1220922897
 GameObject:
   m_ObjectHideFlags: 0
@@ -16083,6 +18116,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220922897}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1221624468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1221624469}
+  - component: {fileID: 1221624471}
+  - component: {fileID: 1221624470}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (18)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1221624469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221624468}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.86602545, z: -0, w: -0.5}
+  m_LocalPosition: {x: -43.689842, y: 1, z: 107.07013}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 240, z: 0}
+--- !u!114 &1221624470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221624468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1221624471
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221624468}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1225764353
 GameObject:
   m_ObjectHideFlags: 0
@@ -16328,6 +18432,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4937712520193489725, guid: bc68127de78b04047b5a033bfcdbd53e, type: 3}
   m_PrefabInstance: {fileID: 1246682760}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1252700507
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1252700508}
+  - component: {fileID: 1252700510}
+  - component: {fileID: 1252700509}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (27)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1252700508
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252700507}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: 4.4441223, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1252700509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252700507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1252700510
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252700507}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1259341558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16440,6 +18615,55 @@ Transform:
   - {fileID: 1856200681}
   - {fileID: 730118200}
   - {fileID: 682442733}
+  - {fileID: 1696698523}
+  - {fileID: 347971099}
+  - {fileID: 1221624469}
+  - {fileID: 1019288223}
+  - {fileID: 1206309239}
+  - {fileID: 1494266913}
+  - {fileID: 1697790697}
+  - {fileID: 1566889756}
+  - {fileID: 1121687155}
+  - {fileID: 1954090227}
+  - {fileID: 1508646984}
+  - {fileID: 1252700508}
+  - {fileID: 894462112}
+  - {fileID: 671135496}
+  - {fileID: 1488551317}
+  - {fileID: 2094037685}
+  - {fileID: 842395408}
+  - {fileID: 998864925}
+  - {fileID: 354827648}
+  - {fileID: 103350358}
+  - {fileID: 1977584984}
+  - {fileID: 611409426}
+  - {fileID: 85115359}
+  - {fileID: 1894805168}
+  - {fileID: 339261681}
+  - {fileID: 1596968353}
+  - {fileID: 1592094282}
+  - {fileID: 736749745}
+  - {fileID: 722213400}
+  - {fileID: 257020759}
+  - {fileID: 623512191}
+  - {fileID: 1031250501}
+  - {fileID: 737276171}
+  - {fileID: 49611906}
+  - {fileID: 680925823}
+  - {fileID: 220423783}
+  - {fileID: 1613312142}
+  - {fileID: 1863891504}
+  - {fileID: 1916466498}
+  - {fileID: 617166276}
+  - {fileID: 544602489}
+  - {fileID: 1393153736}
+  - {fileID: 128594427}
+  - {fileID: 1987991750}
+  - {fileID: 391944805}
+  - {fileID: 1592869065}
+  - {fileID: 1471463971}
+  - {fileID: 731466570}
+  - {fileID: 428482008}
   m_Father: {fileID: 1507864156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1272384462 stripped
@@ -17094,6 +19318,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1326259802
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17316,7 +19543,7 @@ Transform:
   m_GameObject: {fileID: 1354473938}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000044703478}
-  m_LocalPosition: {x: -49.069004, y: 0, z: 4.6522675}
+  m_LocalPosition: {x: -49.069004, y: 1, z: 4.6522675}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17336,6 +19563,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 2
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1354473941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17820,6 +20050,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4937712520193489725, guid: bc68127de78b04047b5a033bfcdbd53e, type: 3}
   m_PrefabInstance: {fileID: 374399540}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1393153735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1393153736}
+  - component: {fileID: 1393153738}
+  - component: {fileID: 1393153737}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (57)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1393153736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393153735}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071064, z: -0, w: -0.7071072}
+  m_LocalPosition: {x: -9.7, y: 1, z: -32.800007}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 450, z: 0}
+--- !u!114 &1393153737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393153735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1393153738
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393153735}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1418128334
 GameObject:
   m_ObjectHideFlags: 0
@@ -17834,7 +20135,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (9)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -17847,7 +20148,7 @@ Transform:
   m_GameObject: {fileID: 1418128334}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.96592575, z: -0, w: -0.25881946}
-  m_LocalPosition: {x: -50.323868, y: 0, z: 53.079754}
+  m_LocalPosition: {x: -50.323868, y: 1, z: 53.079754}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17867,6 +20168,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 9
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1418128337
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18015,7 +20319,7 @@ Transform:
   m_GameObject: {fileID: 1429630078}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000044703478}
-  m_LocalPosition: {x: -49.068993, y: 0, z: 18.652267}
+  m_LocalPosition: {x: -49.068993, y: 1, z: 18.652267}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18035,6 +20339,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 4
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1429630081
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18272,6 +20579,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1441843020
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18579,6 +20889,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457866155}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1471463970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1471463971}
+  - component: {fileID: 1471463973}
+  - component: {fileID: 1471463972}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (62)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1471463971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471463970}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.9659255, z: -0, w: -0.25882012}
+  m_LocalPosition: {x: -47.262188, y: 1, z: -28.434021}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 510, z: 0}
+--- !u!114 &1471463972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471463970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1471463973
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471463970}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1474582131
 GameObject:
   m_ObjectHideFlags: 0
@@ -18705,7 +21086,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (6)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -18718,7 +21099,7 @@ Transform:
   m_GameObject: {fileID: 1481939771}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.92388004, z: -0, w: 0.38268238}
-  m_LocalPosition: {x: -57.033077, y: 0, z: 32.44651}
+  m_LocalPosition: {x: -57.033077, y: 1, z: 32.44651}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18738,6 +21119,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 6
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1481939774
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18745,6 +21129,148 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1481939771}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1488551316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1488551317}
+  - component: {fileID: 1488551319}
+  - component: {fileID: 1488551318}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (30)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1488551317
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488551316}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920532, y: 1, z: 98.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &1488551318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488551316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1488551319
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488551316}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1494266912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1494266913}
+  - component: {fileID: 1494266915}
+  - component: {fileID: 1494266914}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (21)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1494266913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494266912}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -25.555878, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1494266914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494266912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1494266915
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494266912}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -18867,6 +21393,55 @@ MonoBehaviour:
   - {fileID: 1856200681}
   - {fileID: 730118200}
   - {fileID: 682442733}
+  - {fileID: 1696698523}
+  - {fileID: 347971099}
+  - {fileID: 1221624469}
+  - {fileID: 1019288223}
+  - {fileID: 1206309239}
+  - {fileID: 1494266913}
+  - {fileID: 1697790697}
+  - {fileID: 1566889756}
+  - {fileID: 1121687155}
+  - {fileID: 1954090227}
+  - {fileID: 1508646984}
+  - {fileID: 1252700508}
+  - {fileID: 894462112}
+  - {fileID: 671135496}
+  - {fileID: 1488551317}
+  - {fileID: 2094037685}
+  - {fileID: 842395408}
+  - {fileID: 998864925}
+  - {fileID: 354827648}
+  - {fileID: 103350358}
+  - {fileID: 1977584984}
+  - {fileID: 611409426}
+  - {fileID: 85115359}
+  - {fileID: 1894805168}
+  - {fileID: 339261681}
+  - {fileID: 1596968353}
+  - {fileID: 1592094282}
+  - {fileID: 736749745}
+  - {fileID: 722213400}
+  - {fileID: 257020759}
+  - {fileID: 623512191}
+  - {fileID: 1031250501}
+  - {fileID: 737276171}
+  - {fileID: 49611906}
+  - {fileID: 680925823}
+  - {fileID: 220423783}
+  - {fileID: 1613312142}
+  - {fileID: 1863891504}
+  - {fileID: 1916466498}
+  - {fileID: 617166276}
+  - {fileID: 544602489}
+  - {fileID: 1393153736}
+  - {fileID: 128594427}
+  - {fileID: 1987991750}
+  - {fileID: 391944805}
+  - {fileID: 1592869065}
+  - {fileID: 1471463971}
+  - {fileID: 731466570}
+  - {fileID: 428482008}
   spawnPoints:
   - {fileID: 1880494195}
   - {fileID: 71325390}
@@ -18884,7 +21459,7 @@ MonoBehaviour:
   - {fileID: 932225416}
   lapsToWin: 1
   drawGizmos: 1
-  closeCheckpointLoopGizmo: 0
+  closeCheckpointLoopGizmo: 1
   checkpointGizmoColor: {r: 1, g: 0.78, b: 0.2, a: 0.9}
 --- !u!4 &1507864156
 Transform:
@@ -18907,6 +21482,77 @@ Transform:
   - {fileID: 152910574}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1508646983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1508646984}
+  - component: {fileID: 1508646986}
+  - component: {fileID: 1508646985}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (26)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1508646984
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508646983}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -0.5558777, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1508646985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508646983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1508646986
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508646983}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1512128410
 GameObject:
   m_ObjectHideFlags: 0
@@ -19692,6 +22338,77 @@ Transform:
   - {fileID: 1661263776}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1566889755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1566889756}
+  - component: {fileID: 1566889758}
+  - component: {fileID: 1566889757}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (23)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1566889756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566889755}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -15.555878, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1566889757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566889755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1566889758
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566889755}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1579594737
 GameObject:
   m_ObjectHideFlags: 0
@@ -19916,6 +22633,148 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585823305}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1592094281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592094282}
+  - component: {fileID: 1592094284}
+  - component: {fileID: 1592094283}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (42)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1592094282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592094281}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.9206, y: 1, z: 38.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &1592094283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592094281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1592094284
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592094281}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1592869064
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592869065}
+  - component: {fileID: 1592869067}
+  - component: {fileID: 1592869066}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (61)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1592869065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592869064}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.8660249, z: -0, w: -0.50000095}
+  m_LocalPosition: {x: -41.7, y: 1, z: -32.800037}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 480, z: 0}
+--- !u!114 &1592869066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592869064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1592869067
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592869064}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1595188477
 GameObject:
   m_ObjectHideFlags: 0
@@ -19963,6 +22822,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1595188480
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20046,6 +22908,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4937712520193489725, guid: bc68127de78b04047b5a033bfcdbd53e, type: 3}
   m_PrefabInstance: {fileID: 1595615580}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1596968352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1596968353}
+  - component: {fileID: 1596968355}
+  - component: {fileID: 1596968354}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (41)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1596968353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596968352}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920593, y: 1, z: 43.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &1596968354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596968352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1596968355
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596968352}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1598952896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20273,6 +23206,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612928072}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1613312141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1613312142}
+  - component: {fileID: 1613312144}
+  - component: {fileID: 1613312143}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (52)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1613312142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613312141}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920677, y: 1, z: -17.332756}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &1613312143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613312141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1613312144
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613312141}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1622612050
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20950,6 +23954,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1663983411
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -21419,6 +24426,148 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1677607586}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1696698522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1696698523}
+  - component: {fileID: 1696698525}
+  - component: {fileID: 1696698524}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (16)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1696698523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696698522}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000041723246}
+  m_LocalPosition: {x: -48.555885, y: 1, z: 95.14193}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1696698524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696698522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1696698525
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696698522}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1697790696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1697790697}
+  - component: {fileID: 1697790699}
+  - component: {fileID: 1697790698}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (22)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1697790697
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697790696}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -20.555878, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1697790698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697790696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1697790699
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697790696}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1736507092
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22086,9 +25235,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
-  accelerationForce: 125
+  accelerationForce: 55
   reverseAccelerationForce: 1
-  maxSpeed: 24
+  maxSpeed: 18
   steeringStrength: 110
   brakingForce: 18
   lateralGrip: 0.88
@@ -22921,6 +26070,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1814092638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23187,7 +26339,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (13)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -23200,7 +26352,7 @@ Transform:
   m_GameObject: {fileID: 1856200680}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000041723246}
-  m_LocalPosition: {x: -48.555897, y: 0, z: 79.14193}
+  m_LocalPosition: {x: -48.555897, y: 1, z: 79.14193}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23220,6 +26372,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 13
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1856200683
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23353,6 +26508,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863472773}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1863891503
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1863891504}
+  - component: {fileID: 1863891506}
+  - component: {fileID: 1863891505}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (53)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1863891504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863891503}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.2588185, z: -0, w: -0.965926}
+  m_LocalPosition: {x: 17.054657, y: 1, z: -24.832756}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 390, z: 0}
+--- !u!114 &1863891505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863891503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1863891506
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863891503}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1868643450
 GameObject:
   m_ObjectHideFlags: 0
@@ -23479,7 +26705,7 @@ GameObject:
   m_Layer: 9
   m_Name: Checkpoint_1 (12)
   m_TagString: Checkpoint
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -23492,7 +26718,7 @@ Transform:
   m_GameObject: {fileID: 1870064778}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000041723246}
-  m_LocalPosition: {x: -48.5559, y: 0, z: 74.14193}
+  m_LocalPosition: {x: -48.5559, y: 1, z: 74.14193}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23512,6 +26738,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 12
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1870064781
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23785,6 +27014,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 0}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1883845020
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24030,6 +27262,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885457365}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1894805167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1894805168}
+  - component: {fileID: 1894805170}
+  - component: {fileID: 1894805169}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (39)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1894805168
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894805167}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920586, y: 1, z: 53.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &1894805169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894805167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1894805170
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894805167}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1897878308
 GameObject:
   m_ObjectHideFlags: 0
@@ -24290,6 +27593,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1913823190}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1916466497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1916466498}
+  - component: {fileID: 1916466500}
+  - component: {fileID: 1916466499}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (54)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1916466498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916466497}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.49999952, z: -0, w: -0.86602575}
+  m_LocalPosition: {x: 12.322609, y: 1, z: -30.028912}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 420, z: 0}
+--- !u!114 &1916466499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916466497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1916466500
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916466497}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1941107094
 GameObject:
   m_ObjectHideFlags: 0
@@ -24413,6 +27787,7 @@ GameObject:
   - component: {fileID: 1941530386}
   - component: {fileID: 1941530388}
   - component: {fileID: 1941530387}
+  - component: {fileID: 1941530389}
   m_Layer: 9
   m_Name: Checkpoint_1
   m_TagString: Checkpoint
@@ -24429,7 +27804,7 @@ Transform:
   m_GameObject: {fileID: 1941530385}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000044703478}
-  m_LocalPosition: {x: -49.1, y: 0, z: -3.3}
+  m_LocalPosition: {x: -49.1, y: 1, z: -3.3}
   m_LocalScale: {x: 1, y: 1, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24449,6 +27824,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 1507864155}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1941530388
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24470,16 +27848,207 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 14, y: 3, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1941530389
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941530385}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!4 &1941935557 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8963157343003950453, guid: d01a2126aebd36a48aee038a54d02c2f, type: 3}
   m_PrefabInstance: {fileID: 1835181100}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1954090226
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1954090227}
+  - component: {fileID: 1954090229}
+  - component: {fileID: 1954090228}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (25)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1954090227
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954090226}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071069, z: -0, w: -0.70710677}
+  m_LocalPosition: {x: -5.5558777, y: 1, z: 109.14192}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!114 &1954090228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954090226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1954090229
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954090226}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1977534099 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6281788690916244041, guid: c803a9c77d195c04a90318bf701e38dd, type: 3}
   m_PrefabInstance: {fileID: 748945010}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1977584983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1977584984}
+  - component: {fileID: 1977584986}
+  - component: {fileID: 1977584985}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (36)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1977584984
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977584983}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.920563, y: 1, z: 68.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &1977584985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977584983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1977584986
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977584983}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1984721538
 GameObject:
   m_ObjectHideFlags: 0
@@ -24592,6 +28161,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984721538}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1987991749
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1987991750}
+  - component: {fileID: 1987991752}
+  - component: {fileID: 1987991751}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (59)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1987991750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987991749}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071064, z: -0, w: -0.7071072}
+  m_LocalPosition: {x: -25.7, y: 1, z: -32.800022}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 450, z: 0}
+--- !u!114 &1987991751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987991749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &1987991752
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987991749}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1994750690
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25722,7 +29362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
-  accelerationForce: 22
+  accelerationForce: 55
   reverseAccelerationForce: 10
   maxSpeed: 22
   steeringStrength: 110
@@ -26273,6 +29913,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2074809099}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2094037684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2094037685}
+  - component: {fileID: 2094037687}
+  - component: {fileID: 2094037686}
+  m_Layer: 9
+  m_Name: Checkpoint_1 (31)
+  m_TagString: Checkpoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2094037685
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094037684}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005662441, z: -0, w: -1}
+  m_LocalPosition: {x: 17.92054, y: 1, z: 93.667244}
+  m_LocalScale: {x: 1, y: 1, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1266761436}
+  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+--- !u!114 &2094037686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094037684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc831ee408929745ae3908cb03d8ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
+  trackData: {fileID: 1507864155}
+  checkpointIndex: 15
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
+--- !u!65 &2094037687
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094037684}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 3, z: 2.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2097110266
 GameObject:
   m_ObjectHideFlags: 0

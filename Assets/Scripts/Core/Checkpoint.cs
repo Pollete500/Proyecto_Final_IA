@@ -16,6 +16,9 @@ namespace KartGame.Core
     {
         [SerializeField] private TrackData trackData;
         [SerializeField] private int checkpointIndex;
+        [SerializeField] private bool drawTriggerGizmoAlways = true;
+        [SerializeField] private Color triggerGizmoColor = new Color(0.35f, 1f, 0.45f, 0.18f);
+        [SerializeField] private Color triggerWireGizmoColor = new Color(0.35f, 1f, 0.45f, 0.9f);
 
         public TrackData TrackData => trackData;
         public int CheckpointIndex => checkpointIndex;
@@ -52,6 +55,16 @@ namespace KartGame.Core
             tracker.ProcessCheckpoint(this);
         }
 
+        private void OnDrawGizmos()
+        {
+            if (!drawTriggerGizmoAlways)
+            {
+                return;
+            }
+
+            DrawTriggerGizmo();
+        }
+
         private void EnsureTriggerCollider()
         {
             var checkpointCollider = GetComponent<Collider>();
@@ -59,6 +72,48 @@ namespace KartGame.Core
             {
                 checkpointCollider.isTrigger = true;
             }
+        }
+
+        private void DrawTriggerGizmo()
+        {
+            var checkpointCollider = GetComponent<Collider>();
+            if (checkpointCollider == null || !checkpointCollider.enabled || !checkpointCollider.isTrigger)
+            {
+                return;
+            }
+
+            var previousMatrix = Gizmos.matrix;
+            var previousColor = Gizmos.color;
+
+            Gizmos.matrix = transform.localToWorldMatrix;
+
+            switch (checkpointCollider)
+            {
+                case BoxCollider boxCollider:
+                    Gizmos.color = triggerGizmoColor;
+                    Gizmos.DrawCube(boxCollider.center, boxCollider.size);
+                    Gizmos.color = triggerWireGizmoColor;
+                    Gizmos.DrawWireCube(boxCollider.center, boxCollider.size);
+                    break;
+
+                case SphereCollider sphereCollider:
+                    Gizmos.color = triggerGizmoColor;
+                    Gizmos.DrawSphere(sphereCollider.center, sphereCollider.radius);
+                    Gizmos.color = triggerWireGizmoColor;
+                    Gizmos.DrawWireSphere(sphereCollider.center, sphereCollider.radius);
+                    break;
+
+                default:
+                    Gizmos.matrix = previousMatrix;
+                    Gizmos.color = triggerGizmoColor;
+                    Gizmos.DrawCube(checkpointCollider.bounds.center, checkpointCollider.bounds.size);
+                    Gizmos.color = triggerWireGizmoColor;
+                    Gizmos.DrawWireCube(checkpointCollider.bounds.center, checkpointCollider.bounds.size);
+                    break;
+            }
+
+            Gizmos.matrix = previousMatrix;
+            Gizmos.color = previousColor;
         }
     }
 }
