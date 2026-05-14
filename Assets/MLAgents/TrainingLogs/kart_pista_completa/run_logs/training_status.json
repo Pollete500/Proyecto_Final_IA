@@ -1,0 +1,29 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 35754,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\kart_pista_completa\\KartAgent\\KartAgent-35754.onnx",
+                "reward": null,
+                "creation_time": 1778689042.4857142,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\kart_pista_completa\\KartAgent\\KartAgent-35754.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 35754,
+            "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\kart_pista_completa\\KartAgent.onnx",
+            "reward": null,
+            "creation_time": 1778689042.4857142,
+            "auxillary_file_paths": [
+                ".\\Assets\\MLAgents\\TrainingLogs\\kart_pista_completa\\KartAgent\\KartAgent-35754.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

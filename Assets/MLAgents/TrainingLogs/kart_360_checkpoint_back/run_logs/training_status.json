@@ -1,0 +1,29 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 402920,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\kart_360_checkpoint_back\\KartAgent\\KartAgent-402920.onnx",
+                "reward": null,
+                "creation_time": 1778777251.9096613,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\kart_360_checkpoint_back\\KartAgent\\KartAgent-402920.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 402920,
+            "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\kart_360_checkpoint_back\\KartAgent.onnx",
+            "reward": null,
+            "creation_time": 1778777251.9096613,
+            "auxillary_file_paths": [
+                ".\\Assets\\MLAgents\\TrainingLogs\\kart_360_checkpoint_back\\KartAgent\\KartAgent-402920.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}
