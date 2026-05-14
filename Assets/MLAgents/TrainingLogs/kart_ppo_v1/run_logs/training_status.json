@@ -1,0 +1,56 @@
+{
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.0.1+cpu"
+    },
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 49855,
+                "file_path": "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-49855.onnx",
+                "reward": null,
+                "creation_time": 1778693679.3707397,
+                "auxillary_file_paths": [
+                    "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-49855.pt"
+                ]
+            },
+            {
+                "steps": 49855,
+                "file_path": "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-49855.onnx",
+                "reward": null,
+                "creation_time": 1778694337.3061414,
+                "auxillary_file_paths": [
+                    "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-49855.pt"
+                ]
+            },
+            {
+                "steps": 99845,
+                "file_path": "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-99845.onnx",
+                "reward": -11.062766276299953,
+                "creation_time": 1778694626.4634979,
+                "auxillary_file_paths": [
+                    "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-99845.pt"
+                ]
+            },
+            {
+                "steps": 107404,
+                "file_path": "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-107404.onnx",
+                "reward": -12.286138355731964,
+                "creation_time": 1778694688.7799737,
+                "auxillary_file_paths": [
+                    "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-107404.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 107404,
+            "file_path": "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent.onnx",
+            "reward": -12.286138355731964,
+            "creation_time": 1778694688.7799737,
+            "auxillary_file_paths": [
+                "C:\\Users\\JIAJIAO XU\\Documents\\GitHub\\Proyecto_Final_IA\\Assets\\MLAgents\\TrainingLogs\\kart_ppo_v1\\KartAgent\\KartAgent-107404.pt"
+            ]
+        }
+    }
+}

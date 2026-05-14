@@ -27,10 +27,13 @@ namespace KartGame.EditorTools
             public Object pingTarget;
         }
 
+        private enum SceneType { Unknown, Training, Race }
+
         private List<Entry> _entries = new List<Entry>();
         private Vector2 _scroll;
         private GUIStyle _headerStyle, _okStyle, _warnStyle, _errorStyle, _infoStyle;
         private bool _stylesReady;
+        private SceneType _sceneType;
 
         [MenuItem("Tools/Kart Racing/Scene Audit %#a")]
         public static void OpenWindow()
@@ -86,6 +89,14 @@ namespace KartGame.EditorTools
         private void RunAudit()
         {
             _entries.Clear();
+
+            var hasTrainingManager = Object.FindFirstObjectByType<TrainingSceneManager>() != null;
+            var hasRaceManager     = Object.FindFirstObjectByType<RaceManager>() != null;
+            _sceneType = hasTrainingManager ? SceneType.Training : hasRaceManager ? SceneType.Race : SceneType.Unknown;
+
+            var sceneLabel = _sceneType == SceneType.Training ? "TRAINING SCENE" : _sceneType == SceneType.Race ? "RACE SCENE" : "SCENE (type unknown)";
+            AddHeader($"── {sceneLabel} ─────────────────────────────");
+
             AuditTrack();
             AuditRaceSystems();
             AuditKarts();
@@ -153,6 +164,13 @@ namespace KartGame.EditorTools
         private void AuditRaceSystems()
         {
             AddHeader("RACE SYSTEMS");
+
+            if (_sceneType == SceneType.Training)
+            {
+                AddInfo("Training scene — RaceManager not needed (TrainingSceneManager is used instead).");
+                return;
+            }
+
             var rm = Object.FindFirstObjectByType<RaceManager>();
             if (rm == null) { AddError("RaceManager not found."); return; }
             AddOk("RaceManager", rm);
@@ -173,6 +191,14 @@ namespace KartGame.EditorTools
             var players = new List<CheckpointTracker>();
             var bots = new List<CheckpointTracker>();
             foreach (var t in trackers) { if (t.IsPlayer) players.Add(t); else bots.Add(t); }
+
+            if (_sceneType == SceneType.Training)
+            {
+                AddInfo("Training scene — no player kart expected.");
+                if (bots.Count == 0) AddError("No training kart found — run Build Training Prototype.");
+                else { AddOk($"Training agents: {bots.Count}"); foreach (var b in bots) AuditSingleKart(b, false); }
+                return;
+            }
 
             if (players.Count == 0)     AddError("No player kart (no CheckpointTracker with IsPlayer = true).");
             else if (players.Count > 1) AddWarn($"{players.Count} player karts found — only one should be player.");
@@ -213,8 +239,12 @@ namespace KartGame.EditorTools
             if (cam == null) { AddError("No Main Camera."); return; }
             AddOk("Main Camera", cam);
             var follow = cam.GetComponent<CameraFollow>();
-            if (follow == null) AddWarn("CameraFollow not on Main Camera.");
-            else AddOk("CameraFollow", follow);
+            if (_sceneType == SceneType.Training)
+                AddInfo("Training scene — CameraFollow not required.");
+            else if (follow == null)
+                AddWarn("CameraFollow not on Main Camera.");
+            else
+                AddOk("CameraFollow", follow);
         }
 
         // ── UI ────────────────────────────────────────────────────────────────────
@@ -222,6 +252,13 @@ namespace KartGame.EditorTools
         private void AuditUI()
         {
             AddHeader("UI");
+
+            if (_sceneType == SceneType.Training)
+            {
+                AddInfo("Training scene — HUD/Canvas not required.");
+                return;
+            }
+
             var canvas = Object.FindFirstObjectByType<Canvas>();
             if (canvas == null) { AddError("No Canvas — HUD will not show."); return; }
             AddOk($"Canvas: '{canvas.name}'", canvas);

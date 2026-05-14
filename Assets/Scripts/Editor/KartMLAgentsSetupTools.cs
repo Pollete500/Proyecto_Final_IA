@@ -30,6 +30,25 @@ namespace KartGame.EditorTools
         private const string CheckpointLayerName = "KartCheckpoint";
         private const string OffTrackLayerName = "OffTrack";
 
+        // Tuned training circuit: straight → wide right bend → sweep → hairpin → S bend → start.
+        // Order must be: 00 → 01 → 02 → ... → 11 → 00.
+        // X = left/right in top view, Z = forward/back in top view.
+        private static readonly Vector3[] ImprovedCheckpointPositions =
+        {
+            new Vector3(-32f, 1.2f, -12f),  // 00 Start / finish line
+            new Vector3(-32f, 1.2f,   8f),  // 01 Main straight
+            new Vector3(-32f, 1.2f,  28f),  // 02 End of straight, before right bend
+            new Vector3(-14f, 1.2f,  46f),  // 03 Right bend entry
+            new Vector3( 12f, 1.2f,  48f),  // 04 Wide right bend apex
+            new Vector3( 36f, 1.2f,  36f),  // 05 Right bend exit
+            new Vector3( 44f, 1.2f,  14f),  // 06 Long sweeping section
+            new Vector3( 42f, 1.2f,  -4f),  // 07 Sweep exit
+            new Vector3( 30f, 1.2f, -20f),  // 08 Hairpin entry
+            new Vector3( 10f, 1.2f, -26f),  // 09 Hairpin apex
+            new Vector3( -8f, 1.2f, -18f),  // 10 Hairpin exit / S bend entry
+            new Vector3(-20f, 1.2f, -12f),  // 11 S bend exit, return to start
+        };
+
         [MenuItem("Tools/Kart Racing/ML-Agents/Build Training Prototype In Current Scene")]
         public static void BuildTrainingPrototypeInCurrentScene()
         {
@@ -44,6 +63,59 @@ namespace KartGame.EditorTools
             ConfigureKartAgent(trainingKart, manager, trackData);
 
             Selection.activeGameObject = trainingKart;
+        }
+
+        [MenuItem("Tools/Kart Racing/ML-Agents/Build Improved Training Track In Current Scene")]
+        public static void BuildImprovedTrainingTrackInCurrentScene()
+        {
+            EnsureTagsAndLayers();
+
+            var trackData = Object.FindFirstObjectByType<TrackData>();
+            if (trackData == null)
+            {
+                var trackRoot = new GameObject("TrackRoot");
+                Undo.RegisterCreatedObjectUndo(trackRoot, "Create TrackRoot");
+                trackData = Undo.AddComponent<TrackData>(trackRoot);
+            }
+
+            EnsureChildContainer(trackData.transform, "Checkpoints");
+            EnsureChildContainer(trackData.transform, "SpawnPoints");
+            EnsureChildContainer(trackData.transform, "PowerUpBoxes");
+            EnsureChildContainer(trackData.transform, "RespawnPoints");
+            EnsureChildContainer(trackData.transform, "TrackBounds");
+            EnsureChildContainer(trackData.transform, "OffTrackZones");
+
+            EnsurePrototypeGround();
+
+            ClearChildContainer(trackData.transform, "Checkpoints");
+            ClearChildContainer(trackData.transform, "SpawnPoints");
+            ClearChildContainer(trackData.transform, "RespawnPoints");
+            ClearChildContainer(trackData.transform, "TrackBounds");
+
+            trackData.SetLapsToWin(1);
+            EnsureImprovedTrackLayout(trackData);
+            AutoConfigureCheckpoints(trackData);
+            EnsureImprovedTrainingWalls(trackData);
+
+            var manager = EnsureTrainingSceneManager(trackData);
+            var trainingKart = EnsureTrainingKart(trackData);
+            ConfigureKartAgent(trainingKart, manager, trackData);
+
+            // Always reset kart to spawn 0 after rebuilding
+            var spawnPoint = trackData.GetSpawnPoint(0);
+            if (spawnPoint != null)
+            {
+                trainingKart.transform.SetPositionAndRotation(
+                    spawnPoint.position + Vector3.up * 0.35f,
+                    spawnPoint.rotation);
+                var rb = trainingKart.GetComponent<Rigidbody>();
+                if (rb != null) { rb.linearVelocity = Vector3.zero; rb.angularVelocity = Vector3.zero; }
+                EditorUtility.SetDirty(trainingKart);
+            }
+
+            EditorUtility.SetDirty(trackData);
+            Selection.activeGameObject = trainingKart;
+            Debug.Log("[ML-Agents] Improved training track built: 12 checkpoints, front straight + right sweep + hairpin + S-chicane.");
         }
 
         [MenuItem("Tools/Kart Racing/ML-Agents/Configure Selected Kart As Agent")]
@@ -71,6 +143,71 @@ namespace KartGame.EditorTools
             var manager = EnsureTrainingSceneManager(trackData);
             ConfigureKartAgent(kartObject, manager, trackData);
             Selection.activeGameObject = kartObject;
+        }
+
+        private static void ClearChildContainer(Transform parent, string containerName)
+        {
+            var container = parent.Find(containerName);
+            if (container == null) return;
+            for (var i = container.childCount - 1; i >= 0; i--)
+                Undo.DestroyObjectImmediate(container.GetChild(i).gameObject);
+        }
+
+        private static void EnsureImprovedTrackLayout(TrackData trackData)
+        {
+            var checkpointsRoot = EnsureChildContainer(trackData.transform, "Checkpoints");
+            var spawnPointsRoot = EnsureChildContainer(trackData.transform, "SpawnPoints");
+            var respawnRoot     = EnsureChildContainer(trackData.transform, "RespawnPoints");
+
+            if (checkpointsRoot.childCount == 0)
+            {
+                for (var i = 0; i < ImprovedCheckpointPositions.Length; i++)
+                {
+                    var cpObj = new GameObject($"Checkpoint_{i:00}");
+                    Undo.RegisterCreatedObjectUndo(cpObj, "Create Improved Checkpoint");
+                    cpObj.transform.SetParent(checkpointsRoot, false);
+                    cpObj.transform.position = ImprovedCheckpointPositions[i];
+
+                    var nextPos = ImprovedCheckpointPositions[(i + 1) % ImprovedCheckpointPositions.Length];
+                    cpObj.transform.rotation = Quaternion.LookRotation((nextPos - ImprovedCheckpointPositions[i]).normalized, Vector3.up);
+
+                    var col = Undo.AddComponent<BoxCollider>(cpObj);
+                    col.isTrigger = true;
+                    col.size = new Vector3(13f, 3f, 2.5f);
+                }
+            }
+
+            if (spawnPointsRoot.childCount == 0 && checkpointsRoot.childCount > 0)
+            {
+                var startRef = checkpointsRoot.GetChild(0);
+                // Spawn slightly before the S/F line, facing checkpoint 01.
+                // This avoids spawning after Checkpoint_00.
+                // Spawn NORTH of CP0 (between CP0 and CP1) so NextCheckpointIndex starts at 1, not 0.
+                // Kart faces the same direction as CP0 (toward CP1).
+                var offsets = new[] { new Vector3(-2f, 0f, 4f), new Vector3(2f, 0f, 4f), new Vector3(-4f, 0f, 8f), new Vector3(4f, 0f, 8f) };
+                for (var i = 0; i < offsets.Length; i++)
+                {
+                    var spawnObj = new GameObject($"Spawn_{i:00}");
+                    Undo.RegisterCreatedObjectUndo(spawnObj, "Create Improved Spawn");
+                    spawnObj.transform.SetParent(spawnPointsRoot, false);
+                    spawnObj.transform.SetPositionAndRotation(startRef.TransformPoint(offsets[i]), startRef.rotation);
+                }
+            }
+
+            if (respawnRoot.childCount == 0)
+            {
+                for (var i = 0; i < checkpointsRoot.childCount; i++)
+                {
+                    var cp = checkpointsRoot.GetChild(i);
+                    var respawnObj = new GameObject($"Respawn_{i:00}");
+                    Undo.RegisterCreatedObjectUndo(respawnObj, "Create Improved Respawn");
+                    respawnObj.transform.SetParent(respawnRoot, false);
+                    respawnObj.transform.SetPositionAndRotation(cp.position - cp.forward * 3f, cp.rotation);
+                }
+            }
+
+            trackData.SyncChildCollections();
+            EditorUtility.SetDirty(trackData);
         }
 
         private static TrackData EnsureTrainingTrack()
@@ -215,7 +352,7 @@ namespace KartGame.EditorTools
                 return;
             }
 
-            const float trackHalfWidth = 6.5f;
+            const float trackHalfWidth = 7.5f;
             const float wallThickness = 0.75f;
             const float wallHeight = 2.5f;
 
@@ -244,18 +381,79 @@ namespace KartGame.EditorTools
             AssignWallMetadata(wallsRoot);
         }
 
-        private static void CreateWallSegment(Transform parent, int index, string side, Vector3 start, Vector3 end, float thickness, float height)
+        private static void EnsureImprovedTrainingWalls(TrackData trackData)
+        {
+            if (trackData == null || trackData.CheckpointCount < 2) return;
+
+            var wallsRoot = EnsureChildContainer(trackData.transform, "TrackBounds");
+
+            const float trackHalfWidth = 7.5f;
+            const float wallThickness  = 0.75f;
+            const float outerHeight    = 2.5f;
+            const float innerHeight    = 0.4f;  // curb-height — keeps track visually open
+
+            var outerColor = new Color(1f, 0.55f, 0.1f);          // orange outer barrier
+            var innerColorA = new Color(0.9f, 0.15f, 0.15f);       // red curb
+            var innerColorB = new Color(0.95f, 0.95f, 0.95f);      // white curb (alternates)
+
+            for (var i = 0; i < trackData.CheckpointCount; i++)
+            {
+                var current = trackData.GetCheckpoint(i);
+                var next    = trackData.GetCheckpoint((i + 1) % trackData.CheckpointCount);
+                if (current == null || next == null) continue;
+
+                var segment = next.position - current.position;
+                var segLen  = segment.magnitude;
+                if (segLen <= 0.01f) continue;
+
+                var dir   = segment / segLen;
+                var right = Vector3.Cross(Vector3.up, dir).normalized;
+
+                // Outer wall — tall orange barrier
+                CreateWallSegment(wallsRoot, i, "Left",
+                    current.position + right * trackHalfWidth,
+                    next.position    + right * trackHalfWidth,
+                    wallThickness, outerHeight, outerColor);
+
+                // Inner wall — short curb, alternating red/white
+                var curbColor = (i % 2 == 0) ? innerColorA : innerColorB;
+                CreateWallSegment(wallsRoot, i, "Right",
+                    current.position - right * trackHalfWidth,
+                    next.position    - right * trackHalfWidth,
+                    wallThickness, innerHeight, curbColor);
+            }
+
+            AssignWallMetadata(wallsRoot);
+        }
+
+        private static void CreateWallSegment(Transform parent, int index, string side, Vector3 start, Vector3 end, float thickness, float height, Color? colorOverride = null)
         {
             var wallObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Undo.RegisterCreatedObjectUndo(wallObject, "Create Training Wall");
             wallObject.name = $"Wall_{side}_{index:00}";
             wallObject.transform.SetParent(parent, false);
 
-            var segment = end - start;
-            var midpoint = (start + end) * 0.5f + Vector3.up * (height * 0.5f);
+            // Flatten Y so walls always sit on the ground regardless of checkpoint height
+            var s = new Vector3(start.x, 0f, start.z);
+            var e = new Vector3(end.x,   0f, end.z);
+            var segment  = e - s;
+            var midpoint = (s + e) * 0.5f + Vector3.up * (height * 0.5f);
             wallObject.transform.position = midpoint;
             wallObject.transform.rotation = Quaternion.LookRotation(segment.normalized, Vector3.up);
             wallObject.transform.localScale = new Vector3(thickness, height, segment.magnitude);
+
+            var renderer = wallObject.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                var shader = Shader.Find("Universal Render Pipeline/Lit");
+                if (shader != null)
+                {
+                    var wallColor = colorOverride ?? (side == "Left"
+                        ? new Color(1f, 0.55f, 0.1f)    // orange outer
+                        : new Color(0.95f, 0.95f, 0.95f)); // white inner
+                    renderer.sharedMaterial = new Material(shader) { color = wallColor };
+                }
+            }
         }
 
         private static void AssignWallMetadata(Transform wallsRoot)
@@ -407,16 +605,28 @@ namespace KartGame.EditorTools
 
         private static void EnsurePrototypeGround()
         {
-            if (GameObject.Find("TrainingGround") != null)
+            var existing = GameObject.Find("TrainingGround");
+            if (existing != null)
             {
+                // Re-center and resize for improved track bounds
+                existing.transform.position = new Vector3(20f, 0f, 26f);
+                existing.transform.localScale = new Vector3(18f, 1f, 18f);
                 return;
             }
 
             var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
             Undo.RegisterCreatedObjectUndo(ground, "Create Training Ground");
             ground.name = "TrainingGround";
-            ground.transform.position = Vector3.zero;
-            ground.transform.localScale = new Vector3(15f, 1f, 15f);
+            ground.transform.position = new Vector3(20f, 0f, 26f);
+            ground.transform.localScale = new Vector3(18f, 1f, 18f);
+
+            var renderer = ground.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                var shader = Shader.Find("Universal Render Pipeline/Lit");
+                if (shader != null)
+                    renderer.sharedMaterial = new Material(shader) { color = new Color(0.22f, 0.22f, 0.22f) };
+            }
         }
 
         private static Transform EnsureChildContainer(Transform parent, string childName)

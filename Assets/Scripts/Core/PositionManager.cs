@@ -22,6 +22,8 @@ namespace KartGame.Core
         private readonly Dictionary<CheckpointTracker, int> _currentPositions = new Dictionary<CheckpointTracker, int>();
         private float _nextRefreshTime;
 
+        public int RacerCount => registeredRacers.Count;
+
         public event Action PositionsUpdated;
 
         public void SetTrackData(TrackData value)

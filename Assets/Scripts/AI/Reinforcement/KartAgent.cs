@@ -154,6 +154,10 @@ namespace KartGame.AI.Reinforcement
             checkpointTracker.SetRecoveryReference(trackData != null ? trackData.GetSpawnPoint(0) : null);
             kartController.ResetKart(spawnPosition, spawnRotation);
 
+            // Spawn points are placed between CP0 and CP1, so skip CP0 as first target.
+            // The kart will encounter CP0 naturally when completing a lap.
+            checkpointTracker.SkipToCheckpoint(1);
+
             _isOffTrack = false;
             _episodeRunning = true;
             _lastDistanceToCheckpoint = checkpointTracker.DistanceToNextCheckpoint;

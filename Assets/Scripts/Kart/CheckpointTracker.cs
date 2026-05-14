@@ -89,6 +89,12 @@ namespace KartGame.Kart
             _lastRecoveryReference = value;
         }
 
+        public void SkipToCheckpoint(int targetIndex)
+        {
+            if (trackData == null) return;
+            NextCheckpointIndex = Mathf.Clamp(targetIndex, 0, trackData.CheckpointCount - 1);
+        }
+
         public void SetPlayerFlag(bool value)
         {
             isPlayer = value;

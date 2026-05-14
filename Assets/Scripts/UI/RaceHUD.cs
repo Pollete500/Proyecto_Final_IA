@@ -1,3 +1,4 @@
+using KartGame.AI.PowerUps;
 using KartGame.Core;
 using KartGame.Kart;
 using TMPro;
@@ -17,10 +18,12 @@ namespace KartGame.UI
         [SerializeField] private TextMeshProUGUI lapText;
         [SerializeField] private TextMeshProUGUI positionText;
         [SerializeField] private TextMeshProUGUI timeText;
+        [SerializeField] private TextMeshProUGUI itemText;
         [SerializeField] private GameObject hudRoot;
 
         private CheckpointTracker _playerTracker;
         private PositionManager _positionManager;
+        private PowerUpInventory _playerInventory;
         private int _totalLaps;
 
         private static readonly string[] OrdinalSuffixes = { "th", "st", "nd", "rd" };
@@ -37,7 +40,12 @@ namespace KartGame.UI
             var trackers = FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.None);
             foreach (var t in trackers)
             {
-                if (t.IsPlayer) { _playerTracker = t; break; }
+                if (t.IsPlayer)
+                {
+                    _playerTracker = t;
+                    _playerInventory = t.GetComponent<PowerUpInventory>();
+                    break;
+                }
             }
         }
 
@@ -53,6 +61,7 @@ namespace KartGame.UI
             RefreshLapText();
             RefreshPositionText();
             RefreshTimeText();
+            RefreshItemText();
         }
 
         private void HandleRaceStateChanged(RaceState newState)
@@ -86,6 +95,21 @@ namespace KartGame.UI
             var s = Mathf.FloorToInt(elapsed % 60f);
             var cs = Mathf.FloorToInt((elapsed % 1f) * 100f);
             timeText.text = $"{m:00}:{s:00}.{cs:00}";
+        }
+
+        private void RefreshItemText()
+        {
+            if (itemText == null || _playerInventory == null) return;
+            itemText.text = _playerInventory.StoredPowerUp == PowerUpType.None
+                ? string.Empty
+                : _playerInventory.StoredPowerUp switch
+                {
+                    PowerUpType.MushroomBoost => "BOOST  [SPACE]",
+                    PowerUpType.Star          => "STAR   [SPACE]",
+                    PowerUpType.Banana        => "BANANA [SPACE]",
+                    PowerUpType.Shell         => "SHELL  [SPACE]",
+                    _                         => string.Empty
+                };
         }
 
         private static string GetOrdinalSuffix(int n)
