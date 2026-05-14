@@ -45,6 +45,8 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private string wallTag = "Wall";
         [SerializeField] private string checkpointTag = "Checkpoint";
         [SerializeField] private string offTrackTag = "OffTrack";
+        [SerializeField] private bool ignoreCheckpointsInRaySensor;
+        [SerializeField, Min(0)] private int visibleCheckpointsAheadInRaySensor = 3;
 
         [Header("Reward Feedback")]
         [SerializeField] private bool showRewardFlash = true;
@@ -511,6 +513,8 @@ namespace KartGame.AI.Reinforcement
                 checkpointTracker.SetTrackData(trackData);
                 checkpointTracker.SetAutoRespawnIfStuck(!disableCheckpointAutoRespawnDuringTraining);
             }
+
+            ConfigureRaySensors();
         }
 
         private bool HasRequiredReferences()
@@ -522,6 +526,23 @@ namespace KartGame.AI.Reinforcement
 
             Debug.LogError($"KartAgent on '{name}' is missing required references. RewardManager: {rewardManager != null}, KartController: {kartController != null}, CheckpointTracker: {checkpointTracker != null}, Rigidbody: {kartRigidbody != null}", this);
             return false;
+        }
+
+        private void ConfigureRaySensors()
+        {
+            var raySensors = GetComponentsInChildren<CheckpointAwareRayPerceptionSensorComponent3D>(true);
+            foreach (var raySensor in raySensors)
+            {
+                if (raySensor == null)
+                {
+                    continue;
+                }
+
+                raySensor.CheckpointTracker = checkpointTracker;
+                raySensor.IgnorePassedCheckpoints = ignoreCheckpointsInRaySensor;
+                raySensor.LimitCheckpointDetectionWindow = ignoreCheckpointsInRaySensor;
+                raySensor.AdditionalVisibleCheckpointsAhead = visibleCheckpointsAheadInRaySensor;
+            }
         }
 
         private void ApplyAgentReward(float rewardDelta)

@@ -374,7 +374,17 @@ namespace KartGame.EditorTools
             var kartAgent = kartObject.GetComponent<KartAgent>() ?? Undo.AddComponent<KartAgent>(kartObject);
             var behaviorParameters = kartObject.GetComponent<BehaviorParameters>() ?? Undo.AddComponent<BehaviorParameters>(kartObject);
             var decisionRequester = kartObject.GetComponent<DecisionRequester>() ?? Undo.AddComponent<DecisionRequester>(kartObject);
-            var raySensor = kartObject.GetComponent<RayPerceptionSensorComponent3D>() ?? Undo.AddComponent<RayPerceptionSensorComponent3D>(kartObject);
+            var raySensor = kartObject.GetComponent<CheckpointAwareRayPerceptionSensorComponent3D>();
+            if (raySensor == null)
+            {
+                var legacyRaySensor = kartObject.GetComponent<RayPerceptionSensorComponent3D>();
+                if (legacyRaySensor != null)
+                {
+                    Undo.DestroyObjectImmediate(legacyRaySensor);
+                }
+
+                raySensor = Undo.AddComponent<CheckpointAwareRayPerceptionSensorComponent3D>(kartObject);
+            }
 
             trainingSceneManager.RegisterAgent(kartAgent);
             kartAgent.MaxStep = 5000;
@@ -398,6 +408,10 @@ namespace KartGame.EditorTools
             raySensor.EndVerticalOffset = 0f;
             raySensor.DetectableTags = new List<string> { WallTag, CheckpointTag };
             raySensor.RayLayerMask = LayerMask.GetMask(WallLayerName, CheckpointLayerName);
+            raySensor.CheckpointTracker = checkpointTracker;
+            raySensor.IgnorePassedCheckpoints = true;
+            raySensor.LimitCheckpointDetectionWindow = true;
+            raySensor.AdditionalVisibleCheckpointsAhead = 3;
 
             EditorUtility.SetDirty(rewardManager);
             EditorUtility.SetDirty(kartAgent);

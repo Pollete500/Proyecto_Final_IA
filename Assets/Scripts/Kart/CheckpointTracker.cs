@@ -20,10 +20,16 @@ namespace KartGame.Kart
         [SerializeField] private bool autoRespawnIfStuck = true;
         [SerializeField] private bool allowPlayerAutoRespawn;
         [SerializeField] private bool respawnAtInitialSpawnPoint = true;
+        [SerializeField] private bool resetProgressOnInitialSpawnRespawn = true;
         [SerializeField] private bool logAutoRespawns = true;
         [SerializeField] private float stuckSpeedThreshold = 0.9f;
         [SerializeField] private float secondsBeforeAutoRespawn = 4f;
         [SerializeField] private float respawnLift = 0.35f;
+
+        [Header("Runtime Debug")]
+        public int debugNextCheckpointIndex;
+        public int debugLastPassedCheckpointIndex = -1;
+        public int debugCompletedLaps;
 
         private float _stuckTimer;
         private bool _hasInitialSpawnPose;
@@ -49,10 +55,13 @@ namespace KartGame.Kart
         private void Awake()
         {
             kartController ??= GetComponent<KartController>();
+            SyncDebugState();
         }
 
         private void Update()
         {
+            SyncDebugState();
+
             if (!autoRespawnIfStuck || kartController == null || !kartController.IsControlEnabled || HasFinishedRace)
             {
                 _stuckTimer = 0f;
@@ -151,6 +160,8 @@ namespace KartGame.Kart
                 _initialSpawnRotation = _initialSpawnReference.rotation;
                 _hasInitialSpawnPose = true;
             }
+
+            SyncDebugState();
         }
 
         public bool ProcessCheckpoint(Checkpoint checkpoint)
@@ -191,6 +202,7 @@ namespace KartGame.Kart
                 LapCompleted?.Invoke(this, CompletedLaps);
             }
 
+            SyncDebugState();
             CheckpointPassed?.Invoke(this, checkpoint);
             return true;
         }
@@ -213,6 +225,16 @@ namespace KartGame.Kart
 
             if (respawnAtInitialSpawnPoint && _hasInitialSpawnPose)
             {
+                if (resetProgressOnInitialSpawnRespawn)
+                {
+                    CompletedLaps = 0;
+                    LastPassedCheckpointIndex = -1;
+                    NextCheckpointIndex = 0;
+                    HasFinishedRace = false;
+                    FinishPlacement = 0;
+                    SyncDebugState();
+                }
+
                 kartController.ResetKart(_initialSpawnPosition, _initialSpawnRotation);
                 _stuckTimer = 0f;
                 if (logAutoRespawns)
@@ -251,6 +273,13 @@ namespace KartGame.Kart
         {
             var nextCheckpoint = NextCheckpoint;
             return nextCheckpoint == null ? float.MaxValue : Vector3.Distance(transform.position, nextCheckpoint.position);
+        }
+
+        private void SyncDebugState()
+        {
+            debugNextCheckpointIndex = NextCheckpointIndex;
+            debugLastPassedCheckpointIndex = LastPassedCheckpointIndex;
+            debugCompletedLaps = CompletedLaps;
         }
     }
 }

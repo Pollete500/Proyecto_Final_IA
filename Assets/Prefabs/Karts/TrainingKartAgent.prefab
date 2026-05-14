@@ -1,0 +1,377 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7472618651110967666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5043623795437583308}
+  - component: {fileID: 7253047362446369755}
+  - component: {fileID: 7535880686930434187}
+  - component: {fileID: 8231035580727155495}
+  - component: {fileID: 8940056823735310873}
+  - component: {fileID: 3749927887579939022}
+  - component: {fileID: 5718659452806403481}
+  - component: {fileID: 6685021211991704313}
+  - component: {fileID: 707579283812829026}
+  - component: {fileID: 7285335391662920672}
+  m_Layer: 0
+  m_Name: TrainingKartAgent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5043623795437583308
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.030835487, z: -0, w: 0.99952453}
+  m_LocalPosition: {x: 2.777862, y: 0.5500001, z: -25.781185}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7954566517018209125}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -3.534, z: 0}
+--- !u!54 &7253047362446369755
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  serializedVersion: 5
+  m_Mass: 140
+  m_LinearDamping: 0
+  m_AngularDamping: 0.01
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &7535880686930434187
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.4, y: 0.9, z: 2.4}
+  m_Center: {x: 0, y: 0.45, z: 0}
+--- !u!114 &8231035580727155495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
+  accelerationForce: 100
+  reverseAccelerationForce: 1
+  maxSpeed: 15
+  steeringStrength: 110
+  brakingForce: 18
+  lateralGrip: 0.88
+  coastingDrag: 0.35
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  groundProbeOffset: {x: 0, y: 0.35, z: 0}
+  groundProbeDistance: 0.55
+  downforce: 25
+  airSteeringMultiplier: 0.35
+  mass: 140
+  angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
+--- !u!114 &8940056823735310873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcf30e1563c59c4c9472fe403d1940e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.CheckpointTracker
+  trackData: {fileID: 0}
+  kartController: {fileID: 0}
+  isPlayer: 0
+  autoRespawnIfStuck: 1
+  allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  logAutoRespawns: 1
+  stuckSpeedThreshold: 0.9
+  secondsBeforeAutoRespawn: 10
+  respawnLift: 0.35
+--- !u!114 &3749927887579939022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9b0d254d3a744648a0c275d8b6a7bb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.AI.Reinforcement.AgentRewardManager
+  checkpointReward: 1
+  forwardProgressRewardScale: 0
+  backwardProgressPenaltyScale: 0
+  idlePenaltyPerSecond: 0
+  wrongDirectionPenaltyPerSecond: 0
+  wrongCheckpointPenalty: 0
+  wallCollisionPenalty: 0
+  wallContactPenaltyPerSecond: 0
+  offTrackPenalty: 0
+  outOfBoundsPenalty: 1
+  stepPenaltyPerDecision: 0
+  episodeTimeoutPenalty: 0
+--- !u!114 &5718659452806403481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
+  m_BrainParameters:
+    VectorObservationSize: 13
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 0300000003000000
+    VectorActionSize: 0300000003000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: KartAgent
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0
+--- !u!114 &6685021211991704313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e235748955341a149bef64fa365fd49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.AI.Reinforcement.KartAgent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 5000
+  trainingSceneManager: {fileID: 0}
+  rewardManager: {fileID: 0}
+  trackData: {fileID: 0}
+  kartController: {fileID: 0}
+  checkpointTracker: {fileID: 0}
+  kartRigidbody: {fileID: 0}
+  playerKartInputToDisable: {fileID: 0}
+  aiKartInputToDisable: {fileID: 0}
+  endEpisodeOnLapCompletion: 1
+  endEpisodeOnOffTrack: 1
+  endEpisodeOnStrongWallCollision: 0
+  disableCheckpointAutoRespawnDuringTraining: 0
+  normalizedDistanceReference: 25
+  idleSpeedThreshold: 1
+  reverseActivationSpeedThreshold: 1.5
+  outOfBoundsHeight: -2
+  hardCollisionSpeedThreshold: 12
+  wallTag: Wall
+  checkpointTag: Checkpoint
+  offTrackTag: OffTrack
+  showRewardFlash: 1
+  logRewardEvents: 1
+  logEpisodeResets: 1
+  rewardFlashRenderers: []
+  positiveRewardColor: {r: 0.22, g: 0.9, b: 0.52, a: 1}
+  negativeRewardColor: {r: 0.95, g: 0.2, b: 0.2, a: 1}
+  rewardFlashDuration: 0.5
+  positiveRewardFlashMinimumMagnitude: 0.00005
+  negativeRewardFlashMinimumMagnitude: 0.01
+--- !u!114 &707579283812829026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.DecisionRequester
+  DecisionPeriod: 1
+  DecisionStep: 0
+  TakeActionsBetweenDecisions: 1
+--- !u!114 &7285335391662920672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472618651110967666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Sensors.RayPerceptionSensorComponent3D
+  m_SensorName: KartRaySensor
+  m_DetectableTags:
+  - Wall
+  - Checkpoint
+  m_RaysPerDirection: 3
+  m_MaxRayDegrees: 70
+  m_SphereCastRadius: 0.45
+  m_RayLength: 14
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 768
+  m_ObservationStacks: 1
+  m_AlternatingRayOrder: 1
+  m_UseBatchedRaycasts: 0
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0.75
+  m_EndVerticalOffset: 0
+--- !u!1 &9145722858689910547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7954566517018209125}
+  - component: {fileID: 4248629782549347140}
+  - component: {fileID: 2789767339056194605}
+  m_Layer: 0
+  m_Name: Visual
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7954566517018209125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145722858689910547}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.55, z: 0}
+  m_LocalScale: {x: 1.35, y: 0.6, z: 2.2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5043623795437583308}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &4248629782549347140
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145722858689910547}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2789767339056194605
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145722858689910547}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
