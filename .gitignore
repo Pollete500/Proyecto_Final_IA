@@ -23,6 +23,8 @@
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
 
+.vscode/
+
 # Recordings can get excessive in size
 /[Rr]ecordings/
 
