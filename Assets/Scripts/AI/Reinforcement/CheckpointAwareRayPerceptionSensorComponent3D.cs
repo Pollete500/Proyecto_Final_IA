@@ -55,6 +55,7 @@ namespace KartGame.AI.Reinforcement
         [Header("Debug Gizmos")]
         [SerializeField] private Color debugRayHitColor = Color.red;
         [SerializeField] private Color debugRayMissColor = Color.white;
+        [SerializeField] private bool debugDrawHitSpheres = true;
 
         private CheckpointAwareRayPerceptionSensor3D _customSensor;
 
@@ -246,13 +247,27 @@ namespace KartGame.AI.Reinforcement
             return new ISensor[] { _customSensor };
         }
 
-        private void OnDrawGizmosSelected()
+        public RayPerceptionOutput.RayOutput[] GetCurrentRayOutputs()
         {
             var rayOutputs = _customSensor?.RayPerceptionOutput?.RayOutputs;
             if (rayOutputs == null || rayOutputs.Length == 0)
             {
                 rayOutputs = SimulateRayOutputs();
             }
+
+            return rayOutputs;
+        }
+
+        public void ConfigureDebugGizmos(Color hitColor, Color missColor, bool drawHitSpheres)
+        {
+            debugRayHitColor = hitColor;
+            debugRayMissColor = missColor;
+            debugDrawHitSpheres = drawHitSpheres;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var rayOutputs = GetCurrentRayOutputs();
 
             if (rayOutputs == null)
             {
@@ -325,7 +340,7 @@ namespace KartGame.AI.Reinforcement
             Gizmos.color = Color.Lerp(debugRayHitColor, debugRayMissColor, lerpT);
             Gizmos.DrawRay(startPositionWorld, rayDirection);
 
-            if (rayOutput.HasHit)
+            if (debugDrawHitSpheres && rayOutput.HasHit)
             {
                 Gizmos.DrawWireSphere(startPositionWorld + rayDirection, Mathf.Max(rayOutput.ScaledCastRadius, 0.05f));
             }

@@ -177,6 +177,7 @@ namespace KartGame.AI.Reinforcement
             _isOffTrack = false;
             _episodeRunning = true;
             _lastDistanceToCheckpoint = checkpointTracker.DistanceToNextCheckpoint;
+            BroadcastMessage("NotifyDrivingEpisodeReset", SendMessageOptions.DontRequireReceiver);
 
             if (logEpisodeResets)
             {

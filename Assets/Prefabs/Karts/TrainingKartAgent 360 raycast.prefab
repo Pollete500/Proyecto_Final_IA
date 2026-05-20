@@ -90,6 +90,68 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &665060516168526627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8253469459080506730}
+  m_Layer: 0
+  m_Name: RearDropPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8253469459080506730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665060516168526627}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.35, z: -1.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1325345588867502791}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3328311196007869516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2705366375985779622}
+  m_Layer: 0
+  m_Name: ForwardLaunchPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2705366375985779622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3328311196007869516}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.35, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1325345588867502791}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3544321151148859466
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,6 +191,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5197113196041716184}
+  - {fileID: 1325345588867502791}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -3.534, z: 0}
 --- !u!54 &4365629464848830710
@@ -282,10 +345,10 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 532d2745bb1557d47ba049f111ef4751, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: KartAgent
   TeamId: 0
-  m_UseChildSensors: 1
+  m_UseChildSensors: 0
   m_UseChildActuators: 1
   m_DeterministicInference: 0
   m_ObservableAttributeHandling: 0
@@ -385,3 +448,214 @@ MonoBehaviour:
   additionalVisibleCheckpointsAhead: 3
   debugRayHitColor: {r: 1, g: 0, b: 0, a: 1}
   debugRayMissColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1 &9099560920896904314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1325345588867502791}
+  - component: {fileID: 4211124746099344733}
+  - component: {fileID: 1324042719982013296}
+  - component: {fileID: 786075950166294212}
+  - component: {fileID: 2134460308180781919}
+  - component: {fileID: 2878304033666864608}
+  m_Layer: 0
+  m_Name: PowerUpController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1325345588867502791
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099560920896904314}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2705366375985779622}
+  - {fileID: 8253469459080506730}
+  m_Father: {fileID: 5131326545765259854}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4211124746099344733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099560920896904314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a199bc04cbe394479af509144c2e305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.PowerUps.KartPowerUpController
+  kartController: {fileID: 2391639328412772156}
+  checkpointTracker: {fileID: 4933193758124320945}
+  availablePowerUpPoints: 0
+  allowPowerUpPointAccumulation: 0
+  maxAccumulatedPowerUpPoints: 1
+  manualPowerUpType: 2
+  logPowerUpUsage: 1
+  awardPointEveryXCheckpointsForBots: 1
+  checkpointsPerPowerUpPoint: 7
+  logCheckpointPointGain: 0
+  forwardLaunchPoint: {fileID: 2705366375985779622}
+  rearDropPoint: {fileID: 8253469459080506730}
+  forwardLaunchDistance: 1.5
+  rearDropDistance: 1.35
+  spawnHeightOffset: 0.35
+  onlyOneActiveDeployableAtATime: 1
+  limitAnyPowerUpUseRate: 1
+  minimumSecondsBetweenAnyPowerUpUses: 1
+  bananaPrefab: {fileID: 0}
+  shellPrefab: {fileID: 0}
+  bananaLifetime: 15
+  bananaStunDuration: 2.5
+  shellLifetime: 8
+  shellSpeed: 14
+  shellTurnRateDegrees: 220
+  shellHitRadius: 0.45
+  shellStunDuration: 2.25
+  shellTargetDistance: 24
+  shellTargetMaxAngle: 70
+  mushroomBoostMultiplier: 1.6
+  mushroomBoostDuration: 1.4
+  starInvincibilityDuration: 4
+  debugAvailablePowerUpPoints: 0
+  debugCheckpointsSinceLastPoint: 0
+  debugHasActiveDeployable: 0
+  debugSecondsUntilNextAllowedUse: 0
+--- !u!114 &1324042719982013296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099560920896904314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
+  m_BrainParameters:
+    VectorObservationSize: 11
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 05000000
+    VectorActionSize: 05000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: PowerUpAgent
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0
+--- !u!114 &786075950166294212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099560920896904314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c1406a631386f4a923282a2dbd599f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.AI.Reinforcement.KartPowerUpAgent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  powerUpController: {fileID: 4211124746099344733}
+  kartController: {fileID: 2391639328412772156}
+  checkpointTracker: {fileID: 4933193758124320945}
+  wallSensor: {fileID: 0}
+  endEpisodeOnLapCompletion: 0
+  endEpisodeOnRespawn: 0
+  episodeTimeoutPenalty: 0
+  nearbyEnemyDistance: 8
+  aheadSenseHalfAngle: 90
+  behindSenseHalfAngle: 90
+  nearbyHazardRadius: 8
+  nearbyHazardsForStar: 2
+  straightSectionMaxTargetAngle: 12
+  maxWallHitsForStraightSection: 1
+  correctPowerUpChoiceReward: 1
+  wrongPowerUpChoicePenalty: 1
+  missedOpportunityPenalty: 0
+  unnecessaryUsePenalty: 1
+  useWithoutPointsPenalty: 0
+  failedUsePenalty: 0
+  shellHitReward: 0
+  bananaHitReward: 0
+  decisionStepPenalty: 0
+  debugEnemiesAheadClose: 0
+  debugEnemiesBehindClose: 0
+  debugNearbyHazards: 0
+  debugNearbyWallHits: 0
+  debugStraightSection: 0
+  debugHasSuggestedPowerUp: 0
+  debugSuggestedPowerUp: 0
+--- !u!114 &2134460308180781919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099560920896904314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.DecisionRequester
+  DecisionPeriod: 5
+  DecisionStep: 0
+  TakeActionsBetweenDecisions: 1
+--- !u!114 &2878304033666864608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099560920896904314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda34e61de10e0e448837d96956942d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.AI.Reinforcement.CheckpointAwareRayPerceptionSensorComponent3D
+  m_SensorName: PowerUpWallSensor
+  m_DetectableTags:
+  - Wall
+  m_RaysPerDirection: 6
+  m_MaxRayDegrees: 160
+  m_SphereCastRadius: 0.25
+  m_RayLength: 20
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ObservationStacks: 1
+  m_AlternatingRayOrder: 1
+  m_UseBatchedRaycasts: 0
+  m_StartVerticalOffset: 0.75
+  m_EndVerticalOffset: 0
+  checkpointTracker: {fileID: 4933193758124320945}
+  ignorePassedCheckpoints: 0
+  limitCheckpointDetectionWindow: 0
+  additionalVisibleCheckpointsAhead: 0
+  debugRayHitColor: {r: 1, g: 0.374343, b: 0, a: 1}
+  debugRayMissColor: {r: 0.9811321, g: 0.955463, b: 0.254539, a: 1}

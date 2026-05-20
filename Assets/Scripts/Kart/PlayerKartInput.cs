@@ -1,6 +1,8 @@
 using KartGame.Core;
+using KartGame.PowerUps;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace KartGame.Kart
 {
@@ -17,6 +19,7 @@ namespace KartGame.Kart
     {
         [SerializeField] private KartController kartController;
         [SerializeField] private CheckpointTracker checkpointTracker;
+        [SerializeField] private KartPowerUpController powerUpController;
         [SerializeField] private float reverseSpeedThreshold = 1.25f;
         [SerializeField] private bool forceEnableControlOnInput = true;
 
@@ -26,6 +29,8 @@ namespace KartGame.Kart
         {
             kartController ??= GetComponent<KartController>();
             checkpointTracker ??= GetComponent<CheckpointTracker>();
+            powerUpController ??= GetComponent<KartPowerUpController>();
+            powerUpController ??= GetComponentInChildren<KartPowerUpController>(true);
         }
 
         private void Update()
@@ -34,6 +39,9 @@ namespace KartGame.Kart
             {
                 return;
             }
+
+            powerUpController ??= GetComponent<KartPowerUpController>();
+            powerUpController ??= GetComponentInChildren<KartPowerUpController>(true);
 
             var acceleratePressed = Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed;
             var brakePressed = Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed;
@@ -93,8 +101,49 @@ namespace KartGame.Kart
 
             if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
-                SendMessage("UseStoredPowerUp", SendMessageOptions.DontRequireReceiver);
+                if (powerUpController != null)
+                {
+                    powerUpController.UseStoredPowerUp();
+                }
+                else
+                {
+                    BroadcastMessage("UseStoredPowerUp", SendMessageOptions.DontRequireReceiver);
+                }
             }
+
+            if (WasPowerUpKeyPressed(Keyboard.current.digit1Key, Keyboard.current.numpad1Key))
+            {
+                TryUseSpecificPowerUp(PowerUpType.Banana);
+            }
+            else if (WasPowerUpKeyPressed(Keyboard.current.digit2Key, Keyboard.current.numpad2Key))
+            {
+                TryUseSpecificPowerUp(PowerUpType.Shell);
+            }
+            else if (WasPowerUpKeyPressed(Keyboard.current.digit3Key, Keyboard.current.numpad3Key))
+            {
+                TryUseSpecificPowerUp(PowerUpType.Mushroom);
+            }
+            else if (WasPowerUpKeyPressed(Keyboard.current.digit4Key, Keyboard.current.numpad4Key))
+            {
+                TryUseSpecificPowerUp(PowerUpType.Star);
+            }
+        }
+
+        private static bool WasPowerUpKeyPressed(ButtonControl mainKey, ButtonControl alternativeKey)
+        {
+            return (mainKey != null && mainKey.wasPressedThisFrame)
+                || (alternativeKey != null && alternativeKey.wasPressedThisFrame);
+        }
+
+        private void TryUseSpecificPowerUp(PowerUpType powerUpType)
+        {
+            if (powerUpController != null)
+            {
+                powerUpController.UsePowerUp(powerUpType);
+                return;
+            }
+
+            Debug.LogWarning($"No KartPowerUpController was found for player power-up input '{powerUpType}'.", this);
         }
     }
 }

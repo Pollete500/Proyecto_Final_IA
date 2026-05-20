@@ -1,0 +1,29 @@
+{
+    "PowerUpAgent": {
+        "checkpoints": [
+            {
+                "steps": 7830,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerup_03\\PowerUpAgent\\PowerUpAgent-7830.onnx",
+                "reward": -133.1818181818182,
+                "creation_time": 1779293788.035425,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\powerup_03\\PowerUpAgent\\PowerUpAgent-7830.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 7830,
+            "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerup_03\\PowerUpAgent.onnx",
+            "reward": -133.1818181818182,
+            "creation_time": 1779293788.035425,
+            "auxillary_file_paths": [
+                ".\\Assets\\MLAgents\\TrainingLogs\\powerup_03\\PowerUpAgent\\PowerUpAgent-7830.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

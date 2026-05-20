@@ -1,0 +1,21 @@
+Kart Racing Power-Up Usage Report
+================================
+Generated: 2026-05-20 19:51:19
+Scene: TrainingScene Pol
+TrackRoot: TrackRoot (1)
+
+Totals
+------
+Total Power Ups Used: 1
+Banana: 1
+Shell: 0
+Mushroom: 0
+Star: 0
+
+Per Kart
+--------
+PlayerKart: 1
+  Banana: 1
+  Shell: 0
+  Mushroom: 0
+  Star: 0

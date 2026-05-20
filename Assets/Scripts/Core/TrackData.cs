@@ -1,5 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using KartGame.Kart;
+using KartGame.PowerUps;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace KartGame.Core
 {
@@ -21,6 +26,11 @@ namespace KartGame.Core
         [SerializeField] private bool drawGizmos = true;
         [SerializeField] private bool closeCheckpointLoopGizmo = true;
         [SerializeField] private Color checkpointGizmoColor = new Color(1f, 0.78f, 0.2f, 0.9f);
+        [SerializeField] private bool generatePowerUpUsageReport;
+
+        private readonly Dictionary<PowerUpType, int> _powerUpUseCounts = new Dictionary<PowerUpType, int>();
+        private readonly Dictionary<string, Dictionary<PowerUpType, int>> _perKartPowerUpUseCounts = new Dictionary<string, Dictionary<PowerUpType, int>>();
+        private bool _reportWritten;
 
         public int LapsToWin => Mathf.Max(1, lapsToWin);
         public int CheckpointCount => checkpoints?.Length ?? 0;
@@ -29,6 +39,38 @@ namespace KartGame.Core
         public Transform[] SpawnPoints => spawnPoints;
         public Transform[] PowerUpBoxes => powerUpBoxes;
         public Transform[] RespawnPoints => respawnPoints;
+
+        private void Awake()
+        {
+            if (!Application.isPlaying || !generatePowerUpUsageReport)
+            {
+                return;
+            }
+
+            ResetPowerUpUsageTracking();
+            KartPowerUpController.AnyPowerUpUsed += HandlePowerUpUsed;
+        }
+
+        private void OnDisable()
+        {
+            if (!Application.isPlaying || !generatePowerUpUsageReport)
+            {
+                return;
+            }
+
+            TryWritePowerUpUsageReport();
+            KartPowerUpController.AnyPowerUpUsed -= HandlePowerUpUsed;
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (!generatePowerUpUsageReport)
+            {
+                return;
+            }
+
+            TryWritePowerUpUsageReport();
+        }
 
         [ContextMenu("Sync Child Collections")]
         public void SyncChildCollections()
@@ -155,6 +197,124 @@ namespace KartGame.Core
                     Gizmos.DrawLine(current.position, next.position);
                 }
             }
+        }
+
+        private void ResetPowerUpUsageTracking()
+        {
+            _reportWritten = false;
+            _powerUpUseCounts.Clear();
+            _perKartPowerUpUseCounts.Clear();
+
+            var powerUpTypes = (PowerUpType[])Enum.GetValues(typeof(PowerUpType));
+            for (var index = 0; index < powerUpTypes.Length; index++)
+            {
+                _powerUpUseCounts[powerUpTypes[index]] = 0;
+            }
+        }
+
+        private void HandlePowerUpUsed(KartPowerUpController sourceController, PowerUpType powerUpType)
+        {
+            if (!_powerUpUseCounts.ContainsKey(powerUpType))
+            {
+                _powerUpUseCounts[powerUpType] = 0;
+            }
+
+            _powerUpUseCounts[powerUpType]++;
+
+            var kartName = "Unknown";
+            if (sourceController != null)
+            {
+                var sourceKart = sourceController.GetComponentInParent<KartController>();
+                kartName = sourceKart != null ? sourceKart.name : sourceController.transform.root.name;
+            }
+
+            if (!_perKartPowerUpUseCounts.TryGetValue(kartName, out var kartCounts))
+            {
+                kartCounts = new Dictionary<PowerUpType, int>();
+                _perKartPowerUpUseCounts[kartName] = kartCounts;
+            }
+
+            if (!kartCounts.ContainsKey(powerUpType))
+            {
+                kartCounts[powerUpType] = 0;
+            }
+
+            kartCounts[powerUpType]++;
+        }
+
+        private void TryWritePowerUpUsageReport()
+        {
+            if (_reportWritten)
+            {
+                return;
+            }
+
+            _reportWritten = true;
+
+            var reportDirectory = Path.Combine(Application.dataPath, "Informes power ups");
+            Directory.CreateDirectory(reportDirectory);
+
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            var sceneName = SceneManager.GetActiveScene().name;
+            var reportPath = Path.Combine(reportDirectory, $"powerup_report_{sceneName}_{timestamp}.txt");
+
+            var reportLines = new List<string>
+            {
+                "Kart Racing Power-Up Usage Report",
+                "================================",
+                $"Generated: {DateTime.Now:yyyy-MM-dd HH:mm:ss}",
+                $"Scene: {sceneName}",
+                $"TrackRoot: {name}",
+                string.Empty,
+                "Totals",
+                "------"
+            };
+
+            var totalUsed = 0;
+            var powerUpTypes = (PowerUpType[])Enum.GetValues(typeof(PowerUpType));
+            for (var index = 0; index < powerUpTypes.Length; index++)
+            {
+                var powerUpType = powerUpTypes[index];
+                var count = _powerUpUseCounts.TryGetValue(powerUpType, out var storedCount) ? storedCount : 0;
+                totalUsed += count;
+                reportLines.Add($"{powerUpType}: {count}");
+            }
+
+            reportLines.Insert(reportLines.Count - powerUpTypes.Length, $"Total Power Ups Used: {totalUsed}");
+
+            reportLines.Add(string.Empty);
+            reportLines.Add("Per Kart");
+            reportLines.Add("--------");
+
+            if (_perKartPowerUpUseCounts.Count == 0)
+            {
+                reportLines.Add("No power ups were used.");
+            }
+            else
+            {
+                foreach (var kartEntry in _perKartPowerUpUseCounts)
+                {
+                    var kartTotal = 0;
+                    foreach (var count in kartEntry.Value.Values)
+                    {
+                        kartTotal += count;
+                    }
+
+                    reportLines.Add($"{kartEntry.Key}: {kartTotal}");
+                    for (var index = 0; index < powerUpTypes.Length; index++)
+                    {
+                        var powerUpType = powerUpTypes[index];
+                        var count = kartEntry.Value.TryGetValue(powerUpType, out var storedCount) ? storedCount : 0;
+                        reportLines.Add($"  {powerUpType}: {count}");
+                    }
+                }
+            }
+
+            File.WriteAllLines(reportPath, reportLines);
+
+#if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
+#endif
         }
     }
 }

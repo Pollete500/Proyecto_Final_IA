@@ -5870,6 +5870,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 14, y: 3, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &401239738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 401239739}
+  m_Layer: 0
+  m_Name: ForwardLaunchPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &401239739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401239738}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.35, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1540207961}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &408615477
 GameObject:
   m_ObjectHideFlags: 0
@@ -6417,10 +6448,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 453388130}
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 453388129}
     - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 453388130}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 453388129}
     - target: {fileID: 5131326545765259854, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.777862
@@ -6470,6 +6517,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+--- !u!114 &453388129 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4933193758124320945, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 453388128}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcf30e1563c59c4c9472fe403d1940e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.CheckpointTracker
+--- !u!114 &453388130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2391639328412772156, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 453388128}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
 --- !u!1 &456862885
 GameObject:
   m_ObjectHideFlags: 0
@@ -10850,6 +10919,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 14, y: 3, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &784354012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 784354013}
+  m_Layer: 0
+  m_Name: RearDropPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &784354013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784354012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.35, z: -1.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1540207961}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &795178047
 GameObject:
   m_ObjectHideFlags: 0
@@ -12598,7 +12698,7 @@ Transform:
   m_GameObject: {fileID: 922829950}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 15, y: 1, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14257,10 +14357,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 1021224215}
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 1021224214}
     - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 1021224215}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 1021224214}
     - target: {fileID: 5131326545765259854, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.777862
@@ -14310,6 +14426,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+--- !u!114 &1021224214 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4933193758124320945, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 1021224213}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcf30e1563c59c4c9472fe403d1940e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.CheckpointTracker
+--- !u!114 &1021224215 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2391639328412772156, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 1021224213}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
 --- !u!1 &1031250500
 GameObject:
   m_ObjectHideFlags: 0
@@ -15115,10 +15253,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 1112323709}
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 1112323708}
     - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 1112323709}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 1112323708}
     - target: {fileID: 5131326545765259854, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.777862
@@ -15168,6 +15322,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+--- !u!114 &1112323708 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4933193758124320945, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 1112323707}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcf30e1563c59c4c9472fe403d1940e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.CheckpointTracker
+--- !u!114 &1112323709 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2391639328412772156, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 1112323707}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
 --- !u!21 &1116860374
 Material:
   serializedVersion: 8
@@ -19949,6 +20125,7 @@ MonoBehaviour:
   drawGizmos: 1
   closeCheckpointLoopGizmo: 1
   checkpointGizmoColor: {r: 1, g: 0.78, b: 0.2, a: 0.9}
+  generatePowerUpUsageReport: 1
 --- !u!4 &1507864156
 Transform:
   m_ObjectHideFlags: 0
@@ -20387,6 +20564,89 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1536610677}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1540207960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1540207961}
+  - component: {fileID: 1540207962}
+  m_Layer: 0
+  m_Name: PowerUpController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1540207961
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540207960}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 401239739}
+  - {fileID: 784354013}
+  m_Father: {fileID: 2069211375}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1540207962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540207960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a199bc04cbe394479af509144c2e305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.PowerUps.KartPowerUpController
+  kartController: {fileID: 2069211372}
+  checkpointTracker: {fileID: 2069211371}
+  availablePowerUpPoints: 100
+  allowPowerUpPointAccumulation: 1
+  maxAccumulatedPowerUpPoints: 100
+  manualPowerUpType: 2
+  logPowerUpUsage: 1
+  awardPointEveryXCheckpointsForBots: 0
+  checkpointsPerPowerUpPoint: 1
+  logCheckpointPointGain: 0
+  forwardLaunchPoint: {fileID: 401239739}
+  rearDropPoint: {fileID: 784354013}
+  forwardLaunchDistance: 1.5
+  rearDropDistance: 1.35
+  spawnHeightOffset: 0.35
+  onlyOneActiveDeployableAtATime: 1
+  applySingleDeployableLimitToPlayer: 0
+  limitAnyPowerUpUseRate: 1
+  minimumSecondsBetweenAnyPowerUpUses: 0.2
+  bananaPrefab: {fileID: 0}
+  shellPrefab: {fileID: 0}
+  bananaLifetime: 15
+  bananaStunDuration: 2.5
+  shellLifetime: 8
+  shellSpeed: 14
+  shellTurnRateDegrees: 220
+  shellHitRadius: 0.45
+  shellStunDuration: 2.25
+  shellTargetDistance: 24
+  shellTargetMaxAngle: 70
+  mushroomBoostMultiplier: 1.6
+  mushroomBoostDuration: 1.4
+  starInvincibilityDuration: 4
+  debugAvailablePowerUpPoints: 0
+  debugCheckpointsSinceLastPoint: 0
+  debugHasActiveDeployable: 0
+  debugSecondsUntilNextAllowedUse: 0
 --- !u!1 &1543181482
 GameObject:
   m_ObjectHideFlags: 0
@@ -25383,10 +25643,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 1893544142}
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 1893544141}
     - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 1893544142}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 1893544141}
     - target: {fileID: 5131326545765259854, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.777862
@@ -25436,6 +25712,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+--- !u!114 &1893544141 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4933193758124320945, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 1893544140}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcf30e1563c59c4c9472fe403d1940e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.CheckpointTracker
+--- !u!114 &1893544142 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2391639328412772156, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 1893544140}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
 --- !u!1 &1894805167
 GameObject:
   m_ObjectHideFlags: 0
@@ -27498,8 +27796,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a23a4053eaacc48acaa2a543f8b968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.PlayerKartInput
-  kartController: {fileID: 0}
-  checkpointTracker: {fileID: 0}
+  kartController: {fileID: 2069211372}
+  checkpointTracker: {fileID: 2069211371}
+  powerUpController: {fileID: 1540207962}
   reverseSpeedThreshold: 1.25
   forceEnableControlOnInput: 1
 --- !u!114 &2069211371
@@ -27619,6 +27918,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 160353247}
+  - {fileID: 1540207961}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2072614135
@@ -28583,6 +28883,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 4125820886831035853}
+    - target: {fileID: 2173111927860406462, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 4125820886831035852}
     - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast
@@ -28607,6 +28915,18 @@ PrefabInstance:
       propertyPath: 'm_DetectableTags.Array.data[1]'
       value: Checkpoint
       objectReference: {fileID: 0}
+    - target: {fileID: 4487802605093961448, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_UseChildSensors
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: kartController
+      value: 
+      objectReference: {fileID: 4125820886831035853}
+    - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: checkpointTracker
+      value: 
+      objectReference: {fileID: 4125820886831035852}
     - target: {fileID: 5131326545765259854, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.777862
@@ -28656,6 +28976,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+--- !u!114 &4125820886831035852 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4933193758124320945, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 4125820886831035851}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcf30e1563c59c4c9472fe403d1940e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.CheckpointTracker
+--- !u!114 &4125820886831035853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2391639328412772156, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+  m_PrefabInstance: {fileID: 4125820886831035851}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78027cbf62d52844788e55dcffe96460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
