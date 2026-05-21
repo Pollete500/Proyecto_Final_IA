@@ -49,6 +49,12 @@ namespace KartGame.EditorTools
                 powerUpController = Undo.AddComponent<KartPowerUpController>(controllerRoot);
             }
 
+            var indicatorVisualizer = controllerRoot.GetComponent<PowerUpContextIndicatorVisualizer>();
+            if (indicatorVisualizer == null)
+            {
+                indicatorVisualizer = Undo.AddComponent<PowerUpContextIndicatorVisualizer>(controllerRoot);
+            }
+
             RemoveComponentIfExists<KartPowerUpBotBrain>(controllerRoot);
             RemoveComponentIfExists<KartPowerUpAgent>(controllerRoot);
             RemoveComponentIfExists<BehaviorParameters>(controllerRoot);
@@ -58,6 +64,8 @@ namespace KartGame.EditorTools
             AssignControllerReferences(powerUpController, kartController, checkpointTracker, forwardAnchor.transform, rearAnchor.transform);
             ConfigurePlayerController(powerUpController);
             AssignPlayerInputReferences(playerKartInput, kartController, checkpointTracker);
+            AssignIndicatorVisualizerReferences(indicatorVisualizer, powerUpController, null, kartController, checkpointTracker);
+            indicatorVisualizer.EnsureIndicatorObjects();
 
             Selection.activeGameObject = controllerRoot;
             EditorUtility.SetDirty(kartRoot);
@@ -95,6 +103,12 @@ namespace KartGame.EditorTools
                 powerUpController = Undo.AddComponent<KartPowerUpController>(controllerRoot);
             }
 
+            var indicatorVisualizer = controllerRoot.GetComponent<PowerUpContextIndicatorVisualizer>();
+            if (indicatorVisualizer == null)
+            {
+                indicatorVisualizer = Undo.AddComponent<PowerUpContextIndicatorVisualizer>(controllerRoot);
+            }
+
             var legacyBotBrain = controllerRoot.GetComponent<KartPowerUpBotBrain>();
             if (legacyBotBrain != null)
             {
@@ -130,10 +144,55 @@ namespace KartGame.EditorTools
             ConfigureBehaviorParameters(behaviorParameters);
             ConfigureDecisionRequester(decisionRequester);
             ConfigureWallSensor(wallSensor, checkpointTracker);
+            AssignIndicatorVisualizerReferences(indicatorVisualizer, powerUpController, powerUpAgent, kartController, checkpointTracker);
+            indicatorVisualizer.EnsureIndicatorObjects();
 
             Selection.activeGameObject = controllerRoot;
             EditorUtility.SetDirty(controllerRoot);
             EditorUtility.DisplayDialog("Power-Ups", "Hijo PowerUpController ML-Agents creado y configurado.", "OK");
+        }
+
+        [MenuItem("Tools/Kart Racing/Power-Ups/Create Context Indicators")]
+        public static void CreateContextIndicators()
+        {
+            if (Selection.activeGameObject == null)
+            {
+                EditorUtility.DisplayDialog("Power-Ups", "Selecciona primero el kart o el PowerUpController.", "OK");
+                return;
+            }
+
+            var selectedObject = Selection.activeGameObject;
+            var controllerRoot = ResolveControllerRoot(selectedObject);
+            if (controllerRoot == null)
+            {
+                EditorUtility.DisplayDialog("Power-Ups", "No se ha encontrado un PowerUpController en el objeto seleccionado ni en sus hijos.", "OK");
+                return;
+            }
+
+            var powerUpController = controllerRoot.GetComponent<KartPowerUpController>();
+            if (powerUpController == null)
+            {
+                EditorUtility.DisplayDialog("Power-Ups", "El PowerUpController no tiene KartPowerUpController.", "OK");
+                return;
+            }
+
+            var kartRoot = controllerRoot.transform.parent != null ? controllerRoot.transform.parent.gameObject : selectedObject;
+            var kartController = kartRoot.GetComponent<KartController>();
+            var checkpointTracker = kartRoot.GetComponent<CheckpointTracker>();
+            var powerUpAgent = controllerRoot.GetComponent<KartPowerUpAgent>();
+
+            var indicatorVisualizer = controllerRoot.GetComponent<PowerUpContextIndicatorVisualizer>();
+            if (indicatorVisualizer == null)
+            {
+                indicatorVisualizer = Undo.AddComponent<PowerUpContextIndicatorVisualizer>(controllerRoot);
+            }
+
+            AssignIndicatorVisualizerReferences(indicatorVisualizer, powerUpController, powerUpAgent, kartController, checkpointTracker);
+            indicatorVisualizer.EnsureIndicatorObjects();
+
+            Selection.activeGameObject = controllerRoot;
+            EditorUtility.SetDirty(controllerRoot);
+            EditorUtility.DisplayDialog("Power-Ups", "Indicadores de contexto creados/configurados.", "OK");
         }
 
         private static void ConfigureAnchors(Transform forwardAnchor, Transform rearAnchor)
@@ -157,6 +216,22 @@ namespace KartGame.EditorTools
             Undo.RegisterCreatedObjectUndo(child, $"Create {childName}");
             child.transform.SetParent(parent, false);
             return child;
+        }
+
+        private static GameObject ResolveControllerRoot(GameObject selectedObject)
+        {
+            if (selectedObject == null)
+            {
+                return null;
+            }
+
+            if (selectedObject.GetComponent<KartPowerUpController>() != null)
+            {
+                return selectedObject;
+            }
+
+            var controllerInChildren = selectedObject.GetComponentInChildren<KartPowerUpController>(true);
+            return controllerInChildren != null ? controllerInChildren.gameObject : null;
         }
 
         private static void AssignControllerReferences(
@@ -196,6 +271,22 @@ namespace KartGame.EditorTools
             serializedObject.FindProperty("checkpointTracker").objectReferenceValue = checkpointTracker;
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(powerUpAgent);
+        }
+
+        private static void AssignIndicatorVisualizerReferences(
+            PowerUpContextIndicatorVisualizer indicatorVisualizer,
+            KartPowerUpController powerUpController,
+            KartPowerUpAgent powerUpAgent,
+            KartController kartController,
+            CheckpointTracker checkpointTracker)
+        {
+            var serializedObject = new SerializedObject(indicatorVisualizer);
+            serializedObject.FindProperty("powerUpController").objectReferenceValue = powerUpController;
+            serializedObject.FindProperty("powerUpAgent").objectReferenceValue = powerUpAgent;
+            serializedObject.FindProperty("kartController").objectReferenceValue = kartController;
+            serializedObject.FindProperty("checkpointTracker").objectReferenceValue = checkpointTracker;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(indicatorVisualizer);
         }
 
         private static void AssignPlayerInputReferences(

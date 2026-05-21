@@ -1,0 +1,46 @@
+Kart Racing Power-Up Usage Report
+================================
+Generated: 2026-05-21 17:46:29
+Scene: TrainingScene Pol
+TrackRoot: TrackRoot (1)
+
+Totals
+------
+Total Power Ups Used: 413
+Banana: 40
+Shell: 57
+Mushroom: 251
+Star: 65
+
+Per Kart
+--------
+TrainingKartAgent 360 raycast (4): 80
+  Banana: 8
+  Shell: 11
+  Mushroom: 47
+  Star: 14
+TrainingKartAgent 360 raycast (5): 82
+  Banana: 3
+  Shell: 13
+  Mushroom: 57
+  Star: 9
+TrainingKartAgent 360 raycast (2): 76
+  Banana: 6
+  Shell: 12
+  Mushroom: 42
+  Star: 16
+TrainingKartAgent 360 raycast (1): 76
+  Banana: 4
+  Shell: 11
+  Mushroom: 47
+  Star: 14
+TrainingKartAgent 360 raycast: 85
+  Banana: 5
+  Shell: 10
+  Mushroom: 58
+  Star: 12
+PlayerKart: 14
+  Banana: 14
+  Shell: 0
+  Mushroom: 0
+  Star: 0

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using KartGame.Core;
 using KartGame.Kart;
@@ -33,6 +34,7 @@ namespace KartGame.PowerUps
         [Header("Use Limits")]
         [SerializeField] private bool onlyOneActiveDeployableAtATime = true;
         [SerializeField] private bool applySingleDeployableLimitToPlayer;
+        [SerializeField] private bool applySingleDeployableLimitToBots = true;
         [SerializeField] private bool limitAnyPowerUpUseRate = true;
         [SerializeField] private float minimumSecondsBetweenAnyPowerUpUses = 0.2f;
 
@@ -52,6 +54,7 @@ namespace KartGame.PowerUps
         [SerializeField] private float shellStunDuration = 2.25f;
         [SerializeField] private float shellTargetDistance = 24f;
         [SerializeField] private float shellTargetMaxAngle = 70f;
+        [SerializeField] private bool shellHomesToTargetAhead = true;
 
         [Header("Mushroom")]
         [SerializeField] private float mushroomBoostMultiplier = 1.6f;
@@ -59,6 +62,14 @@ namespace KartGame.PowerUps
 
         [Header("Star")]
         [SerializeField] private float starInvincibilityDuration = 4f;
+
+        [Header("Visual Feedback")]
+        [SerializeField] private bool colorKartByLastUsedPowerUp = true;
+        [SerializeField] private Renderer[] powerUpColorRenderers;
+        [SerializeField] private Color bananaPowerUpColor = new Color(1f, 0.9f, 0.15f, 1f);
+        [SerializeField] private Color shellPowerUpColor = new Color(0.2f, 0.85f, 0.3f, 1f);
+        [SerializeField] private Color mushroomPowerUpColor = new Color(0.95f, 0.2f, 0.2f, 1f);
+        [SerializeField] private Color starPowerUpColor = Color.white;
 
         [Header("Runtime Debug")]
         public int debugAvailablePowerUpPoints;
@@ -77,6 +88,10 @@ namespace KartGame.PowerUps
         private int _checkpointsSinceLastPoint;
         private PowerUpHazardBase _activeDeployableHazard;
         private float _nextAllowedUseTime;
+        private MaterialPropertyBlock _powerUpColorPropertyBlock;
+
+        private static readonly int BaseColorPropertyId = Shader.PropertyToID("_BaseColor");
+        private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
         private void Awake()
         {
@@ -219,6 +234,8 @@ namespace KartGame.PowerUps
             _nextAllowedUseTime = limitAnyPowerUpUseRate
                 ? Time.time + Mathf.Max(0.2f, minimumSecondsBetweenAnyPowerUpUses)
                 : 0f;
+
+            ApplyLastUsedPowerUpColor(powerUpType);
             SyncDebugState();
 
             if (logPowerUpUsage)
@@ -343,12 +360,13 @@ namespace KartGame.PowerUps
                 this,
                 kartController,
                 PowerUpType.Shell,
-                preferredTarget != null ? preferredTarget : FindBestShellTarget(),
+                shellHomesToTargetAhead ? (preferredTarget != null ? preferredTarget : FindBestShellTarget()) : null,
                 shellStunDuration,
                 shellLifetime,
                 shellSpeed,
                 shellTurnRateDegrees,
-                shellHitRadius);
+                shellHitRadius,
+                shellHomesToTargetAhead);
             RegisterActiveDeployable(shell);
             ConfigureRuntimeHazardObject(shellObject);
             SyncDebugState();
@@ -501,6 +519,14 @@ namespace KartGame.PowerUps
             kartController ??= GetComponentInParent<KartController>();
             checkpointTracker ??= GetComponent<CheckpointTracker>();
             checkpointTracker ??= GetComponentInParent<CheckpointTracker>();
+            _powerUpColorPropertyBlock ??= new MaterialPropertyBlock();
+
+            if (powerUpColorRenderers == null || powerUpColorRenderers.Length == 0)
+            {
+                powerUpColorRenderers = kartController != null
+                    ? kartController.GetComponentsInChildren<Renderer>(true)
+                    : Array.Empty<Renderer>();
+            }
         }
 
         private void SubscribeToCheckpointEvents()
@@ -544,9 +570,14 @@ namespace KartGame.PowerUps
                 return false;
             }
 
-            if (checkpointTracker != null && checkpointTracker.IsPlayer && !applySingleDeployableLimitToPlayer)
+            if (checkpointTracker != null)
             {
-                return false;
+                if (checkpointTracker.IsPlayer)
+                {
+                    return applySingleDeployableLimitToPlayer && _activeDeployableHazard != null;
+                }
+
+                return applySingleDeployableLimitToBots && _activeDeployableHazard != null;
             }
 
             return _activeDeployableHazard != null;
@@ -604,7 +635,7 @@ namespace KartGame.PowerUps
             var visualCollider = visual.GetComponent<Collider>();
             if (visualCollider != null)
             {
-                Object.Destroy(visualCollider);
+                UnityEngine.Object.Destroy(visualCollider);
             }
 
             return root;
@@ -624,7 +655,7 @@ namespace KartGame.PowerUps
             var visualCollider = visual.GetComponent<Collider>();
             if (visualCollider != null)
             {
-                Object.Destroy(visualCollider);
+                UnityEngine.Object.Destroy(visualCollider);
             }
 
             return root;
@@ -654,6 +685,60 @@ namespace KartGame.PowerUps
             }
 
             targetObject.hideFlags = HideFlags.HideInHierarchy;
+        }
+
+        private void ApplyLastUsedPowerUpColor(PowerUpType powerUpType)
+        {
+            if (!colorKartByLastUsedPowerUp)
+            {
+                return;
+            }
+
+            CacheReferences();
+            if (powerUpColorRenderers == null || powerUpColorRenderers.Length == 0 || _powerUpColorPropertyBlock == null)
+            {
+                return;
+            }
+
+            var targetColor = powerUpType switch
+            {
+                PowerUpType.Banana => bananaPowerUpColor,
+                PowerUpType.Shell => shellPowerUpColor,
+                PowerUpType.Mushroom => mushroomPowerUpColor,
+                PowerUpType.Star => starPowerUpColor,
+                _ => Color.white
+            };
+
+            foreach (var powerUpRenderer in powerUpColorRenderers)
+            {
+                if (powerUpRenderer == null)
+                {
+                    continue;
+                }
+
+                var sharedMaterial = powerUpRenderer.sharedMaterial;
+                if (sharedMaterial == null)
+                {
+                    continue;
+                }
+
+                _powerUpColorPropertyBlock.Clear();
+
+                if (sharedMaterial.HasProperty(BaseColorPropertyId))
+                {
+                    _powerUpColorPropertyBlock.SetColor(BaseColorPropertyId, targetColor);
+                }
+                else if (sharedMaterial.HasProperty(ColorPropertyId))
+                {
+                    _powerUpColorPropertyBlock.SetColor(ColorPropertyId, targetColor);
+                }
+                else
+                {
+                    continue;
+                }
+
+                powerUpRenderer.SetPropertyBlock(_powerUpColorPropertyBlock);
+            }
         }
     }
 }

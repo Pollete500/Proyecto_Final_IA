@@ -1,0 +1,65 @@
+{
+    "PowerUpAgent": {
+        "checkpoints": [
+            {
+                "steps": 96145,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-96145.onnx",
+                "reward": 0.5,
+                "creation_time": 1779377474.5972106,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-96145.pt"
+                ]
+            },
+            {
+                "steps": 110964,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-110964.onnx",
+                "reward": -4.333333333333333,
+                "creation_time": 1779378213.0029354,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-110964.pt"
+                ]
+            },
+            {
+                "steps": 130658,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-130658.onnx",
+                "reward": -0.875,
+                "creation_time": 1779378453.4450567,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-130658.pt"
+                ]
+            },
+            {
+                "steps": 137379,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-137379.onnx",
+                "reward": -5.0,
+                "creation_time": 1779378670.4608457,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-137379.pt"
+                ]
+            },
+            {
+                "steps": 166567,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-166567.onnx",
+                "reward": 1.0,
+                "creation_time": 1779379282.0421588,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-166567.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 166567,
+            "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent.onnx",
+            "reward": 1.0,
+            "creation_time": 1779379282.0421588,
+            "auxillary_file_paths": [
+                ".\\Assets\\MLAgents\\TrainingLogs\\powerups_1\\PowerUpAgent\\PowerUpAgent-166567.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

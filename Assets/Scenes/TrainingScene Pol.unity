@@ -20627,6 +20627,7 @@ MonoBehaviour:
   spawnHeightOffset: 0.35
   onlyOneActiveDeployableAtATime: 1
   applySingleDeployableLimitToPlayer: 0
+  applySingleDeployableLimitToBots: 1
   limitAnyPowerUpUseRate: 1
   minimumSecondsBetweenAnyPowerUpUses: 0.2
   bananaPrefab: {fileID: 0}
@@ -20640,9 +20641,17 @@ MonoBehaviour:
   shellStunDuration: 2.25
   shellTargetDistance: 24
   shellTargetMaxAngle: 70
+  shellHomesToTargetAhead: 1
   mushroomBoostMultiplier: 1.6
   mushroomBoostDuration: 1.4
   starInvincibilityDuration: 4
+  colorKartByLastUsedPowerUp: 1
+  powerUpColorRenderers:
+  - {fileID: 160353248}
+  bananaPowerUpColor: {r: 1, g: 0.9, b: 0.15, a: 1}
+  shellPowerUpColor: {r: 0.2, g: 0.85, b: 0.3, a: 1}
+  mushroomPowerUpColor: {r: 0.95, g: 0.2, b: 0.2, a: 1}
+  starPowerUpColor: {r: 1, g: 1, b: 1, a: 1}
   debugAvailablePowerUpPoints: 0
   debugCheckpointsSinceLastPoint: 0
   debugHasActiveDeployable: 0
@@ -28895,6 +28904,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast
       objectReference: {fileID: 0}
+    - target: {fileID: 3801547919202124594, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4431645015551169420, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_MaxRayDegrees
       value: 160
@@ -28965,6 +28978,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5131326545765259854, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831991339365968078, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6175801959125631302, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}

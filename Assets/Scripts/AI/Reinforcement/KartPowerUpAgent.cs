@@ -30,6 +30,8 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private float behindSenseHalfAngle = 70f;
         [SerializeField] private float nearbyHazardRadius = 8f;
         [SerializeField] private int nearbyHazardsForStar = 2;
+        [SerializeField] private bool ignoreBananasBehindAndShellsAhead;
+        [SerializeField] private bool ignoreStraightSectionMaxTargetAngle;
         [SerializeField] private float straightSectionMaxTargetAngle = 12f;
         [SerializeField] private int maxWallHitsForStraightSection = 1;
 
@@ -44,6 +46,13 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private float bananaHitReward = 1f;
         [SerializeField] private float decisionStepPenalty = 0.0005f;
 
+        [Header("Reward Feedback")]
+        [SerializeField] private bool colorKartByLastPowerUpReward;
+        [SerializeField] private Renderer[] powerUpRewardColorRenderers;
+        [SerializeField] private Color positivePowerUpRewardColor = new Color(0.22f, 0.9f, 0.52f, 1f);
+        [SerializeField] private Color negativePowerUpRewardColor = new Color(0.95f, 0.2f, 0.2f, 1f);
+        [SerializeField] private float minimumRewardMagnitudeForColorFeedback = 0.01f;
+
         [Header("Runtime Debug")]
         public int debugEnemiesAheadClose;
         public int debugEnemiesBehindClose;
@@ -57,6 +66,10 @@ namespace KartGame.AI.Reinforcement
         private float _nearestBehindDistanceNormalized = 1f;
         private float _nextCheckpointAngleNormalized;
         private float _wallHitRatio;
+        private MaterialPropertyBlock _powerUpRewardColorPropertyBlock;
+
+        private static readonly int BaseColorPropertyId = Shader.PropertyToID("_BaseColor");
+        private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
         private void Awake()
         {
@@ -269,6 +282,14 @@ namespace KartGame.AI.Reinforcement
             wallSensor ??= GetComponent<CheckpointAwareRayPerceptionSensorComponent3D>();
             wallSensor ??= GetComponentInChildren<CheckpointAwareRayPerceptionSensorComponent3D>(true);
             wallSensor ??= GetComponentInParent<CheckpointAwareRayPerceptionSensorComponent3D>();
+            _powerUpRewardColorPropertyBlock ??= new MaterialPropertyBlock();
+
+            if (powerUpRewardColorRenderers == null || powerUpRewardColorRenderers.Length == 0)
+            {
+                powerUpRewardColorRenderers = kartController != null
+                    ? kartController.GetComponentsInChildren<Renderer>(true)
+                    : System.Array.Empty<Renderer>();
+            }
         }
 
         private void ConfigureWallSensorDebug()
@@ -435,7 +456,8 @@ namespace KartGame.AI.Reinforcement
 
         private int CountNearbyHazards()
         {
-            var hits = Physics.OverlapSphere(transform.position, nearbyHazardRadius, ~0, QueryTriggerInteraction.Collide);
+            var referenceTransform = kartController != null ? kartController.transform : transform;
+            var hits = Physics.OverlapSphere(referenceTransform.position, nearbyHazardRadius, ~0, QueryTriggerInteraction.Collide);
             var hazards = new HashSet<PowerUpHazardBase>();
 
             for (var index = 0; index < hits.Length; index++)
@@ -444,6 +466,20 @@ namespace KartGame.AI.Reinforcement
                 if (hazard == null || hazard.OwnerKart == kartController)
                 {
                     continue;
+                }
+
+                if (ignoreBananasBehindAndShellsAhead)
+                {
+                    var localHazardPosition = referenceTransform.InverseTransformPoint(hazard.transform.position);
+                    if (hazard.PowerUpType == PowerUpType.Banana && localHazardPosition.z < 0f)
+                    {
+                        continue;
+                    }
+
+                    if (hazard.PowerUpType == PowerUpType.Shell && localHazardPosition.z > 0f)
+                    {
+                        continue;
+                    }
                 }
 
                 hazards.Add(hazard);
@@ -492,7 +528,8 @@ namespace KartGame.AI.Reinforcement
             var localTarget = referenceTransform.InverseTransformPoint(nextCheckpoint.position);
             var targetAngle = Mathf.Abs(Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg);
             _nextCheckpointAngleNormalized = Mathf.Clamp01(targetAngle / 90f);
-            return targetAngle <= straightSectionMaxTargetAngle && wallHitCount <= maxWallHitsForStraightSection;
+            var angleRequirementPassed = ignoreStraightSectionMaxTargetAngle || targetAngle <= straightSectionMaxTargetAngle;
+            return angleRequirementPassed && wallHitCount <= maxWallHitsForStraightSection;
         }
 
         private void ApplyReward(float rewardDelta)
@@ -503,6 +540,57 @@ namespace KartGame.AI.Reinforcement
             }
 
             AddReward(rewardDelta);
+            ApplyPowerUpRewardColorFeedback(rewardDelta);
+        }
+
+        private void ApplyPowerUpRewardColorFeedback(float rewardDelta)
+        {
+            if (!colorKartByLastPowerUpReward)
+            {
+                return;
+            }
+
+            if (Mathf.Abs(rewardDelta) < minimumRewardMagnitudeForColorFeedback)
+            {
+                return;
+            }
+
+            CacheReferences();
+            if (powerUpRewardColorRenderers == null || powerUpRewardColorRenderers.Length == 0 || _powerUpRewardColorPropertyBlock == null)
+            {
+                return;
+            }
+
+            var targetColor = rewardDelta > 0f ? positivePowerUpRewardColor : negativePowerUpRewardColor;
+            foreach (var rewardRenderer in powerUpRewardColorRenderers)
+            {
+                if (rewardRenderer == null)
+                {
+                    continue;
+                }
+
+                var sharedMaterial = rewardRenderer.sharedMaterial;
+                if (sharedMaterial == null)
+                {
+                    continue;
+                }
+
+                _powerUpRewardColorPropertyBlock.Clear();
+                if (sharedMaterial.HasProperty(BaseColorPropertyId))
+                {
+                    _powerUpRewardColorPropertyBlock.SetColor(BaseColorPropertyId, targetColor);
+                }
+                else if (sharedMaterial.HasProperty(ColorPropertyId))
+                {
+                    _powerUpRewardColorPropertyBlock.SetColor(ColorPropertyId, targetColor);
+                }
+                else
+                {
+                    continue;
+                }
+
+                rewardRenderer.SetPropertyBlock(_powerUpRewardColorPropertyBlock);
+            }
         }
 
         private void ResetRuntimeContext()

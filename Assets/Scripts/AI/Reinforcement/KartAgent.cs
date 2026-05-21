@@ -48,35 +48,17 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private bool ignoreCheckpointsInRaySensor;
         [SerializeField, Min(0)] private int visibleCheckpointsAheadInRaySensor = 3;
 
-        [Header("Reward Feedback")]
-        [SerializeField] private bool showRewardFlash = true;
+        [Header("Debug")]
         [SerializeField] private bool logRewardEvents = true;
         [SerializeField] private bool logEpisodeResets = true;
-        [SerializeField] private Renderer[] rewardFlashRenderers;
-        [SerializeField] private Color positiveRewardColor = new Color(0.22f, 0.9f, 0.52f);
-        [SerializeField] private Color negativeRewardColor = new Color(0.95f, 0.2f, 0.2f);
-        [SerializeField] private float rewardFlashDuration = 0.5f;
-        [SerializeField] private float positiveRewardFlashMinimumMagnitude = 0.00005f;
-        [SerializeField] private float negativeRewardFlashMinimumMagnitude = 0.01f;
-
-        private static readonly int BaseColorPropertyId = Shader.PropertyToID("_BaseColor");
-        private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
-        private MaterialPropertyBlock _rewardFlashPropertyBlock;
         private float _lastDistanceToCheckpoint = float.PositiveInfinity;
-        private float _rewardFlashTimeRemaining;
         private bool _episodeRunning;
         private bool _isOffTrack;
 
         private void Awake()
         {
-            EnsureRewardFlashResources();
             CacheReferences();
             ApplyRuntimeSetup();
-        }
-
-        private void Update()
-        {
-            UpdateRewardFlash(Time.deltaTime);
         }
 
         protected override void OnEnable()
@@ -490,10 +472,6 @@ namespace KartGame.AI.Reinforcement
                 aiKartInputToDisable = GetComponent<AIKartInput>();
             }
 
-            if (rewardFlashRenderers == null || rewardFlashRenderers.Length == 0)
-            {
-                rewardFlashRenderers = GetComponentsInChildren<Renderer>(true);
-            }
         }
 
         private void ApplyRuntimeSetup()
@@ -559,121 +537,6 @@ namespace KartGame.AI.Reinforcement
             }
 
             AddReward(rewardDelta);
-            TriggerRewardFlash(rewardDelta);
-        }
-
-        private void TriggerRewardFlash(float rewardDelta)
-        {
-            if (!showRewardFlash || rewardFlashDuration <= 0f)
-            {
-                return;
-            }
-
-            var magnitude = Mathf.Abs(rewardDelta);
-            if (rewardDelta > 0f)
-            {
-                if (magnitude < positiveRewardFlashMinimumMagnitude)
-                {
-                    return;
-                }
-
-                ApplyRewardFlashColor(positiveRewardColor);
-                _rewardFlashTimeRemaining = rewardFlashDuration;
-            }
-            else if (rewardDelta < 0f)
-            {
-                if (magnitude < negativeRewardFlashMinimumMagnitude)
-                {
-                    return;
-                }
-
-                ApplyRewardFlashColor(negativeRewardColor);
-                _rewardFlashTimeRemaining = rewardFlashDuration;
-            }
-        }
-
-        private void UpdateRewardFlash(float deltaTime)
-        {
-            if (_rewardFlashTimeRemaining <= 0f)
-            {
-                return;
-            }
-
-            _rewardFlashTimeRemaining -= deltaTime;
-            if (_rewardFlashTimeRemaining > 0f)
-            {
-                return;
-            }
-
-            ClearRewardFlash();
-        }
-
-        private void ApplyRewardFlashColor(Color color)
-        {
-            EnsureRewardFlashResources();
-            if (rewardFlashRenderers == null || rewardFlashRenderers.Length == 0)
-            {
-                rewardFlashRenderers = GetComponentsInChildren<Renderer>(true);
-            }
-
-            foreach (var rewardRenderer in rewardFlashRenderers)
-            {
-                if (rewardRenderer == null)
-                {
-                    continue;
-                }
-
-                var sharedMaterial = rewardRenderer.sharedMaterial;
-                if (sharedMaterial == null)
-                {
-                    continue;
-                }
-
-                _rewardFlashPropertyBlock.Clear();
-
-                if (sharedMaterial.HasProperty(BaseColorPropertyId))
-                {
-                    _rewardFlashPropertyBlock.SetColor(BaseColorPropertyId, color);
-                }
-                else if (sharedMaterial.HasProperty(ColorPropertyId))
-                {
-                    _rewardFlashPropertyBlock.SetColor(ColorPropertyId, color);
-                }
-                else
-                {
-                    continue;
-                }
-
-                rewardRenderer.SetPropertyBlock(_rewardFlashPropertyBlock);
-            }
-        }
-
-        private void ClearRewardFlash()
-        {
-            _rewardFlashTimeRemaining = 0f;
-
-            if (rewardFlashRenderers == null)
-            {
-                return;
-            }
-
-            foreach (var rewardRenderer in rewardFlashRenderers)
-            {
-                if (rewardRenderer == null)
-                {
-                    continue;
-                }
-
-                rewardRenderer.SetPropertyBlock(null);
-            }
-        }
-
-        private void EnsureRewardFlashResources()
-        {
-            if (_rewardFlashPropertyBlock == null)
-            {
-                _rewardFlashPropertyBlock = new MaterialPropertyBlock();
-            }
         }
     }
 }
