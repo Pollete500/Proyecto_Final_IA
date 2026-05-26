@@ -78,6 +78,11 @@ namespace KartGame.PowerUps
         public float debugSecondsUntilNextAllowedUse;
 
         public int AvailablePowerUpPoints => availablePowerUpPoints;
+        public float CooldownRemainingSeconds => Mathf.Max(0f, _nextAllowedUseTime - Time.time);
+        public float CooldownRemainingNormalized => limitAnyPowerUpUseRate
+            ? Mathf.Clamp01(CooldownRemainingSeconds / Mathf.Max(0.2f, minimumSecondsBetweenAnyPowerUpUses))
+            : 0f;
+        public bool HasActiveDeployableBlockingUse => HasActiveDeployable();
         public static event System.Action<KartPowerUpController, PowerUpType> AnyPowerUpUsed;
         public static event System.Action<KartPowerUpController, PowerUpType, KartController> AnyPowerUpHit;
         public event System.Action<int> PowerUpPointsAdded;
@@ -184,6 +189,30 @@ namespace KartGame.PowerUps
         public bool UsePowerUp(PowerUpType powerUpType)
         {
             return UsePowerUp(powerUpType, null);
+        }
+
+        public bool CanAttemptPowerUp(PowerUpType powerUpType)
+        {
+            CacheReferences();
+
+            if (kartController == null || availablePowerUpPoints <= 0)
+            {
+                return false;
+            }
+
+            if (limitAnyPowerUpUseRate && Time.time < _nextAllowedUseTime)
+            {
+                return false;
+            }
+
+            return powerUpType switch
+            {
+                PowerUpType.Banana => !HasActiveDeployable(),
+                PowerUpType.Shell => !HasActiveDeployable(),
+                PowerUpType.Mushroom => true,
+                PowerUpType.Star => true,
+                _ => false
+            };
         }
 
         public bool UsePowerUp(PowerUpType powerUpType, CheckpointTracker preferredTarget)

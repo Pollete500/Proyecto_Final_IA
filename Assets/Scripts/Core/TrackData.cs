@@ -284,10 +284,14 @@ namespace KartGame.Core
                 IncrementPerKartPowerUpCount(_perKartPowerUpSuggestedCounts, GetKartName(sourceAgent), suggestedPowerUp.Value);
             }
 
-            if (decisionOutcome == KartPowerUpAgent.PowerUpDecisionOutcome.CorrectChoice && suggestedPowerUp.HasValue)
+            if (decisionOutcome == KartPowerUpAgent.PowerUpDecisionOutcome.CorrectChoice)
             {
-                IncrementPowerUpCount(_powerUpCorrectChoiceCounts, suggestedPowerUp.Value);
-                IncrementPerKartPowerUpCount(_perKartPowerUpCorrectChoiceCounts, GetKartName(sourceAgent), suggestedPowerUp.Value);
+                var correctPowerUp = chosenPowerUp ?? suggestedPowerUp;
+                if (correctPowerUp.HasValue)
+                {
+                    IncrementPowerUpCount(_powerUpCorrectChoiceCounts, correctPowerUp.Value);
+                    IncrementPerKartPowerUpCount(_perKartPowerUpCorrectChoiceCounts, GetKartName(sourceAgent), correctPowerUp.Value);
+                }
             }
         }
 

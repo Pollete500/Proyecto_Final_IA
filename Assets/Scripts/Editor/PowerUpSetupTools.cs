@@ -305,7 +305,7 @@ namespace KartGame.EditorTools
         {
             behaviorParameters.BehaviorName = "PowerUpAgent";
             behaviorParameters.BehaviorType = BehaviorType.Default;
-            behaviorParameters.BrainParameters.VectorObservationSize = 11;
+            behaviorParameters.BrainParameters.VectorObservationSize = 13;
             behaviorParameters.BrainParameters.NumStackedVectorObservations = 1;
             behaviorParameters.BrainParameters.ActionSpec = ActionSpec.MakeDiscrete(5);
             EditorUtility.SetDirty(behaviorParameters);

@@ -1,0 +1,143 @@
+Kart Racing Power-Up Usage Report
+================================
+Generated: 2026-05-26 19:52:45
+Scene: TrainingScene Pol
+TrackRoot: TrackRoot (1)
+
+Totals
+------
+Total Power Ups Used: 1675
+Banana: 155
+Shell: 108
+Mushroom: 1356
+Star: 56
+
+Learning Summary
+----------------
+Total Failed Uses: 4675
+Total Power Up Hits: 142
+Correct Choices: 3480
+Wrong Choices: 1384
+Missed Opportunities: 925
+Unnecessary Uses: 1486
+Uses Without Points: 125945
+Overall Decision Accuracy: 72 %
+Overall Execution Success Rate: 26 %
+Overall Learning Verdict: Aprendizaje parcial, aun inconsistente.
+
+Per Power Up Learning
+---------------------
+Banana:
+  Suggested Opportunities: 22681
+  Correct Context Choices: 841
+  Successful Uses: 155
+  Failed Uses: 2460
+  Hits: 114
+  Decision Accuracy: 4 %
+  Execution Success Rate: 6 %
+  Learning Verdict: No parece aprenderlo todavia.
+Shell:
+  Suggested Opportunities: 32263
+  Correct Context Choices: 445
+  Successful Uses: 108
+  Failed Uses: 1361
+  Hits: 28
+  Decision Accuracy: 1 %
+  Execution Success Rate: 7 %
+  Learning Verdict: No parece aprenderlo todavia.
+Mushroom:
+  Suggested Opportunities: 31235
+  Correct Context Choices: 2176
+  Successful Uses: 1356
+  Failed Uses: 837
+  Hits: 0
+  Decision Accuracy: 7 %
+  Execution Success Rate: 62 %
+  Learning Verdict: Aprendizaje parcial.
+Star:
+  Suggested Opportunities: 35094
+  Correct Context Choices: 18
+  Successful Uses: 56
+  Failed Uses: 17
+  Hits: 0
+  Decision Accuracy: 0 %
+  Execution Success Rate: 77 %
+  Learning Verdict: Aprendizaje parcial.
+
+Per Kart
+--------
+TrainingKartAgent 360 raycast: 334
+  Banana: 34
+  Shell: 20
+  Mushroom: 272
+  Star: 8
+  Learning:
+    Correct Choices: 657
+    Wrong Choices: 257
+    Missed Opportunities: 207
+    Unnecessary Uses: 114
+    Uses Without Points: 25361
+    Banana -> suggested: 6115, correct: 252, failed: 431, hits: 24
+    Shell -> suggested: 6936, correct: 94, failed: 227, hits: 3
+    Mushroom -> suggested: 4380, correct: 308, failed: 36, hits: 0
+    Star -> suggested: 7436, correct: 3, failed: 0, hits: 0
+TrainingKartAgent 360 raycast (5): 335
+  Banana: 32
+  Shell: 24
+  Mushroom: 264
+  Star: 15
+  Learning:
+    Correct Choices: 633
+    Wrong Choices: 192
+    Missed Opportunities: 168
+    Unnecessary Uses: 393
+    Uses Without Points: 25148
+    Banana -> suggested: 3130, correct: 41, failed: 348, hits: 29
+    Shell -> suggested: 5332, correct: 87, failed: 292, hits: 7
+    Mushroom -> suggested: 7097, correct: 501, failed: 241, hits: 0
+    Star -> suggested: 8060, correct: 4, failed: 2, hits: 0
+TrainingKartAgent 360 raycast (4): 345
+  Banana: 29
+  Shell: 27
+  Mushroom: 276
+  Star: 13
+  Learning:
+    Correct Choices: 420
+    Wrong Choices: 152
+    Missed Opportunities: 170
+    Unnecessary Uses: 224
+    Uses Without Points: 25798
+    Banana -> suggested: 5620, correct: 105, failed: 263, hits: 22
+    Shell -> suggested: 4276, correct: 18, failed: 166, hits: 6
+    Mushroom -> suggested: 9141, correct: 295, failed: 22, hits: 0
+    Star -> suggested: 4484, correct: 2, failed: 0, hits: 0
+TrainingKartAgent 360 raycast (2): 333
+  Banana: 31
+  Shell: 22
+  Mushroom: 271
+  Star: 9
+  Learning:
+    Correct Choices: 1081
+    Wrong Choices: 581
+    Missed Opportunities: 217
+    Unnecessary Uses: 282
+    Uses Without Points: 24483
+    Banana -> suggested: 3474, correct: 252, failed: 826, hits: 21
+    Shell -> suggested: 8439, correct: 221, failed: 432, hits: 9
+    Mushroom -> suggested: 5282, correct: 600, failed: 338, hits: 0
+    Star -> suggested: 7660, correct: 8, failed: 15, hits: 0
+TrainingKartAgent 360 raycast (1): 328
+  Banana: 29
+  Shell: 15
+  Mushroom: 273
+  Star: 11
+  Learning:
+    Correct Choices: 689
+    Wrong Choices: 202
+    Missed Opportunities: 163
+    Unnecessary Uses: 473
+    Uses Without Points: 25155
+    Banana -> suggested: 4342, correct: 191, failed: 592, hits: 18
+    Shell -> suggested: 7280, correct: 25, failed: 244, hits: 3
+    Mushroom -> suggested: 5335, correct: 472, failed: 200, hits: 0
+    Star -> suggested: 7454, correct: 1, failed: 0, hits: 0

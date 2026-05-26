@@ -4,6 +4,7 @@ using KartGame.PowerUps;
 using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -78,6 +79,7 @@ namespace KartGame.AI.Reinforcement
         private float _nextCheckpointAngleNormalized;
         private float _wallHitRatio;
         private MaterialPropertyBlock _powerUpRewardColorPropertyBlock;
+        private const int ExpectedVectorObservationSize = 13;
 
         private static readonly int BaseColorPropertyId = Shader.PropertyToID("_BaseColor");
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
@@ -87,18 +89,21 @@ namespace KartGame.AI.Reinforcement
         {
             CacheReferences();
             ConfigureWallSensorDebug();
+            EnsureBehaviorParameters();
         }
 
         private void OnValidate()
         {
             CacheReferences();
             ConfigureWallSensorDebug();
+            EnsureBehaviorParameters();
         }
 
         protected override void OnEnable()
         {
             CacheReferences();
             ConfigureWallSensorDebug();
+            EnsureBehaviorParameters();
             base.OnEnable();
 
             if (powerUpController != null)
@@ -151,6 +156,8 @@ namespace KartGame.AI.Reinforcement
             sensor.AddObservation(_wallHitRatio);
             sensor.AddObservation(debugStraightSection);
             sensor.AddObservation(_nextCheckpointAngleNormalized);
+            sensor.AddObservation(powerUpController != null ? powerUpController.CooldownRemainingNormalized : 0f);
+            sensor.AddObservation(powerUpController != null && powerUpController.HasActiveDeployableBlockingUse);
         }
 
         public override void OnActionReceived(ActionBuffers actions)
@@ -169,7 +176,8 @@ namespace KartGame.AI.Reinforcement
 
             var action = actions.DiscreteActions.Length > 0 ? actions.DiscreteActions[0] : 0;
             var chosenPowerUp = DecodeAction(action);
-            var suggestedPowerUp = GetSuggestedPowerUp();
+            var suggestedPowerUp = GetPrimarySuggestedPowerUp();
+            var hasUsableRecommendedPowerUp = HasUsableRecommendedPowerUp();
 
             debugHasSuggestedPowerUp = suggestedPowerUp.HasValue;
             if (suggestedPowerUp.HasValue)
@@ -179,7 +187,7 @@ namespace KartGame.AI.Reinforcement
 
             if (!chosenPowerUp.HasValue)
             {
-                if (powerUpController != null && powerUpController.AvailablePowerUpPoints > 0 && suggestedPowerUp.HasValue)
+                if (powerUpController != null && hasUsableRecommendedPowerUp)
                 {
                     ApplyReward(-missedOpportunityPenalty);
                     NotifyDecisionOutcome(null, suggestedPowerUp, PowerUpDecisionOutcome.MissedOpportunity);
@@ -195,22 +203,7 @@ namespace KartGame.AI.Reinforcement
                 return;
             }
 
-            if (!suggestedPowerUp.HasValue)
-            {
-                ApplyReward(-unnecessaryUsePenalty);
-                NotifyDecisionOutcome(chosenPowerUp, null, PowerUpDecisionOutcome.UnnecessaryUse);
-            }
-            else if (suggestedPowerUp.Value == chosenPowerUp.Value)
-            {
-                ApplyReward(correctPowerUpChoiceReward);
-                NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.CorrectChoice);
-            }
-            else
-            {
-                ApplyReward(-wrongPowerUpChoicePenalty);
-                NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.WrongChoice);
-            }
-
+            var isRecommendedChoice = IsRecommendedChoice(chosenPowerUp.Value);
             var used = chosenPowerUp.Value == PowerUpType.Shell
                 ? powerUpController.UsePowerUp(chosenPowerUp.Value, GetBestAheadTarget())
                 : powerUpController.UsePowerUp(chosenPowerUp.Value);
@@ -219,6 +212,37 @@ namespace KartGame.AI.Reinforcement
             {
                 ApplyReward(-failedUsePenalty);
                 AnyPowerUpExecutionFailed?.Invoke(this, chosenPowerUp.Value);
+
+                if (!suggestedPowerUp.HasValue)
+                {
+                    NotifyDecisionOutcome(chosenPowerUp, null, PowerUpDecisionOutcome.UnnecessaryUse);
+                }
+                else if (isRecommendedChoice)
+                {
+                    NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.CorrectChoice);
+                }
+                else
+                {
+                    NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.WrongChoice);
+                }
+
+                return;
+            }
+
+            if (!suggestedPowerUp.HasValue)
+            {
+                ApplyReward(-unnecessaryUsePenalty);
+                NotifyDecisionOutcome(chosenPowerUp, null, PowerUpDecisionOutcome.UnnecessaryUse);
+            }
+            else if (isRecommendedChoice)
+            {
+                ApplyReward(correctPowerUpChoiceReward);
+                NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.CorrectChoice);
+            }
+            else
+            {
+                ApplyReward(-wrongPowerUpChoicePenalty);
+                NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.WrongChoice);
             }
         }
 
@@ -307,6 +331,20 @@ namespace KartGame.AI.Reinforcement
                 powerUpRewardColorRenderers = kartController != null
                     ? kartController.GetComponentsInChildren<Renderer>(true)
                     : System.Array.Empty<Renderer>();
+            }
+        }
+
+        private void EnsureBehaviorParameters()
+        {
+            var behaviorParameters = GetComponent<BehaviorParameters>();
+            if (behaviorParameters == null)
+            {
+                return;
+            }
+
+            if (behaviorParameters.BrainParameters.VectorObservationSize != ExpectedVectorObservationSize)
+            {
+                behaviorParameters.BrainParameters.VectorObservationSize = ExpectedVectorObservationSize;
             }
         }
 
@@ -404,29 +442,71 @@ namespace KartGame.AI.Reinforcement
             };
         }
 
-        private PowerUpType? GetSuggestedPowerUp()
+        private bool HasUsableRecommendedPowerUp()
         {
-            if (debugNearbyHazards >= nearbyHazardsForStar)
+            if (powerUpController == null)
+            {
+                return false;
+            }
+
+            if (IsRecommendedChoice(PowerUpType.Star) && powerUpController.CanAttemptPowerUp(PowerUpType.Star))
+            {
+                return true;
+            }
+
+            if (IsRecommendedChoice(PowerUpType.Shell) && powerUpController.CanAttemptPowerUp(PowerUpType.Shell))
+            {
+                return true;
+            }
+
+            if (IsRecommendedChoice(PowerUpType.Banana) && powerUpController.CanAttemptPowerUp(PowerUpType.Banana))
+            {
+                return true;
+            }
+
+            if (IsRecommendedChoice(PowerUpType.Mushroom) && powerUpController.CanAttemptPowerUp(PowerUpType.Mushroom))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private PowerUpType? GetPrimarySuggestedPowerUp()
+        {
+            if (IsRecommendedChoice(PowerUpType.Star))
             {
                 return PowerUpType.Star;
             }
 
-            if (debugEnemiesAheadClose > 0)
+            if (IsRecommendedChoice(PowerUpType.Shell))
             {
                 return PowerUpType.Shell;
             }
 
-            if (debugEnemiesBehindClose > 0)
+            if (IsRecommendedChoice(PowerUpType.Banana))
             {
                 return PowerUpType.Banana;
             }
 
-            if (debugStraightSection)
+            if (IsRecommendedChoice(PowerUpType.Mushroom))
             {
                 return PowerUpType.Mushroom;
             }
 
             return null;
+        }
+
+        private bool IsRecommendedChoice(PowerUpType powerUpType)
+        {
+            return powerUpType switch
+            {
+                PowerUpType.Star => debugNearbyHazards >= nearbyHazardsForStar,
+                PowerUpType.Shell => debugEnemiesAheadClose > 0,
+                PowerUpType.Banana => debugEnemiesBehindClose > 0,
+                PowerUpType.Mushroom => debugStraightSection,
+                _ => false
+            };
         }
 
         private CheckpointTracker GetBestAheadTarget()
