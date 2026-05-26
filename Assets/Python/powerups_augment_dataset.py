@@ -17,6 +17,11 @@ FIELDNAMES = (
 )
 
 POWER_UPS = ("banana", "shell", "mushroom", "star")
+PROFILE_TARGET_RATIOS = {
+    "balanced": {"banana": 0.25, "shell": 0.25, "mushroom": 0.25, "star": 0.25},
+    "agresivo": {"banana": 0.35, "shell": 0.35, "mushroom": 0.25, "star": 0.05},
+    "pacifico": {"banana": 0.05, "shell": 0.05, "mushroom": 0.50, "star": 0.40},
+}
 
 
 def project_paths() -> tuple[Path, Path]:
@@ -98,7 +103,7 @@ def jitter_base_row(base_row: dict[str, object], rng: random.Random) -> dict[str
     }
 
 
-def bias_candidate_for_label(candidate: dict[str, object], label: str, rng: random.Random) -> None:
+def bias_candidate_for_label(candidate: dict[str, object], label: str, rng: random.Random, profile: str) -> None:
     if label == "banana":
         candidate["enemigos_atras"] = max(int(candidate["enemigos_atras"]), rng.randint(1, 5))
         candidate["enemigos_delante"] = min(int(candidate["enemigos_delante"]), max(0, int(candidate["enemigos_atras"]) - rng.randint(1, 2)))
@@ -122,11 +127,45 @@ def bias_candidate_for_label(candidate: dict[str, object], label: str, rng: rand
         candidate["enemigos_atras"] = clamp_int(int(candidate["enemigos_atras"]), 0, 3)
         candidate["recta"] = candidate["recta"] if rng.random() < 0.4 else False
 
+    if profile == "agresivo":
+        if label in {"banana", "shell"}:
+            candidate["recta"] = candidate["recta"] if rng.random() < 0.5 else False
+            candidate["platanos_delante"] = clamp_int(int(candidate["platanos_delante"]), 0, 1)
+            candidate["conchas_atras"] = clamp_int(int(candidate["conchas_atras"]), 0, 1)
+            if label == "banana":
+                candidate["enemigos_atras"] = max(int(candidate["enemigos_atras"]), rng.randint(2, 5))
+            else:
+                candidate["enemigos_delante"] = max(int(candidate["enemigos_delante"]), rng.randint(2, 5))
+        elif label == "star":
+            candidate["platanos_delante"] = max(int(candidate["platanos_delante"]), rng.randint(3, 4))
+            candidate["conchas_atras"] = max(int(candidate["conchas_atras"]), rng.randint(3, 4))
+            candidate["recta"] = False
+    elif profile == "pacifico":
+        if label == "mushroom":
+            candidate["recta"] = True
+            candidate["enemigos_delante"] = clamp_int(int(candidate["enemigos_delante"]), 0, 1)
+            candidate["enemigos_atras"] = clamp_int(int(candidate["enemigos_atras"]), 0, 1)
+            candidate["platanos_delante"] = clamp_int(int(candidate["platanos_delante"]), 0, 1)
+            candidate["conchas_atras"] = clamp_int(int(candidate["conchas_atras"]), 0, 1)
+        elif label == "star":
+            candidate["platanos_delante"] = max(int(candidate["platanos_delante"]), rng.randint(2, 4))
+            candidate["conchas_atras"] = max(int(candidate["conchas_atras"]), rng.randint(2, 4))
+        elif label in {"banana", "shell"}:
+            if label == "banana":
+                candidate["enemigos_atras"] = max(int(candidate["enemigos_atras"]), rng.randint(1, 3))
+                candidate["enemigos_delante"] = clamp_int(int(candidate["enemigos_delante"]), 0, 1)
+            else:
+                candidate["enemigos_delante"] = max(int(candidate["enemigos_delante"]), rng.randint(1, 3))
+                candidate["enemigos_atras"] = clamp_int(int(candidate["enemigos_atras"]), 0, 1)
+            candidate["platanos_delante"] = clamp_int(int(candidate["platanos_delante"]) + rng.randint(0, 1), 0, 2)
+            candidate["conchas_atras"] = clamp_int(int(candidate["conchas_atras"]) + rng.randint(0, 1), 0, 2)
+
 
 def generate_row_for_label(
     label: str,
     base_rows_by_label: dict[str, list[dict[str, object]]],
     rng: random.Random,
+    profile: str,
     max_attempts: int = 200,
 ) -> dict[str, object]:
     base_candidates = base_rows_by_label.get(label) or []
@@ -143,7 +182,7 @@ def generate_row_for_label(
                 "conchas_atras": rng.randint(0, 4),
             }
 
-        bias_candidate_for_label(candidate, label, rng)
+        bias_candidate_for_label(candidate, label, rng, profile)
         chosen_label = choose_power_up(
             bool(candidate["recta"]),
             int(candidate["enemigos_delante"]),
@@ -157,6 +196,24 @@ def generate_row_for_label(
             return candidate
 
     raise RuntimeError(f"No se pudo generar una fila sintetica coherente para la clase '{label}'.")
+
+
+def build_target_counts(profile: str, target_size: int) -> dict[str, int]:
+    ratios = PROFILE_TARGET_RATIOS.get(profile, PROFILE_TARGET_RATIOS["balanced"])
+    target_counts = {label: int(target_size * ratios[label]) for label in POWER_UPS}
+    assigned_total = sum(target_counts.values())
+    remainder = target_size - assigned_total
+
+    if remainder > 0:
+        ordered_labels = sorted(
+            POWER_UPS,
+            key=lambda label: ratios[label] - target_counts[label] / max(1, target_size),
+            reverse=True,
+        )
+        for remainder_index in range(remainder):
+            target_counts[ordered_labels[remainder_index % len(ordered_labels)]] += 1
+
+    return target_counts
 
 
 def write_rows(output_path: Path, rows: list[dict[str, object]]) -> None:
@@ -184,6 +241,12 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=output_path, help="CSV de salida aumentado.")
     parser.add_argument("--target-size", type=int, default=2000, help="Numero total de filas deseado.")
     parser.add_argument("--seed", type=int, default=42, help="Semilla aleatoria.")
+    parser.add_argument(
+        "--profile",
+        choices=tuple(PROFILE_TARGET_RATIOS.keys()),
+        default="balanced",
+        help="Perfil de comportamiento a sesgar.",
+    )
     args = parser.parse_args()
 
     rng = random.Random(args.seed)
@@ -200,9 +263,13 @@ def main() -> None:
         base_rows_by_label[str(row["power_up_tirado"])].append(row)
 
     augmented_rows = list(rows)
+    target_counts = build_target_counts(args.profile, args.target_size)
     while len(augmented_rows) < args.target_size:
-        label_to_generate = min(POWER_UPS, key=lambda label: counts[label])
-        synthetic_row = generate_row_for_label(label_to_generate, base_rows_by_label, rng)
+        label_to_generate = min(
+            POWER_UPS,
+            key=lambda label: (counts[label] - target_counts[label], counts[label]),
+        )
+        synthetic_row = generate_row_for_label(label_to_generate, base_rows_by_label, rng, args.profile)
         augmented_rows.append(synthetic_row)
         counts[label_to_generate] += 1
 
@@ -211,6 +278,7 @@ def main() -> None:
 
     print(f"Filas originales: {len(rows)}")
     print(f"Filas finales: {len(augmented_rows)}")
+    print(f"Perfil: {args.profile}")
     print("Balance final por clase:")
     for label in POWER_UPS:
         print(f"  {label}: {counts[label]}")
