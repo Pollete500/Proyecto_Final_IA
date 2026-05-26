@@ -13,6 +13,15 @@ namespace KartGame.AI.Reinforcement
     [RequireComponent(typeof(KartPowerUpController))]
     public class KartPowerUpAgent : Agent
     {
+        public enum PowerUpDecisionOutcome
+        {
+            CorrectChoice,
+            WrongChoice,
+            MissedOpportunity,
+            UnnecessaryUse,
+            UseWithoutPoints
+        }
+
         [Header("References")]
         [SerializeField] private KartPowerUpController powerUpController;
         [SerializeField] private KartController kartController;
@@ -61,6 +70,8 @@ namespace KartGame.AI.Reinforcement
         public bool debugStraightSection;
         public bool debugHasSuggestedPowerUp;
         public PowerUpType debugSuggestedPowerUp;
+        public static event System.Action<KartPowerUpAgent, PowerUpType?, PowerUpType?, PowerUpDecisionOutcome> AnyDecisionEvaluated;
+        public static event System.Action<KartPowerUpAgent, PowerUpType> AnyPowerUpExecutionFailed;
 
         private float _nearestAheadDistanceNormalized = 1f;
         private float _nearestBehindDistanceNormalized = 1f;
@@ -71,6 +82,7 @@ namespace KartGame.AI.Reinforcement
         private static readonly int BaseColorPropertyId = Shader.PropertyToID("_BaseColor");
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
+        
         private void Awake()
         {
             CacheReferences();
@@ -170,6 +182,7 @@ namespace KartGame.AI.Reinforcement
                 if (powerUpController != null && powerUpController.AvailablePowerUpPoints > 0 && suggestedPowerUp.HasValue)
                 {
                     ApplyReward(-missedOpportunityPenalty);
+                    NotifyDecisionOutcome(null, suggestedPowerUp, PowerUpDecisionOutcome.MissedOpportunity);
                 }
 
                 return;
@@ -178,20 +191,24 @@ namespace KartGame.AI.Reinforcement
             if (powerUpController == null || powerUpController.AvailablePowerUpPoints <= 0)
             {
                 ApplyReward(-useWithoutPointsPenalty);
+                NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.UseWithoutPoints);
                 return;
             }
 
             if (!suggestedPowerUp.HasValue)
             {
                 ApplyReward(-unnecessaryUsePenalty);
+                NotifyDecisionOutcome(chosenPowerUp, null, PowerUpDecisionOutcome.UnnecessaryUse);
             }
             else if (suggestedPowerUp.Value == chosenPowerUp.Value)
             {
                 ApplyReward(correctPowerUpChoiceReward);
+                NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.CorrectChoice);
             }
             else
             {
                 ApplyReward(-wrongPowerUpChoicePenalty);
+                NotifyDecisionOutcome(chosenPowerUp, suggestedPowerUp, PowerUpDecisionOutcome.WrongChoice);
             }
 
             var used = chosenPowerUp.Value == PowerUpType.Shell
@@ -201,6 +218,7 @@ namespace KartGame.AI.Reinforcement
             if (!used)
             {
                 ApplyReward(-failedUsePenalty);
+                AnyPowerUpExecutionFailed?.Invoke(this, chosenPowerUp.Value);
             }
         }
 
@@ -591,6 +609,11 @@ namespace KartGame.AI.Reinforcement
 
                 rewardRenderer.SetPropertyBlock(_powerUpRewardColorPropertyBlock);
             }
+        }
+
+        private void NotifyDecisionOutcome(PowerUpType? chosenPowerUp, PowerUpType? suggestedPowerUp, PowerUpDecisionOutcome outcome)
+        {
+            AnyDecisionEvaluated?.Invoke(this, chosenPowerUp, suggestedPowerUp, outcome);
         }
 
         private void ResetRuntimeContext()

@@ -865,7 +865,7 @@ MonoBehaviour:
   manualPowerUpType: 2
   logPowerUpUsage: 1
   awardPointEveryXCheckpointsForBots: 1
-  checkpointsPerPowerUpPoint: 7
+  checkpointsPerPowerUpPoint: 3
   logCheckpointPointGain: 0
   forwardLaunchPoint: {fileID: 2705366375985779622}
   rearDropPoint: {fileID: 8253469459080506730}
@@ -925,7 +925,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: de267b3c152ddb348b6750b3d4a16fdf, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: PowerUpAgent
@@ -975,6 +975,16 @@ MonoBehaviour:
   shellHitReward: 0
   bananaHitReward: 0
   decisionStepPenalty: 0
+  colorKartByLastPowerUpReward: 0
+  powerUpRewardColorRenderers:
+  - {fileID: 6175801959125631302}
+  - {fileID: 3801547919202124594}
+  - {fileID: 5831991339365968078}
+  - {fileID: 4111001548133386081}
+  - {fileID: 4354744363312245860}
+  positivePowerUpRewardColor: {r: 0.22, g: 0.9, b: 0.52, a: 1}
+  negativePowerUpRewardColor: {r: 0.95, g: 0.2, b: 0.2, a: 1}
+  minimumRewardMagnitudeForColorFeedback: 0.01
   debugEnemiesAheadClose: 0
   debugEnemiesBehindClose: 0
   debugNearbyHazards: 0

@@ -20126,6 +20126,7 @@ MonoBehaviour:
   closeCheckpointLoopGizmo: 1
   checkpointGizmoColor: {r: 1, g: 0.78, b: 0.2, a: 0.9}
   generatePowerUpUsageReport: 1
+  generatePowerUpLearningReport: 1
 --- !u!4 &1507864156
 Transform:
   m_ObjectHideFlags: 0

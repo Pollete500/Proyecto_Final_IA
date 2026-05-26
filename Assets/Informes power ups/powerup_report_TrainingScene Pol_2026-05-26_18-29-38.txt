@@ -1,0 +1,143 @@
+Kart Racing Power-Up Usage Report
+================================
+Generated: 2026-05-26 18:29:38
+Scene: TrainingScene Pol
+TrackRoot: TrackRoot (1)
+
+Totals
+------
+Total Power Ups Used: 215
+Banana: 11
+Shell: 9
+Mushroom: 96
+Star: 99
+
+Learning Summary
+----------------
+Total Failed Uses: 42
+Total Power Up Hits: 1
+Correct Choices: 61
+Wrong Choices: 194
+Missed Opportunities: 253
+Unnecessary Uses: 2
+Uses Without Points: 15845
+Overall Decision Accuracy: 24 %
+Overall Execution Success Rate: 84 %
+Overall Learning Verdict: Aprendizaje parcial, aun inconsistente.
+
+Per Power Up Learning
+---------------------
+Banana:
+  Suggested Opportunities: 3279
+  Correct Context Choices: 10
+  Successful Uses: 11
+  Failed Uses: 21
+  Hits: 0
+  Decision Accuracy: 0 %
+  Execution Success Rate: 34 %
+  Learning Verdict: No parece aprenderlo todavia.
+Shell:
+  Suggested Opportunities: 7408
+  Correct Context Choices: 12
+  Successful Uses: 9
+  Failed Uses: 9
+  Hits: 1
+  Decision Accuracy: 0 %
+  Execution Success Rate: 50 %
+  Learning Verdict: Aprendizaje parcial.
+Mushroom:
+  Suggested Opportunities: 524
+  Correct Context Choices: 8
+  Successful Uses: 96
+  Failed Uses: 11
+  Hits: 0
+  Decision Accuracy: 2 %
+  Execution Success Rate: 90 %
+  Learning Verdict: Aprendizaje parcial.
+Star:
+  Suggested Opportunities: 4964
+  Correct Context Choices: 31
+  Successful Uses: 99
+  Failed Uses: 1
+  Hits: 0
+  Decision Accuracy: 1 %
+  Execution Success Rate: 99 %
+  Learning Verdict: Aprendizaje parcial.
+
+Per Kart
+--------
+TrainingKartAgent 360 raycast: 46
+  Banana: 2
+  Shell: 2
+  Mushroom: 29
+  Star: 13
+  Learning:
+    Correct Choices: 13
+    Wrong Choices: 32
+    Missed Opportunities: 64
+    Unnecessary Uses: 2
+    Uses Without Points: 3245
+    Banana -> suggested: 1343, correct: 1, failed: 0, hits: 0
+    Shell -> suggested: 926, correct: 2, failed: 0, hits: 1
+    Mushroom -> suggested: 524, correct: 8, failed: 0, hits: 0
+    Star -> suggested: 383, correct: 2, failed: 1, hits: 0
+TrainingKartAgent 360 raycast (5): 44
+  Banana: 3
+  Shell: 0
+  Mushroom: 20
+  Star: 21
+  Learning:
+    Correct Choices: 12
+    Wrong Choices: 45
+    Missed Opportunities: 51
+    Unnecessary Uses: 0
+    Uses Without Points: 3061
+    Banana -> suggested: 1383, correct: 8, failed: 13, hits: 0
+    Shell -> suggested: 1157, correct: 0, failed: 0, hits: 0
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 629, correct: 4, failed: 0, hits: 0
+TrainingKartAgent 360 raycast (2): 41
+  Banana: 3
+  Shell: 3
+  Mushroom: 13
+  Star: 22
+  Learning:
+    Correct Choices: 9
+    Wrong Choices: 35
+    Missed Opportunities: 7
+    Unnecessary Uses: 0
+    Uses Without Points: 3241
+    Banana -> suggested: 460, correct: 1, failed: 3, hits: 0
+    Shell -> suggested: 1535, correct: 0, failed: 0, hits: 0
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 1297, correct: 8, failed: 0, hits: 0
+TrainingKartAgent 360 raycast (1): 43
+  Banana: 2
+  Shell: 1
+  Mushroom: 21
+  Star: 19
+  Learning:
+    Correct Choices: 14
+    Wrong Choices: 45
+    Missed Opportunities: 73
+    Unnecessary Uses: 0
+    Uses Without Points: 3167
+    Banana -> suggested: 93, correct: 0, failed: 0, hits: 0
+    Shell -> suggested: 2061, correct: 6, failed: 5, hits: 0
+    Mushroom -> suggested: 0, correct: 0, failed: 11, hits: 0
+    Star -> suggested: 1145, correct: 8, failed: 0, hits: 0
+TrainingKartAgent 360 raycast (4): 41
+  Banana: 1
+  Shell: 3
+  Mushroom: 13
+  Star: 24
+  Learning:
+    Correct Choices: 13
+    Wrong Choices: 37
+    Missed Opportunities: 58
+    Unnecessary Uses: 0
+    Uses Without Points: 3131
+    Banana -> suggested: 0, correct: 0, failed: 5, hits: 0
+    Shell -> suggested: 1729, correct: 4, failed: 4, hits: 0
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 1510, correct: 9, failed: 0, hits: 0

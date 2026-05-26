@@ -79,6 +79,7 @@ namespace KartGame.PowerUps
 
         public int AvailablePowerUpPoints => availablePowerUpPoints;
         public static event System.Action<KartPowerUpController, PowerUpType> AnyPowerUpUsed;
+        public static event System.Action<KartPowerUpController, PowerUpType, KartController> AnyPowerUpHit;
         public event System.Action<int> PowerUpPointsAdded;
         public event System.Action<KartPowerUpController, PowerUpType> PowerUpUsed;
         public event System.Action<PowerUpType> PowerUpUseFailed;
@@ -479,6 +480,7 @@ namespace KartGame.PowerUps
         public void NotifyPowerUpHit(PowerUpType powerUpType, KartController targetKart)
         {
             PowerUpHit?.Invoke(powerUpType, targetKart);
+            AnyPowerUpHit?.Invoke(this, powerUpType, targetKart);
         }
 
         private void HandleCheckpointPassed(CheckpointTracker tracker, Checkpoint checkpoint)
