@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1805579347373389708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2130074123358552002}
+  - component: {fileID: 4633481528344815092}
+  - component: {fileID: 8891481274186904605}
+  - component: {fileID: 3558921208598150182}
+  - component: {fileID: 7654102838144255740}
+  - component: {fileID: 5383558233799283020}
+  m_Layer: 0
+  m_Name: RaceSystems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2130074123358552002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805579347373389708}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4633481528344815092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805579347373389708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f021bca30563843a41436cdd6f2af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.LapManager
+  trackData: {fileID: 0}
+  registeredRacers: []
+--- !u!114 &8891481274186904605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805579347373389708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 187976571a4b5f34f9120c9dd50516fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.PositionManager
+  trackData: {fileID: 0}
+  refreshInterval: 0.1
+  registeredRacers: []
+--- !u!114 &3558921208598150182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805579347373389708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c617d50dc73531240af8b62e4c12cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.RaceManager
+  trackData: {fileID: 0}
+  lapManager: {fileID: 4633481528344815092}
+  positionManager: {fileID: 8891481274186904605}
+  registeredRacers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  countdownDuration: 3
+  autoRegisterSceneRacers: 1
+  autoPlaceRacersOnSpawnPoints: 1
+  finishRaceWhenPlayerFinishes: 1
+  postPlayerFinishTimeout: 90
+--- !u!114 &7654102838144255740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805579347373389708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11de3e5bc88d77844ad1199ea3b241ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.UI.ResultsScreen
+  mainMenuSceneName: MainMenu
+  showDelay: 2.5
+  trophyIconPrefab: {fileID: 1651877860529502, guid: baa9c8e0af7d24d4b841c8867be11126, type: 3}
+--- !u!114 &5383558233799283020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805579347373389708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa7e8373e2df4a4398880736ec40e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.UI.RaceUI
+  countdownColor: {r: 1, g: 1, b: 1, a: 1}
+  goColor: {r: 0, g: 1, b: 0, a: 1}
+  countdownScale: 2.5
+  goScale: 3
+  raceManager: {fileID: 0}
+  lapManager: {fileID: 0}
+  positionManager: {fileID: 0}
+  clockIconPrefab: {fileID: 1755006447092516, guid: d5bf9e98e6b7ce847b2483b9a8beec71, type: 3}
+  pauseIconPrefab: {fileID: 1284856177437360, guid: 167a7c8c9938e1443b923b9395884c6b, type: 3}

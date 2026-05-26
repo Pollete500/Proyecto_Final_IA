@@ -34,7 +34,7 @@ namespace KartGame.Kart
 
         private void Update()
         {
-            if (kartController == null || checkpointTracker == null)
+            if (kartController == null || checkpointTracker == null || !kartController.IsControlEnabled)
             {
                 return;
             }

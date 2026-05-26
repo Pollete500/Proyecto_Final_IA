@@ -98,13 +98,22 @@ namespace KartGame.Kart
             return _rigidbody == null ? 0f : _rigidbody.linearVelocity.magnitude;
         }
 
-        public void SetControlEnabled(bool isEnabled)
+        public void SetControlEnabled(bool isEnabled, bool freezePhysics = true)
         {
             _controlEnabled = isEnabled;
+            SetInput(0f, 0f, 0f);
 
-            if (!isEnabled)
+            if (_rigidbody == null) return;
+
+            if (!isEnabled && freezePhysics)
             {
-                SetInput(0f, 0f, 1f);
+                _rigidbody.linearVelocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
+                _rigidbody.isKinematic = true;
+            }
+            else if (isEnabled)
+            {
+                _rigidbody.isKinematic = false;
             }
         }
 
@@ -187,7 +196,7 @@ namespace KartGame.Kart
 
             _rigidbody.AddForce(transform.forward * driveForce * boostFactor * airControlFactor, ForceMode.Acceleration);
 
-            if (canDrive && _brakeInput > 0f)
+            if (_brakeInput > 0f && _stunTimer <= 0f)
             {
                 var brakeVector = -transform.forward * forwardSpeed * brakingForce * _brakeInput;
                 _rigidbody.AddForce(brakeVector, ForceMode.Acceleration);
