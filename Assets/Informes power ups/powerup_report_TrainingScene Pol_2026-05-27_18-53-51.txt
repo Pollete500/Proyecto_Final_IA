@@ -1,0 +1,173 @@
+Kart Racing Power-Up Usage Report
+================================
+Generated: 2026-05-27 18:53:51
+Scene: TrainingScene Pol
+TrackRoot: TrackRoot (1)
+
+Totals
+------
+Total Power Ups Used: 278
+Banana: 28
+Shell: 50
+Mushroom: 93
+Star: 107
+
+Learning Summary
+----------------
+Total Failed Uses: 0
+Total Power Up Hits: 45
+Correct Choices: 0
+Wrong Choices: 0
+Missed Opportunities: 0
+Unnecessary Uses: 0
+Uses Without Points: 0
+Overall Decision Accuracy: N/A
+Overall Execution Success Rate: 100 %
+Overall Learning Verdict: Sin datos suficientes todavia.
+
+Per Power Up Learning
+---------------------
+Banana:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 28
+  Failed Uses: 0
+  Hits: 22
+  Decision Accuracy: N/A
+  Execution Success Rate: 100 %
+  Learning Verdict: Sin oportunidades suficientes.
+Shell:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 50
+  Failed Uses: 0
+  Hits: 23
+  Decision Accuracy: N/A
+  Execution Success Rate: 100 %
+  Learning Verdict: Sin oportunidades suficientes.
+Mushroom:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 93
+  Failed Uses: 0
+  Hits: 0
+  Decision Accuracy: N/A
+  Execution Success Rate: 100 %
+  Learning Verdict: Sin oportunidades suficientes.
+Star:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 107
+  Failed Uses: 0
+  Hits: 0
+  Decision Accuracy: N/A
+  Execution Success Rate: 100 %
+  Learning Verdict: Sin oportunidades suficientes.
+
+Per Kart
+--------
+agresivo: 50
+  Banana: 5
+  Shell: 0
+  Mushroom: 16
+  Star: 29
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 4
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0
+TrainingKart_random_forest (2): 41
+  Banana: 3
+  Shell: 9
+  Mushroom: 13
+  Star: 16
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 3
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 6
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0
+pacifico: 45
+  Banana: 4
+  Shell: 15
+  Mushroom: 24
+  Star: 2
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 4
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 6
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0
+TrainingKart_random_forest (1): 46
+  Banana: 6
+  Shell: 5
+  Mushroom: 19
+  Star: 16
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 4
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 4
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0
+TrainingKart_random_forest: 37
+  Banana: 5
+  Shell: 3
+  Mushroom: 6
+  Star: 23
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 3
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 3
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0
+TrainingKart_random_forest (3): 47
+  Banana: 5
+  Shell: 9
+  Mushroom: 12
+  Star: 21
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 4
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 2
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0
+PlayerKart: 12
+  Banana: 0
+  Shell: 9
+  Mushroom: 3
+  Star: 0
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 2
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0

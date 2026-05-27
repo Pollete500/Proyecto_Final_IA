@@ -279,7 +279,12 @@ namespace KartGame.PowerUps
             for (var index = 0; index < hits.Length; index++)
             {
                 var hazard = hits[index] != null ? hits[index].GetComponentInParent<PowerUpHazardBase>() : null;
-                if (hazard == null || hazard.OwnerKart == kartController)
+                if (hazard == null)
+                {
+                    continue;
+                }
+
+                if (hazard.PowerUpType != PowerUpType.Banana && hazard.PowerUpType != PowerUpType.Shell)
                 {
                     continue;
                 }

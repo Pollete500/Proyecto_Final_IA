@@ -6460,6 +6460,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: kartController
       value: 
@@ -12704,6 +12708,71 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &928875030
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 952122434218314630, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2420040881038729555, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544321151148859466, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_Name
+      value: TrainingKart_random_forest
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -22.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99952453
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.030835487
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -3.534
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131326545765259854, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 908aa28b88a908d478ed643d39880bb4, type: 3}
 --- !u!1 &932225415
 GameObject:
   m_ObjectHideFlags: 0
@@ -14369,6 +14438,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: kartController
       value: 
@@ -15264,6 +15337,10 @@ PrefabInstance:
     - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: kartController
@@ -25665,6 +25742,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4981294462048320063, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: kartController
       value: 
@@ -28905,6 +28986,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingKartAgent 360 raycast
       objectReference: {fileID: 0}
+    - target: {fileID: 3544321151148859466, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3801547919202124594, guid: 3ee3f8abbd8ee994b86694d08de80d90, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -29031,6 +29116,7 @@ SceneRoots:
   - {fileID: 453388128}
   - {fileID: 1893544140}
   - {fileID: 1112323707}
+  - {fileID: 928875030}
   - {fileID: 677934020}
   - {fileID: 1507864156}
   - {fileID: 2069211375}

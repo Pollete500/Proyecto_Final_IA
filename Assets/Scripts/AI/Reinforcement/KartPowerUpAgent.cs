@@ -654,6 +654,11 @@ namespace KartGame.AI.Reinforcement
             }
 
             CacheReferences();
+            if (powerUpController != null && powerUpController.IsColoringKartByLastUsedPowerUp)
+            {
+                return;
+            }
+
             if (powerUpRewardColorRenderers == null || powerUpRewardColorRenderers.Length == 0 || _powerUpRewardColorPropertyBlock == null)
             {
                 return;
@@ -662,32 +667,59 @@ namespace KartGame.AI.Reinforcement
             var targetColor = rewardDelta > 0f ? positivePowerUpRewardColor : negativePowerUpRewardColor;
             foreach (var rewardRenderer in powerUpRewardColorRenderers)
             {
-                if (rewardRenderer == null)
-                {
-                    continue;
-                }
+                ApplyColorToRenderer(rewardRenderer, targetColor, _powerUpRewardColorPropertyBlock);
+            }
+        }
 
-                var sharedMaterial = rewardRenderer.sharedMaterial;
-                if (sharedMaterial == null)
-                {
-                    continue;
-                }
+        private static void ApplyColorToRenderer(Renderer targetRenderer, Color targetColor, MaterialPropertyBlock propertyBlock)
+        {
+            if (targetRenderer == null)
+            {
+                return;
+            }
 
-                _powerUpRewardColorPropertyBlock.Clear();
-                if (sharedMaterial.HasProperty(BaseColorPropertyId))
-                {
-                    _powerUpRewardColorPropertyBlock.SetColor(BaseColorPropertyId, targetColor);
-                }
-                else if (sharedMaterial.HasProperty(ColorPropertyId))
-                {
-                    _powerUpRewardColorPropertyBlock.SetColor(ColorPropertyId, targetColor);
-                }
-                else
-                {
-                    continue;
-                }
+            var sharedMaterial = targetRenderer.sharedMaterial;
+            if (sharedMaterial == null)
+            {
+                return;
+            }
 
-                rewardRenderer.SetPropertyBlock(_powerUpRewardColorPropertyBlock);
+            var applied = false;
+            propertyBlock.Clear();
+            if (sharedMaterial.HasProperty(BaseColorPropertyId))
+            {
+                propertyBlock.SetColor(BaseColorPropertyId, targetColor);
+                targetRenderer.SetPropertyBlock(propertyBlock);
+                applied = true;
+            }
+            else if (sharedMaterial.HasProperty(ColorPropertyId))
+            {
+                propertyBlock.SetColor(ColorPropertyId, targetColor);
+                targetRenderer.SetPropertyBlock(propertyBlock);
+                applied = true;
+            }
+
+            var instanceMaterial = targetRenderer.material;
+            if (instanceMaterial == null)
+            {
+                return;
+            }
+
+            if (instanceMaterial.HasProperty(BaseColorPropertyId))
+            {
+                instanceMaterial.SetColor(BaseColorPropertyId, targetColor);
+                applied = true;
+            }
+
+            if (instanceMaterial.HasProperty(ColorPropertyId))
+            {
+                instanceMaterial.SetColor(ColorPropertyId, targetColor);
+                applied = true;
+            }
+
+            if (!applied)
+            {
+                instanceMaterial.color = targetColor;
             }
         }
 
