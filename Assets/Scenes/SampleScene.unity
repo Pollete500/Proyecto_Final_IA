@@ -237,6 +237,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 5
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &97431558
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -824,7 +827,9 @@ MonoBehaviour:
   - {fileID: 2075537749}
   lapsToWin: 3
   drawGizmos: 1
+  closeCheckpointLoopGizmo: 1
   checkpointGizmoColor: {r: 1, g: 0.78, b: 0.2, a: 0.9}
+  generatePowerUpUsageReport: 0
 --- !u!4 &462145984
 Transform:
   m_ObjectHideFlags: 0
@@ -974,9 +979,15 @@ MonoBehaviour:
   isPlayer: 0
   autoRespawnIfStuck: 1
   allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  resetProgressOnInitialSpawnRespawn: 1
+  logAutoRespawns: 1
   stuckSpeedThreshold: 0.9
   secondsBeforeAutoRespawn: 4
   respawnLift: 0.35
+  debugNextCheckpointIndex: 0
+  debugLastPassedCheckpointIndex: -1
+  debugCompletedLaps: 0
 --- !u!114 &520321256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1029,6 +1040,7 @@ MonoBehaviour:
   airSteeringMultiplier: 0.35
   mass: 140
   angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
 --- !u!65 &520321258
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1140,6 +1152,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 5
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &561406540
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1391,6 +1406,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 1
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &709158049
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1490,6 +1508,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 4
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &810940205
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1818,6 +1839,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 0
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &892844638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1877,9 +1901,15 @@ MonoBehaviour:
   isPlayer: 0
   autoRespawnIfStuck: 1
   allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  resetProgressOnInitialSpawnRespawn: 1
+  logAutoRespawns: 1
   stuckSpeedThreshold: 0.9
   secondsBeforeAutoRespawn: 4
   respawnLift: 0.35
+  debugNextCheckpointIndex: 0
+  debugLastPassedCheckpointIndex: -1
+  debugCompletedLaps: 0
 --- !u!114 &938713368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1932,6 +1962,7 @@ MonoBehaviour:
   airSteeringMultiplier: 0.35
   mass: 140
   angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
 --- !u!65 &938713370
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2043,6 +2074,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 2
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &951234030
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2076,6 +2110,8 @@ GameObject:
   - component: {fileID: 964265459}
   - component: {fileID: 964265458}
   - component: {fileID: 964265457}
+  - component: {fileID: 964265462}
+  - component: {fileID: 964265461}
   m_Layer: 0
   m_Name: RaceSystems
   m_TagString: Untagged
@@ -2154,6 +2190,39 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &964265461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964265456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa7e8373e2df4a4398880736ec40e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.UI.RaceUI
+  countdownColor: {r: 1, g: 1, b: 1, a: 1}
+  goColor: {r: 0, g: 1, b: 0, a: 1}
+  countdownScale: 2.5
+  goScale: 3
+  raceManager: {fileID: 0}
+  lapManager: {fileID: 0}
+  positionManager: {fileID: 0}
+--- !u!114 &964265462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964265456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11de3e5bc88d77844ad1199ea3b241ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.UI.ResultsScreen
+  mainMenuSceneName: MainMenu
+  showDelay: 2.5
 --- !u!1 &1029006526
 GameObject:
   m_ObjectHideFlags: 0
@@ -2392,6 +2461,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 3
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1208767044
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2451,9 +2523,15 @@ MonoBehaviour:
   isPlayer: 0
   autoRespawnIfStuck: 1
   allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  resetProgressOnInitialSpawnRespawn: 1
+  logAutoRespawns: 1
   stuckSpeedThreshold: 0.9
   secondsBeforeAutoRespawn: 4
   respawnLift: 0.35
+  debugNextCheckpointIndex: 0
+  debugLastPassedCheckpointIndex: -1
+  debugCompletedLaps: 0
 --- !u!114 &1224495179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2506,6 +2584,7 @@ MonoBehaviour:
   airSteeringMultiplier: 0.35
   mass: 140
   angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
 --- !u!65 &1224495181
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2701,9 +2780,15 @@ MonoBehaviour:
   isPlayer: 0
   autoRespawnIfStuck: 1
   allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  resetProgressOnInitialSpawnRespawn: 1
+  logAutoRespawns: 1
   stuckSpeedThreshold: 0.9
   secondsBeforeAutoRespawn: 4
   respawnLift: 0.35
+  debugNextCheckpointIndex: 0
+  debugLastPassedCheckpointIndex: -1
+  debugCompletedLaps: 0
 --- !u!114 &1368579406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2756,6 +2841,7 @@ MonoBehaviour:
   airSteeringMultiplier: 0.35
   mass: 140
   angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
 --- !u!65 &1368579408
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2980,9 +3066,15 @@ MonoBehaviour:
   isPlayer: 0
   autoRespawnIfStuck: 1
   allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  resetProgressOnInitialSpawnRespawn: 1
+  logAutoRespawns: 1
   stuckSpeedThreshold: 0.9
   secondsBeforeAutoRespawn: 4
   respawnLift: 0.35
+  debugNextCheckpointIndex: 0
+  debugLastPassedCheckpointIndex: -1
+  debugCompletedLaps: 0
 --- !u!114 &1429084106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3035,6 +3127,7 @@ MonoBehaviour:
   airSteeringMultiplier: 0.35
   mass: 140
   angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
 --- !u!65 &1429084108
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3412,9 +3505,15 @@ MonoBehaviour:
   isPlayer: 0
   autoRespawnIfStuck: 1
   allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  resetProgressOnInitialSpawnRespawn: 1
+  logAutoRespawns: 1
   stuckSpeedThreshold: 0.9
   secondsBeforeAutoRespawn: 4
   respawnLift: 0.35
+  debugNextCheckpointIndex: 0
+  debugLastPassedCheckpointIndex: -1
+  debugCompletedLaps: 0
 --- !u!114 &1490177312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3467,6 +3566,7 @@ MonoBehaviour:
   airSteeringMultiplier: 0.35
   mass: 140
   angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
 --- !u!65 &1490177314
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3640,6 +3740,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Core.Checkpoint
   trackData: {fileID: 462145983}
   checkpointIndex: 6
+  drawTriggerGizmoAlways: 1
+  triggerGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.18}
+  triggerWireGizmoColor: {r: 0.35, g: 1, b: 0.45, a: 0.9}
 --- !u!65 &1752308326
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3696,6 +3799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.PlayerKartInput
   kartController: {fileID: 0}
   checkpointTracker: {fileID: 0}
+  powerUpController: {fileID: 0}
   reverseSpeedThreshold: 1.25
   forceEnableControlOnInput: 1
 --- !u!114 &1815424805
@@ -3715,9 +3819,15 @@ MonoBehaviour:
   isPlayer: 1
   autoRespawnIfStuck: 1
   allowPlayerAutoRespawn: 0
+  respawnAtInitialSpawnPoint: 1
+  resetProgressOnInitialSpawnRespawn: 1
+  logAutoRespawns: 1
   stuckSpeedThreshold: 0.9
   secondsBeforeAutoRespawn: 4
   respawnLift: 0.35
+  debugNextCheckpointIndex: 0
+  debugLastPassedCheckpointIndex: -1
+  debugCompletedLaps: 0
 --- !u!114 &1815424806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3746,6 +3856,7 @@ MonoBehaviour:
   airSteeringMultiplier: 0.35
   mass: 140
   angularDrag: 3
+  ignoreCollisionsWithOtherKarts: 1
 --- !u!65 &1815424807
 BoxCollider:
   m_ObjectHideFlags: 0

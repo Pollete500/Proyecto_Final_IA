@@ -32,8 +32,10 @@ namespace KartGame.Core
         [SerializeField] private bool autoRegisterSceneRacers = true;
         [SerializeField] private bool autoPlaceRacersOnSpawnPoints = true;
         [SerializeField] private bool finishRaceWhenPlayerFinishes = true;
+        [SerializeField] private float postPlayerFinishTimeout = 90f;
 
         private Coroutine _raceFlowRoutine;
+        private Coroutine _postPlayerFinishRoutine;
         private float _countdownRemaining;
         private float _raceStartTime;
         private float _raceEndTime;
@@ -173,6 +175,8 @@ namespace KartGame.Core
         private void RefreshSceneReferences()
         {
             trackData ??= FindFirstObjectByType<TrackData>();
+            if (trackData != null && PlayerPrefs.HasKey("LapsToWin"))
+                trackData.SetLapsToWin(PlayerPrefs.GetInt("LapsToWin"));
             lapManager ??= FindFirstObjectByType<LapManager>();
             positionManager ??= FindFirstObjectByType<PositionManager>();
 
@@ -285,10 +289,41 @@ namespace KartGame.Core
                 return;
             }
 
-            if ((finishRaceWhenPlayerFinishes && tracker.IsPlayer) || AllRacersFinished())
+            if (AllRacersFinished())
             {
+                if (_postPlayerFinishRoutine != null)
+                {
+                    StopCoroutine(_postPlayerFinishRoutine);
+                    _postPlayerFinishRoutine = null;
+                }
                 FinishRace();
+                return;
             }
+
+            if (finishRaceWhenPlayerFinishes && tracker.IsPlayer && _postPlayerFinishRoutine == null)
+            {
+                // Disable only the player kart; bots keep running so they can finish and record times.
+                // freezePhysics=false lets the kart coast to a stop naturally via drag.
+                var playerController = tracker.GetComponent<KartController>();
+                if (playerController != null)
+                    playerController.SetControlEnabled(false, freezePhysics: false);
+
+                _postPlayerFinishRoutine = StartCoroutine(PostPlayerFinishRoutine());
+            }
+        }
+
+        private IEnumerator PostPlayerFinishRoutine()
+        {
+            float elapsed = 0f;
+            while (elapsed < postPlayerFinishTimeout)
+            {
+                if (AllRacersFinished()) break;
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            _postPlayerFinishRoutine = null;
+            if (CurrentState != RaceState.Finished)
+                FinishRace();
         }
 
         private bool AllRacersFinished()

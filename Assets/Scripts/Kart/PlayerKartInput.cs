@@ -80,7 +80,9 @@ namespace KartGame.Kart
                 if (forceEnableControlOnInput)
                 {
                     var raceManager = RaceManager.Instance;
-                    if (raceManager == null || raceManager.CurrentState != RaceState.Finished)
+                    var isRacing = raceManager != null && raceManager.CurrentState == RaceState.Racing;
+                    var playerFinished = checkpointTracker != null && checkpointTracker.HasFinishedRace;
+                    if (isRacing && !playerFinished)
                     {
                         kartController.SetControlEnabled(true);
                     }
