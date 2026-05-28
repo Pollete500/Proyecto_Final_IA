@@ -1,14 +1,14 @@
+using System;
 using KartGame.Core;
 using KartGame.PowerUps;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
 namespace KartGame.Kart
 {
     /*
      * Script: PlayerKartInput.cs
-     * Purpose: Reads keyboard input and forwards acceleration, steering, braking, reset and power-up usage requests to the player kart.
+     * Purpose: Reads keyboard and mouse input and forwards acceleration, steering, braking, reset and power-up usage requests to the player kart.
      * Attach To: Player kart root GameObject.
      * Required Components: KartController.
      * Dependencies: CheckpointTracker, optional future PowerUpInventory.
@@ -17,16 +17,76 @@ namespace KartGame.Kart
     [RequireComponent(typeof(KartController))]
     public class PlayerKartInput : MonoBehaviour
     {
+        [Serializable]
+        private struct PowerUpInputBinding
+        {
+            [SerializeField] public TriggerType triggerType;
+            [SerializeField] public Key key;
+        }
+
+        private enum TriggerType
+        {
+            None = 0,
+            Key = 1,
+            MouseLeftButton = 2,
+            MouseRightButton = 3,
+            MouseMiddleButton = 4
+        }
+
         [SerializeField] private KartController kartController;
         [SerializeField] private CheckpointTracker checkpointTracker;
         [SerializeField] private KartPowerUpController powerUpController;
         [SerializeField] private float reverseSpeedThreshold = 1.25f;
         [SerializeField] private bool forceEnableControlOnInput = true;
 
+        [Header("Power-Up Controls")]
+        [SerializeField] private PowerUpInputBinding useStoredPowerUpBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.Key,
+            key = Key.Space
+        };
+        [SerializeField] private PowerUpInputBinding bananaPowerUpBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.MouseRightButton,
+            key = Key.None
+        };
+        [SerializeField] private PowerUpInputBinding bananaPowerUpAlternateBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.Key,
+            key = Key.Digit1
+        };
+        [SerializeField] private PowerUpInputBinding shellPowerUpBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.MouseLeftButton,
+            key = Key.None
+        };
+        [SerializeField] private PowerUpInputBinding shellPowerUpAlternateBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.Key,
+            key = Key.Digit2
+        };
+        [SerializeField] private PowerUpInputBinding mushroomPowerUpBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.Key,
+            key = Key.Digit3
+        };
+        [SerializeField] private PowerUpInputBinding starPowerUpBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.Key,
+            key = Key.LeftShift
+        };
+        [SerializeField] private PowerUpInputBinding starPowerUpAlternateBinding = new PowerUpInputBinding
+        {
+            triggerType = TriggerType.Key,
+            key = Key.Digit4
+        };
+        [SerializeField, HideInInspector] private int powerUpControlPresetVersion;
+
         private float _nextDisabledControlWarningTime;
 
         private void Awake()
         {
+            ApplyDefaultPowerUpControlPresetIfNeeded();
             kartController ??= GetComponent<KartController>();
             checkpointTracker ??= GetComponent<CheckpointTracker>();
             powerUpController ??= GetComponent<KartPowerUpController>();
@@ -35,6 +95,8 @@ namespace KartGame.Kart
 
         private void Update()
         {
+            ApplyDefaultPowerUpControlPresetIfNeeded();
+
             if (kartController == null || Keyboard.current == null)
             {
                 return;
@@ -101,7 +163,7 @@ namespace KartGame.Kart
                 checkpointTracker?.RespawnToRecoveryPoint();
             }
 
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            if (WasBindingPressedThisFrame(useStoredPowerUpBinding))
             {
                 if (powerUpController != null)
                 {
@@ -113,28 +175,106 @@ namespace KartGame.Kart
                 }
             }
 
-            if (WasPowerUpKeyPressed(Keyboard.current.digit1Key, Keyboard.current.numpad1Key))
+            if (WasBindingPressedThisFrame(bananaPowerUpBinding) || WasBindingPressedThisFrame(bananaPowerUpAlternateBinding))
             {
                 TryUseSpecificPowerUp(PowerUpType.Banana);
             }
-            else if (WasPowerUpKeyPressed(Keyboard.current.digit2Key, Keyboard.current.numpad2Key))
+            else if (WasBindingPressedThisFrame(shellPowerUpBinding) || WasBindingPressedThisFrame(shellPowerUpAlternateBinding))
             {
                 TryUseSpecificPowerUp(PowerUpType.Shell);
             }
-            else if (WasPowerUpKeyPressed(Keyboard.current.digit3Key, Keyboard.current.numpad3Key))
+            else if (WasBindingPressedThisFrame(mushroomPowerUpBinding))
             {
                 TryUseSpecificPowerUp(PowerUpType.Mushroom);
             }
-            else if (WasPowerUpKeyPressed(Keyboard.current.digit4Key, Keyboard.current.numpad4Key))
+            else if (WasBindingPressedThisFrame(starPowerUpBinding) || WasBindingPressedThisFrame(starPowerUpAlternateBinding))
             {
                 TryUseSpecificPowerUp(PowerUpType.Star);
             }
         }
 
-        private static bool WasPowerUpKeyPressed(ButtonControl mainKey, ButtonControl alternativeKey)
+        private void OnValidate()
         {
-            return (mainKey != null && mainKey.wasPressedThisFrame)
-                || (alternativeKey != null && alternativeKey.wasPressedThisFrame);
+            ApplyDefaultPowerUpControlPresetIfNeeded();
+        }
+
+        private void ApplyDefaultPowerUpControlPresetIfNeeded()
+        {
+            if (powerUpControlPresetVersion >= 1)
+            {
+                return;
+            }
+
+            useStoredPowerUpBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.Key,
+                key = Key.Space
+            };
+            bananaPowerUpBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.MouseRightButton,
+                key = Key.None
+            };
+            bananaPowerUpAlternateBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.Key,
+                key = Key.Digit1
+            };
+            shellPowerUpBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.MouseLeftButton,
+                key = Key.None
+            };
+            shellPowerUpAlternateBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.Key,
+                key = Key.Digit2
+            };
+            mushroomPowerUpBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.Key,
+                key = Key.Digit3
+            };
+            starPowerUpBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.Key,
+                key = Key.LeftShift
+            };
+            starPowerUpAlternateBinding = new PowerUpInputBinding
+            {
+                triggerType = TriggerType.Key,
+                key = Key.Digit4
+            };
+
+            powerUpControlPresetVersion = 1;
+        }
+
+        private static bool WasBindingPressedThisFrame(PowerUpInputBinding binding)
+        {
+            if (Keyboard.current == null && Mouse.current == null)
+            {
+                return false;
+            }
+
+            return binding.triggerType switch
+            {
+                TriggerType.Key => WasKeyPressedThisFrame(binding.key),
+                TriggerType.MouseLeftButton => Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame,
+                TriggerType.MouseRightButton => Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame,
+                TriggerType.MouseMiddleButton => Mouse.current != null && Mouse.current.middleButton.wasPressedThisFrame,
+                _ => false
+            };
+        }
+
+        private static bool WasKeyPressedThisFrame(Key key)
+        {
+            if (key == Key.None || Keyboard.current == null)
+            {
+                return false;
+            }
+
+            var keyControl = Keyboard.current[key];
+            return keyControl != null && keyControl.wasPressedThisFrame;
         }
 
         private void TryUseSpecificPowerUp(PowerUpType powerUpType)

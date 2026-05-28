@@ -158,6 +158,7 @@ namespace KartGame.EditorTools
         {
             CreateBotRandomForestPowerUpBrainInternal(
                 "Assets/Data/classifier_rules/powerups_random_forest.json",
+                "Assets/Data/classifier_rules/powerups_random_forest.json",
                 "GameObject PowerUpBrain con Random Forest base creado y configurado.");
         }
 
@@ -165,6 +166,7 @@ namespace KartGame.EditorTools
         public static void CreateBotAggressiveRandomForestPowerUpBrain()
         {
             CreateBotRandomForestPowerUpBrainInternal(
+                "Assets/Data/classifier_rules/powerups_random_forest_agresivo.json",
                 "Assets/Data/classifier_rules/powerups_random_forest_agresivo.json",
                 "GameObject PowerUpBrain agresivo creado y configurado.");
         }
@@ -174,10 +176,117 @@ namespace KartGame.EditorTools
         {
             CreateBotRandomForestPowerUpBrainInternal(
                 "Assets/Data/classifier_rules/powerups_random_forest_pacifico.json",
+                "Assets/Data/classifier_rules/powerups_random_forest_pacifico.json",
                 "GameObject PowerUpBrain pacifico creado y configurado.");
         }
 
-        private static void CreateBotRandomForestPowerUpBrainInternal(string modelJsonPath, string successMessage)
+        [MenuItem("Tools/Kart Racing/Power-Ups/Create Bot Player Imitation Random Forest PowerUp Brain")]
+        public static void CreateBotPlayerImitationRandomForestPowerUpBrain()
+        {
+            CreateBotRandomForestPowerUpBrainInternal(
+                "Assets/Data/classifier_rules/ImitarPlayer/powerups_random_forest_player.json",
+                "Assets/Data/classifier_rules/powerups_random_forest.json",
+                "GameObject PowerUpBrain de imitacion del jugador creado y configurado.",
+                followLatestPlayerModel: true);
+        }
+
+        [MenuItem("Tools/Kart Racing/Power-Ups/Create Player PowerUp Imitation Recorder")]
+        public static void CreatePlayerPowerUpImitationRecorder()
+        {
+            if (Selection.activeGameObject == null)
+            {
+                EditorUtility.DisplayDialog("Power-Ups", "Selecciona primero el kart del jugador.", "OK");
+                return;
+            }
+
+            var selectedObject = Selection.activeGameObject;
+            var kartController = selectedObject.GetComponent<KartController>();
+            kartController ??= selectedObject.GetComponentInParent<KartController>();
+
+            if (kartController == null)
+            {
+                EditorUtility.DisplayDialog("Power-Ups", "El objeto seleccionado debe tener KartController.", "OK");
+                return;
+            }
+
+            var kartRoot = kartController.gameObject;
+            var checkpointTracker = kartRoot.GetComponent<CheckpointTracker>();
+            if (checkpointTracker == null)
+            {
+                EditorUtility.DisplayDialog("Power-Ups", "El kart del jugador debe tener CheckpointTracker.", "OK");
+                return;
+            }
+
+            var controllerRoot = ResolveControllerRoot(selectedObject);
+            if (controllerRoot == null)
+            {
+                controllerRoot = FindOrCreateChild(kartRoot.transform, "PowerUpController");
+            }
+
+            var forwardAnchor = FindOrCreateChild(controllerRoot.transform, "ForwardLaunchPoint");
+            var rearAnchor = FindOrCreateChild(controllerRoot.transform, "RearDropPoint");
+            ConfigureAnchors(forwardAnchor.transform, rearAnchor.transform);
+
+            var powerUpController = controllerRoot.GetComponent<KartPowerUpController>();
+            if (powerUpController == null)
+            {
+                powerUpController = Undo.AddComponent<KartPowerUpController>(controllerRoot);
+            }
+
+            var recorder = controllerRoot.GetComponent<PlayerPowerUpImitationRecorder>();
+            if (recorder == null)
+            {
+                recorder = Undo.AddComponent<PlayerPowerUpImitationRecorder>(controllerRoot);
+            }
+
+            var indicatorVisualizer = controllerRoot.GetComponent<PowerUpContextIndicatorVisualizer>();
+            if (indicatorVisualizer == null)
+            {
+                indicatorVisualizer = Undo.AddComponent<PowerUpContextIndicatorVisualizer>(controllerRoot);
+            }
+
+            var playerKartInput = kartRoot.GetComponent<PlayerKartInput>();
+            if (playerKartInput == null)
+            {
+                playerKartInput = Undo.AddComponent<PlayerKartInput>(kartRoot);
+            }
+
+            var legacyBrainRoot = controllerRoot.transform.Find("PowerUpBrain");
+            if (legacyBrainRoot != null)
+            {
+                RemoveComponentIfExists<KartPowerUpBotBrain>(legacyBrainRoot.gameObject);
+                RemoveComponentIfExists<KartPowerUpAgent>(legacyBrainRoot.gameObject);
+                RemoveComponentIfExists<BehaviorParameters>(legacyBrainRoot.gameObject);
+                RemoveComponentIfExists<DecisionRequester>(legacyBrainRoot.gameObject);
+                RemoveComponentIfExists<CheckpointAwareRayPerceptionSensorComponent3D>(legacyBrainRoot.gameObject);
+                RemoveComponentIfExists<RandomForestPowerUpBrain>(legacyBrainRoot.gameObject);
+            }
+
+            RemoveComponentIfExists<KartPowerUpBotBrain>(controllerRoot);
+            RemoveComponentIfExists<KartPowerUpAgent>(controllerRoot);
+            RemoveComponentIfExists<BehaviorParameters>(controllerRoot);
+            RemoveComponentIfExists<DecisionRequester>(controllerRoot);
+            RemoveComponentIfExists<CheckpointAwareRayPerceptionSensorComponent3D>(controllerRoot);
+            RemoveComponentIfExists<RandomForestPowerUpBrain>(controllerRoot);
+
+            AssignControllerReferences(powerUpController, kartController, checkpointTracker, forwardAnchor.transform, rearAnchor.transform);
+            ConfigurePlayerController(powerUpController);
+            AssignPlayerInputReferences(playerKartInput, kartController, checkpointTracker);
+            AssignPlayerImitationRecorderReferences(recorder, powerUpController, kartController, checkpointTracker);
+            AssignIndicatorVisualizerReferences(indicatorVisualizer, powerUpController, null, kartController, checkpointTracker);
+            indicatorVisualizer.EnsureIndicatorObjects();
+
+            Selection.activeGameObject = controllerRoot;
+            EditorUtility.SetDirty(kartRoot);
+            EditorUtility.SetDirty(controllerRoot);
+            EditorUtility.DisplayDialog("Power-Ups", "Recorder de imitacion del jugador creado y configurado.", "OK");
+        }
+
+        private static void CreateBotRandomForestPowerUpBrainInternal(
+            string modelJsonPath,
+            string defaultModelJsonPath,
+            string successMessage,
+            bool followLatestPlayerModel = false)
         {
             if (Selection.activeGameObject == null)
             {
@@ -238,7 +347,9 @@ namespace KartGame.EditorTools
                 powerUpController,
                 kartController,
                 checkpointTracker,
-                AssetDatabase.LoadAssetAtPath<TextAsset>(modelJsonPath));
+                AssetDatabase.LoadAssetAtPath<TextAsset>(modelJsonPath),
+                AssetDatabase.LoadAssetAtPath<TextAsset>(defaultModelJsonPath),
+                followLatestPlayerModel);
             AssignIndicatorVisualizerReferences(indicatorVisualizer, powerUpController, null, kartController, checkpointTracker);
             indicatorVisualizer.EnsureIndicatorObjects();
 
@@ -349,6 +460,7 @@ namespace KartGame.EditorTools
         private static void ConfigurePlayerController(KartPowerUpController powerUpController)
         {
             var serializedObject = new SerializedObject(powerUpController);
+            serializedObject.FindProperty("manualPowerUpType").enumValueIndex = (int)PowerUpType.Mushroom;
             serializedObject.FindProperty("awardPointEveryXCheckpointsForBots").boolValue = false;
             serializedObject.FindProperty("logCheckpointPointGain").boolValue = false;
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
@@ -399,13 +511,18 @@ namespace KartGame.EditorTools
             KartPowerUpController powerUpController,
             KartController kartController,
             CheckpointTracker checkpointTracker,
-            TextAsset modelJson)
+            TextAsset modelJson,
+            TextAsset defaultModelJson,
+            bool followLatestPlayerModel)
         {
             var serializedObject = new SerializedObject(randomForestBrain);
             serializedObject.FindProperty("powerUpController").objectReferenceValue = powerUpController;
             serializedObject.FindProperty("kartController").objectReferenceValue = kartController;
             serializedObject.FindProperty("checkpointTracker").objectReferenceValue = checkpointTracker;
             serializedObject.FindProperty("modelJson").objectReferenceValue = modelJson;
+            serializedObject.FindProperty("defaultModelJson").objectReferenceValue = defaultModelJson ?? modelJson;
+            serializedObject.FindProperty("followLatestPlayerModel").boolValue = followLatestPlayerModel;
+            serializedObject.FindProperty("resetToDefaultModelOnRaceFinished").boolValue = true;
             serializedObject.FindProperty("wallSenseMask").intValue = LayerMask.GetMask("KartWall");
             serializedObject.FindProperty("requireRaceToBeActive").boolValue = true;
             serializedObject.FindProperty("logPredictedPowerUps").boolValue = false;
@@ -423,6 +540,29 @@ namespace KartGame.EditorTools
             serializedObject.FindProperty("checkpointTracker").objectReferenceValue = checkpointTracker;
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(playerKartInput);
+        }
+
+        private static void AssignPlayerImitationRecorderReferences(
+            PlayerPowerUpImitationRecorder recorder,
+            KartPowerUpController powerUpController,
+            KartController kartController,
+            CheckpointTracker checkpointTracker)
+        {
+            var serializedObject = new SerializedObject(recorder);
+            serializedObject.FindProperty("powerUpController").objectReferenceValue = powerUpController;
+            serializedObject.FindProperty("kartController").objectReferenceValue = kartController;
+            serializedObject.FindProperty("checkpointTracker").objectReferenceValue = checkpointTracker;
+            serializedObject.FindProperty("recordOnlyPlayer").boolValue = true;
+            serializedObject.FindProperty("appendToSessionCsv").boolValue = true;
+            serializedObject.FindProperty("writeLapCsv").boolValue = true;
+            serializedObject.FindProperty("autoBuildPlayerModelOnLapCompleted").boolValue = true;
+            serializedObject.FindProperty("sampleInterval").floatValue = 0.15f;
+            serializedObject.FindProperty("reactionDelaySeconds").floatValue = 0.35f;
+            serializedObject.FindProperty("outputFolderRelativePath").stringValue = "Assets/Data/PlayerPowerUpInteractions";
+            serializedObject.FindProperty("sessionFileName").stringValue = "player_powerup_interactions.csv";
+            serializedObject.FindProperty("logRecording").boolValue = false;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(recorder);
         }
 
         private static void ConfigureBehaviorParameters(BehaviorParameters behaviorParameters)

@@ -42,6 +42,12 @@ def main() -> None:
     parser.add_argument("--n-estimators", type=int, default=300, help="Numero de arboles.")
     parser.add_argument("--max-depth", type=int, default=10, help="Profundidad maxima.")
     parser.add_argument("--min-samples-leaf", type=int, default=2, help="Minimo de muestras por hoja.")
+    parser.add_argument(
+        "--class-weight",
+        choices=("balanced", "none"),
+        default="balanced",
+        help="Ponderacion de clases del Random Forest.",
+    )
     args = parser.parse_args()
 
     (
@@ -58,6 +64,8 @@ def main() -> None:
         raise SystemExit(f"No existe el CSV de entrada: {args.input}")
 
     df = pd.read_csv(args.input)
+    if len(df) < 2:
+        raise SystemExit("El dataset necesita al menos 2 filas para entrenar el modelo.")
 
     expected_columns = [
         "recta",
@@ -88,19 +96,28 @@ def main() -> None:
     X = df[feature_columns]
     y = df[target_column]
 
+    class_counts = y.value_counts()
+    estimated_test_samples = max(1, int(round(len(df) * args.test_size)))
+    can_stratify = (
+        len(class_counts) > 1
+        and int(class_counts.min()) >= 2
+        and estimated_test_samples >= len(class_counts)
+    )
+
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
         test_size=args.test_size,
         random_state=args.random_state,
-        stratify=y,
+        stratify=y if can_stratify else None,
     )
 
+    class_weight = None if args.class_weight == "none" else "balanced"
     model = RandomForestClassifier(
         n_estimators=args.n_estimators,
         max_depth=args.max_depth,
         min_samples_leaf=args.min_samples_leaf,
-        class_weight="balanced",
+        class_weight=class_weight,
         random_state=args.random_state,
         n_jobs=-1,
     )
@@ -114,6 +131,7 @@ def main() -> None:
     print(f"CSV de entrada: {args.input}")
     print(f"Filas totales: {len(df)}")
     print(f"Train: {len(X_train)} | Test: {len(X_test)}")
+    print(f"Stratified split: {can_stratify}")
     print(f"Accuracy test: {accuracy:.4f}")
     print("\nFeature importances:")
     for feature_name, importance in zip(feature_columns, model.feature_importances_):

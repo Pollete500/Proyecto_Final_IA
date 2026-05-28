@@ -161,6 +161,63 @@ def bias_candidate_for_label(candidate: dict[str, object], label: str, rng: rand
             candidate["conchas_atras"] = clamp_int(int(candidate["conchas_atras"]) + rng.randint(0, 1), 0, 2)
 
 
+def bias_preserved_label_candidate(candidate: dict[str, object], label: str, rng: random.Random) -> None:
+    if label == "banana":
+        candidate["enemigos_atras"] = max(int(candidate["enemigos_atras"]), rng.randint(1, 4))
+        candidate["enemigos_delante"] = clamp_int(int(candidate["enemigos_delante"]) + rng.randint(-1, 0), 0, 4)
+        candidate["platanos_delante"] = clamp_int(int(candidate["platanos_delante"]) + rng.randint(-1, 1), 0, 2)
+        candidate["conchas_atras"] = clamp_int(int(candidate["conchas_atras"]) + rng.randint(-1, 1), 0, 2)
+        if rng.random() < 0.35:
+            candidate["recta"] = False
+    elif label == "shell":
+        candidate["enemigos_delante"] = max(int(candidate["enemigos_delante"]), rng.randint(1, 4))
+        candidate["enemigos_atras"] = clamp_int(int(candidate["enemigos_atras"]) + rng.randint(-1, 0), 0, 4)
+        candidate["platanos_delante"] = clamp_int(int(candidate["platanos_delante"]) + rng.randint(-1, 1), 0, 2)
+        candidate["conchas_atras"] = clamp_int(int(candidate["conchas_atras"]) + rng.randint(-1, 1), 0, 2)
+        if rng.random() < 0.35:
+            candidate["recta"] = False
+    elif label == "mushroom":
+        candidate["recta"] = True if rng.random() < 0.85 else bool(candidate["recta"])
+        candidate["enemigos_delante"] = clamp_int(int(candidate["enemigos_delante"]), 0, 2)
+        candidate["enemigos_atras"] = clamp_int(int(candidate["enemigos_atras"]), 0, 2)
+        candidate["platanos_delante"] = clamp_int(int(candidate["platanos_delante"]), 0, 2)
+        candidate["conchas_atras"] = clamp_int(int(candidate["conchas_atras"]), 0, 2)
+    elif label == "star":
+        candidate["platanos_delante"] = max(int(candidate["platanos_delante"]), rng.randint(1, 4))
+        candidate["conchas_atras"] = max(int(candidate["conchas_atras"]), rng.randint(1, 4))
+        candidate["enemigos_delante"] = clamp_int(int(candidate["enemigos_delante"]), 0, 3)
+        candidate["enemigos_atras"] = clamp_int(int(candidate["enemigos_atras"]), 0, 3)
+        if rng.random() < 0.5:
+            candidate["recta"] = False
+
+
+def generate_preserved_row_for_label(
+    label: str,
+    base_rows_by_label: dict[str, list[dict[str, object]]],
+    rng: random.Random,
+    max_attempts: int = 200,
+) -> dict[str, object]:
+    base_candidates = base_rows_by_label.get(label) or []
+
+    for _ in range(max_attempts):
+        if base_candidates:
+            candidate = jitter_base_row(rng.choice(base_candidates), rng)
+        else:
+            candidate = {
+                "recta": rng.choice([True, False]),
+                "enemigos_delante": rng.randint(0, 5),
+                "enemigos_atras": rng.randint(0, 5),
+                "platanos_delante": rng.randint(0, 4),
+                "conchas_atras": rng.randint(0, 4),
+            }
+
+        bias_preserved_label_candidate(candidate, label, rng)
+        candidate["power_up_tirado"] = label
+        return candidate
+
+    raise RuntimeError(f"No se pudo generar una fila sintetica preservando la clase '{label}'.")
+
+
 def generate_row_for_label(
     label: str,
     base_rows_by_label: dict[str, list[dict[str, object]]],
@@ -216,6 +273,70 @@ def build_target_counts(profile: str, target_size: int) -> dict[str, int]:
     return target_counts
 
 
+def build_preserved_label_target_counts(rows: list[dict[str, object]], target_size: int) -> dict[str, int]:
+    counts = Counter(str(row["power_up_tirado"]) for row in rows)
+    total_rows = max(1, len(rows))
+    if target_size <= len(rows):
+        return {label: counts[label] for label in POWER_UPS}
+
+    raw_targets = {
+        label: counts[label] + (target_size - len(rows)) * (counts[label] / total_rows)
+        for label in POWER_UPS
+    }
+    target_counts = {label: int(raw_targets[label]) for label in POWER_UPS}
+    assigned_total = sum(target_counts.values())
+    remainder = target_size - assigned_total
+
+    if remainder > 0:
+        ordered_labels = sorted(
+            POWER_UPS,
+            key=lambda label: raw_targets[label] - target_counts[label],
+            reverse=True,
+        )
+        for remainder_index in range(remainder):
+            target_counts[ordered_labels[remainder_index % len(ordered_labels)]] += 1
+
+    for label in POWER_UPS:
+        target_counts[label] = max(target_counts[label], counts[label])
+
+    return target_counts
+
+
+def choose_label_with_deficit(counts: Counter, target_counts: dict[str, int]) -> str | None:
+    labels_with_deficit = [label for label in POWER_UPS if counts[label] < target_counts[label]]
+    if not labels_with_deficit:
+        return None
+
+    return min(
+        labels_with_deficit,
+        key=lambda label: (counts[label] - target_counts[label], counts[label]),
+    )
+
+
+def augment_preserving_labels(
+    rows: list[dict[str, object]],
+    target_size: int,
+    rng: random.Random,
+) -> tuple[list[dict[str, object]], Counter]:
+    counts = Counter(str(row["power_up_tirado"]) for row in rows)
+    augmented_rows = list(rows)
+    base_rows_by_label: dict[str, list[dict[str, object]]] = defaultdict(list)
+    for row in rows:
+        base_rows_by_label[str(row["power_up_tirado"])].append(row)
+
+    target_counts = build_preserved_label_target_counts(rows, target_size)
+    while len(augmented_rows) < target_size:
+        label_to_generate = choose_label_with_deficit(counts, target_counts)
+        if label_to_generate is None:
+            break
+
+        synthetic_row = generate_preserved_row_for_label(label_to_generate, base_rows_by_label, rng)
+        augmented_rows.append(synthetic_row)
+        counts[label_to_generate] += 1
+
+    return augmented_rows, counts
+
+
 def write_rows(output_path: Path, rows: list[dict[str, object]]) -> None:
     with output_path.open("w", encoding="utf-8", newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=FIELDNAMES)
@@ -247,10 +368,36 @@ def main() -> None:
         default="balanced",
         help="Perfil de comportamiento a sesgar.",
     )
+    parser.add_argument(
+        "--preserve-labels",
+        action="store_true",
+        help="Aumenta el dataset sin cambiar la etiqueta original de cada fila.",
+    )
     args = parser.parse_args()
 
     rng = random.Random(args.seed)
     rows = load_rows(args.input)
+    if len(rows) == 0:
+        raise SystemExit(f"El CSV de entrada no contiene filas: {args.input}")
+
+    if args.preserve_labels:
+        if len(rows) >= args.target_size:
+            write_rows(args.output, rows)
+            print(f"El dataset ya tiene {len(rows)} filas, no hace falta ampliarlo.")
+            print(f"Salida escrita en: {args.output}")
+            return
+
+        augmented_rows, counts = augment_preserving_labels(rows, args.target_size, rng)
+        write_rows(args.output, augmented_rows)
+        print(f"Filas originales: {len(rows)}")
+        print(f"Filas finales: {len(augmented_rows)}")
+        print("Modo: preserve-labels")
+        print("Balance final por clase:")
+        for label in POWER_UPS:
+            print(f"  {label}: {counts[label]}")
+        print(f"CSV aumentado guardado en: {args.output}")
+        return
+
     if len(rows) >= args.target_size:
         write_rows(args.output, rows)
         print(f"El dataset ya tiene {len(rows)} filas, no hace falta ampliarlo.")

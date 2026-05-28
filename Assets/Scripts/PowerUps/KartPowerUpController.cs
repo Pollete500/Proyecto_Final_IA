@@ -79,6 +79,8 @@ namespace KartGame.PowerUps
 
         public int AvailablePowerUpPoints => availablePowerUpPoints;
         public bool IsColoringKartByLastUsedPowerUp => colorKartByLastUsedPowerUp;
+        public KartController KartController => kartController;
+        public CheckpointTracker CheckpointTracker => checkpointTracker;
         public float CooldownRemainingSeconds => Mathf.Max(0f, _nextAllowedUseTime - Time.time);
         public float CooldownRemainingNormalized => limitAnyPowerUpUseRate
             ? Mathf.Clamp01(CooldownRemainingSeconds / Mathf.Max(0.2f, minimumSecondsBetweenAnyPowerUpUses))

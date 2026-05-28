@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using KartGame.Core;
 using KartGame.Kart;
 using UnityEngine;
@@ -159,11 +160,17 @@ namespace KartGame.PowerUps
         [SerializeField] private KartController kartController;
         [SerializeField] private CheckpointTracker checkpointTracker;
         [SerializeField] private TextAsset modelJson;
+        [SerializeField] private TextAsset defaultModelJson;
+        [SerializeField] private bool followLatestPlayerModel;
+
+        [Header("Model Reset")]
+        [SerializeField] private bool resetToDefaultModelOnRaceFinished = true;
 
         [Header("Decision Timing")]
         [SerializeField] private float decisionInterval = 0.25f;
         [SerializeField] private bool requireRaceToBeActive = true;
         [SerializeField] private bool logPredictedPowerUps;
+        [SerializeField] private bool logContextRaycasts = true;
 
         [Header("Enemy Sensing")]
         [SerializeField] private float nearbyEnemyDistance = 14f;
@@ -224,6 +231,11 @@ namespace KartGame.PowerUps
         private void Update()
         {
             CacheReferences();
+            if (TryResetToDefaultModelIfRaceFinished())
+            {
+                return;
+            }
+
             if (powerUpController == null || kartController == null || checkpointTracker == null || _runtimeModel == null)
             {
                 return;
@@ -272,13 +284,55 @@ namespace KartGame.PowerUps
             debugHasLoadedModel = _runtimeModel != null;
         }
 
+        public bool FollowLatestPlayerModel => followLatestPlayerModel;
+
+        public void SetModelReferences(TextAsset newModelJson, TextAsset newDefaultModelJson = null)
+        {
+            modelJson = newModelJson;
+            defaultModelJson = newDefaultModelJson ?? newModelJson;
+            LoadModel();
+        }
+
+        private bool TryResetToDefaultModelIfRaceFinished()
+        {
+            if (!resetToDefaultModelOnRaceFinished)
+            {
+                return false;
+            }
+
+            if (RaceManager.Instance == null || RaceManager.Instance.CurrentState != RaceState.Finished)
+            {
+                return false;
+            }
+
+            if (defaultModelJson == null)
+            {
+                return false;
+            }
+
+            if (modelJson != defaultModelJson)
+            {
+                modelJson = defaultModelJson;
+                LoadModel();
+                if (logPredictedPowerUps)
+                {
+                    Debug.Log(
+                        $"RandomForestPowerUpBrain ha vuelto al modelo por defecto al finalizar la carrera: {defaultModelJson.name}",
+                        this);
+                }
+            }
+
+            return true;
+        }
+
         private void RefreshContext()
         {
             debugEnemiesAhead = 0;
             debugEnemiesBehind = 0;
             debugBananasAhead = 0;
             debugShellsBehind = 0;
-            debugStraightSection = IsStraightSection();
+            var wallHits = CountWallHits();
+            debugStraightSection = IsStraightSection(wallHits);
             debugPredictedPowerUpAvailable = false;
             debugPredictedLabel = string.Empty;
             debugPredictedVoteRatio = 0f;
@@ -362,9 +416,16 @@ namespace KartGame.PowerUps
             _featureValues[2] = debugEnemiesBehind;
             _featureValues[3] = debugBananasAhead;
             _featureValues[4] = debugShellsBehind;
+
+            if (logContextRaycasts)
+            {
+                Debug.Log(
+                    $"RF CONTEXT: recta={debugStraightSection} | wallHits={wallHits} | delante={debugEnemiesAhead} | atras={debugEnemiesBehind} | bananasDelante={debugBananasAhead} | conchasAtras={debugShellsBehind} | features=[{_featureValues[0]}, {_featureValues[1]}, {_featureValues[2]}, {_featureValues[3]}, {_featureValues[4]}]",
+                    this);
+            }
         }
 
-        private bool IsStraightSection()
+        private bool IsStraightSection(int wallHits)
         {
             if (checkpointTracker == null || checkpointTracker.NextCheckpoint == null || kartController == null)
             {
@@ -373,7 +434,6 @@ namespace KartGame.PowerUps
 
             var localTarget = kartController.transform.InverseTransformPoint(checkpointTracker.NextCheckpoint.position);
             var targetAngle = Mathf.Abs(Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg);
-            var wallHits = CountWallHits();
             var angleMatches = ignoreStraightSectionMaxTargetAngle || targetAngle <= straightSectionMaxTargetAngle;
             return angleMatches && wallHits <= maxWallHitsForStraightSection;
         }
@@ -390,15 +450,38 @@ namespace KartGame.PowerUps
             var origin = referenceTransform.position + Vector3.up * wallSenseStartHeight;
             var raysPerDirection = Mathf.Max(0, wallSenseRaysPerDirection);
             var stepAngle = raysPerDirection > 0 ? wallSenseMaxDegrees / raysPerDirection : 0f;
+            StringBuilder rayLog = logContextRaycasts ? new StringBuilder(256) : null;
 
             for (var rayIndex = -raysPerDirection; rayIndex <= raysPerDirection; rayIndex++)
             {
                 var yaw = stepAngle * rayIndex;
                 var direction = Quaternion.Euler(0f, yaw, 0f) * referenceTransform.forward;
-                if (Physics.Raycast(origin, direction, wallSenseDistance, wallSenseMask, QueryTriggerInteraction.Ignore))
+                var rayCountLabel = $"{yaw:+0;-0;0}deg";
+                if (Physics.Raycast(origin, direction, out RaycastHit hitInfo, wallSenseDistance, wallSenseMask, QueryTriggerInteraction.Ignore))
                 {
                     hitCount++;
+                    if (rayLog != null)
+                    {
+                        rayLog.Append('[')
+                            .Append(rayCountLabel)
+                            .Append(" HIT:")
+                            .Append(hitInfo.collider != null ? hitInfo.collider.name : "unknown")
+                            .Append("] ");
+                    }
                 }
+                else if (rayLog != null)
+                {
+                    rayLog.Append('[')
+                        .Append(rayCountLabel)
+                        .Append(" miss] ");
+                }
+            }
+
+            if (rayLog != null)
+            {
+                Debug.Log(
+                    $"RF WALL RAYS: origin={origin:F2} | distance={wallSenseDistance:0.00} | hits={hitCount}/{raysPerDirection * 2 + 1} | {rayLog}",
+                    this);
             }
 
             return hitCount;
