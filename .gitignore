@@ -112,3 +112,6 @@ InitTestScene*.unity*
 # Python / ML-Agents local environments and generated training outputs
 /results/
 /Assets/ML-Agents/
+
+
+.DS_Store
