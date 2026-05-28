@@ -1,0 +1,38 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 499974,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\kart_pro_doble_sensor_doble\\KartAgent\\KartAgent-499974.onnx",
+                "reward": 64.0,
+                "creation_time": 1780000655.152742,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\kart_pro_doble_sensor_doble\\KartAgent\\KartAgent-499974.pt"
+                ]
+            },
+            {
+                "steps": 527516,
+                "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\kart_pro_doble_sensor_doble\\KartAgent\\KartAgent-527516.onnx",
+                "reward": 64.0,
+                "creation_time": 1780000776.8458126,
+                "auxillary_file_paths": [
+                    ".\\Assets\\MLAgents\\TrainingLogs\\kart_pro_doble_sensor_doble\\KartAgent\\KartAgent-527516.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 527516,
+            "file_path": ".\\Assets\\MLAgents\\TrainingLogs\\kart_pro_doble_sensor_doble\\KartAgent.onnx",
+            "reward": 64.0,
+            "creation_time": 1780000776.8458126,
+            "auxillary_file_paths": [
+                ".\\Assets\\MLAgents\\TrainingLogs\\kart_pro_doble_sensor_doble\\KartAgent\\KartAgent-527516.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

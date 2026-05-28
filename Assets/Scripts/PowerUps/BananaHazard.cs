@@ -4,17 +4,20 @@ using UnityEngine;
 namespace KartGame.PowerUps
 {
     [RequireComponent(typeof(SphereCollider))]
-    [RequireComponent(typeof(Rigidbody))]
     public class BananaHazard : PowerUpHazardBase
     {
+        private const string BananaLayerName = "Banana";
+        [SerializeField] private bool bananaTrain = false;
+
+        public static event System.Action<BananaHazard, KartController> AnyTrainingBananaTouched;
+
+        protected override bool ShouldAutoDespawn => !bananaTrain;
+
         protected override void Awake()
         {
             base.Awake();
 
-            var bananaRigidbody = GetComponent<Rigidbody>();
-            bananaRigidbody.useGravity = false;
-            bananaRigidbody.isKinematic = true;
-            bananaRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            ApplyLayerFromName(gameObject, BananaLayerName);
 
             var sphereCollider = GetComponent<SphereCollider>();
             sphereCollider.isTrigger = true;
@@ -38,9 +41,52 @@ namespace KartGame.PowerUps
                 return;
             }
 
+            if (bananaTrain && IsBotKart(targetKart))
+            {
+                AnyTrainingBananaTouched?.Invoke(this, targetKart);
+                IgnoreFor(targetKart);
+                return;
+            }
+
             if (TryAffect(targetKart))
             {
                 Destroy(gameObject);
+            }
+        }
+
+        private static bool IsBotKart(KartController kartController)
+        {
+            return kartController != null && kartController.GetComponentInParent<PlayerKartInput>() == null;
+        }
+
+        private static void ApplyLayerFromName(GameObject targetObject, string layerName)
+        {
+            if (targetObject == null)
+            {
+                return;
+            }
+
+            var layer = LayerMask.NameToLayer(layerName);
+            if (layer < 0)
+            {
+                return;
+            }
+
+            ApplyLayerRecursively(targetObject.transform, layer);
+        }
+
+        private static void ApplyLayerRecursively(Transform targetTransform, int layer)
+        {
+            if (targetTransform == null)
+            {
+                return;
+            }
+
+            targetTransform.gameObject.layer = layer;
+
+            for (var childIndex = 0; childIndex < targetTransform.childCount; childIndex++)
+            {
+                ApplyLayerRecursively(targetTransform.GetChild(childIndex), layer);
             }
         }
     }

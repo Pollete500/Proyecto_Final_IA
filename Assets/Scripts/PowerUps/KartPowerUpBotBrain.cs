@@ -204,7 +204,7 @@ namespace KartGame.PowerUps
                 }
 
                 var hazard = hit.GetComponentInParent<PowerUpHazardBase>();
-                if (hazard == null || hazard.OwnerKart == kartController)
+                if (hazard == null || hazard.OwnerKart == kartController || hazard.IsIgnoredFor(kartController))
                 {
                     continue;
                 }

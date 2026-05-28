@@ -1,8 +1,10 @@
 using KartGame.Core;
 using KartGame.Kart;
+using KartGame.PowerUps;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Policies;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,6 +28,7 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private TrainingSceneManager trainingSceneManager;
         [SerializeField] private AgentRewardManager rewardManager;
         [SerializeField] private TrackData trackData;
+        [SerializeField] private BehaviorParameters behaviorParameters;
         [SerializeField] private KartController kartController;
         [SerializeField] private CheckpointTracker checkpointTracker;
         [SerializeField] private Rigidbody kartRigidbody;
@@ -65,6 +68,7 @@ namespace KartGame.AI.Reinforcement
         {
             CacheReferences();
             ApplyRuntimeSetup();
+            EnsureValidBehaviorParameters();
             base.OnEnable();
 
             if (checkpointTracker != null)
@@ -77,10 +81,18 @@ namespace KartGame.AI.Reinforcement
             {
                 trainingSceneManager.RegisterAgent(this);
             }
+
+            CoinPickup.AnyCoinCollected += HandleAnyCoinCollected;
+            BananaHazard.AnyTrainingBananaTouched += HandleTrainingBananaTouched;
+            KartPowerUpController.AnyPowerUpHit += HandleAnyPowerUpHit;
         }
 
         protected override void OnDisable()
         {
+            CoinPickup.AnyCoinCollected -= HandleAnyCoinCollected;
+            BananaHazard.AnyTrainingBananaTouched -= HandleTrainingBananaTouched;
+            KartPowerUpController.AnyPowerUpHit -= HandleAnyPowerUpHit;
+
             if (checkpointTracker != null)
             {
                 checkpointTracker.CheckpointPassed -= HandleCheckpointPassed;
@@ -170,7 +182,7 @@ namespace KartGame.AI.Reinforcement
         public override void CollectObservations(VectorSensor sensor)
         {
             CacheReferences();
-            if (!HasRequiredReferences())
+            if (!HasRequiredReferences() || kartRigidbody == null || kartController == null || checkpointTracker == null)
             {
                 sensor.AddObservation(0f);
                 sensor.AddObservation(0f);
@@ -425,6 +437,40 @@ namespace KartGame.AI.Reinforcement
             }
         }
 
+        private void HandleAnyCoinCollected(CoinPickup sourcePickup, KartController targetKart, int coinAmount)
+        {
+            if (!_episodeRunning || rewardManager == null || targetKart != kartController || sourcePickup == null)
+            {
+                return;
+            }
+
+            ApplyAgentReward(rewardManager.GetCoinPickupReward(coinAmount));
+        }
+
+        private void HandleTrainingBananaTouched(BananaHazard sourceHazard, KartController targetKart)
+        {
+            if (!_episodeRunning || rewardManager == null || targetKart != kartController || sourceHazard == null)
+            {
+                return;
+            }
+
+            ApplyAgentReward(rewardManager.GetPowerUpHitPenalty(PowerUpType.Banana));
+        }
+
+        private void HandleAnyPowerUpHit(KartPowerUpController sourceController, PowerUpType powerUpType, KartController targetKart)
+        {
+            if (!_episodeRunning || rewardManager == null || targetKart != kartController || sourceController == null)
+            {
+                return;
+            }
+
+            var rewardDelta = rewardManager.GetPowerUpHitPenalty(powerUpType);
+            if (!Mathf.Approximately(rewardDelta, 0f))
+            {
+                ApplyAgentReward(rewardDelta);
+            }
+        }
+
         private bool IsWallCollision(Collider other)
         {
             return other != null && other.CompareTag(wallTag);
@@ -440,6 +486,11 @@ namespace KartGame.AI.Reinforcement
             if (rewardManager == null)
             {
                 rewardManager = GetComponent<AgentRewardManager>();
+            }
+
+            if (behaviorParameters == null)
+            {
+                behaviorParameters = GetComponent<BehaviorParameters>();
             }
 
             if (trackData == null)
@@ -494,6 +545,20 @@ namespace KartGame.AI.Reinforcement
             }
 
             ConfigureRaySensors();
+        }
+
+        private void EnsureValidBehaviorParameters()
+        {
+            if (behaviorParameters == null)
+            {
+                return;
+            }
+
+            if (behaviorParameters.BehaviorType == BehaviorType.InferenceOnly && behaviorParameters.Model == null)
+            {
+                Debug.LogWarning($"KartAgent on '{name}' had Behavior Type set to InferenceOnly without a model. Falling back to Default.", this);
+                behaviorParameters.BehaviorType = BehaviorType.Default;
+            }
         }
 
         private bool HasRequiredReferences()

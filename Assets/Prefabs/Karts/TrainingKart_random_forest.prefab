@@ -48,9 +48,13 @@ MonoBehaviour:
   kartController: {fileID: 2391639328412772156}
   checkpointTracker: {fileID: 4933193758124320945}
   modelJson: {fileID: 4900000, guid: 90c667376bee1e24794a9ec496254286, type: 3}
+  defaultModelJson: {fileID: 0}
+  followLatestPlayerModel: 0
+  resetToDefaultModelOnRaceFinished: 1
   decisionInterval: 0.25
   requireRaceToBeActive: 1
   logPredictedPowerUps: 0
+  logContextRaycasts: 1
   nearbyEnemyDistance: 14
   aheadSenseHalfAngle: 70
   behindSenseHalfAngle: 70
@@ -420,6 +424,11 @@ MonoBehaviour:
   brakingForce: 18
   lateralGrip: 0.88
   coastingDrag: 0.35
+  maxCoins: 10
+  coinSpeedMultiplierAtMax: 2
+  hazardSlowMultiplier: 0.2
+  coinDropLifetime: 6
+  coinDropImpulse: 2.5
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -480,6 +489,9 @@ MonoBehaviour:
   outOfBoundsPenalty: 1
   stepPenaltyPerDecision: 0
   episodeTimeoutPenalty: 0
+  coinPickupReward: 0.05
+  bananaHitPenalty: 0.12
+  shellHitPenalty: 0.08
 --- !u!114 &4487802605093961448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,6 +542,7 @@ MonoBehaviour:
   trainingSceneManager: {fileID: 0}
   rewardManager: {fileID: 0}
   trackData: {fileID: 0}
+  behaviorParameters: {fileID: 0}
   kartController: {fileID: 0}
   checkpointTracker: {fileID: 0}
   kartRigidbody: {fileID: 0}
@@ -1049,12 +1062,12 @@ MonoBehaviour:
   bananaPrefab: {fileID: 0}
   shellPrefab: {fileID: 0}
   bananaLifetime: 15
-  bananaStunDuration: 2.5
+  bananaSlowDuration: 2.5
   shellLifetime: 8
   shellSpeed: 14
   shellTurnRateDegrees: 220
   shellHitRadius: 0.45
-  shellStunDuration: 2.25
+  shellSlowDuration: 2.25
   shellTargetDistance: 24
   shellTargetMaxAngle: 70
   shellHomesToTargetAhead: 1

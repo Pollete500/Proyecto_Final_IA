@@ -279,7 +279,7 @@ namespace KartGame.PowerUps
             for (var index = 0; index < hits.Length; index++)
             {
                 var hazard = hits[index] != null ? hits[index].GetComponentInParent<PowerUpHazardBase>() : null;
-                if (hazard == null)
+                if (hazard == null || hazard.IsIgnoredFor(kartController))
                 {
                     continue;
                 }

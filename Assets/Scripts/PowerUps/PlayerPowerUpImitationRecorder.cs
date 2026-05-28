@@ -454,7 +454,7 @@ namespace KartGame.PowerUps
             {
                 var hit = hazardHits[index];
                 var hazard = hit != null ? hit.GetComponentInParent<PowerUpHazardBase>() : null;
-                if (hazard == null || hazard.OwnerKart == kartController || !seenHazards.Add(hazard) || hazard.PowerUpType != powerUpType)
+                if (hazard == null || hazard.OwnerKart == kartController || hazard.IsIgnoredFor(kartController) || !seenHazards.Add(hazard) || hazard.PowerUpType != powerUpType)
                 {
                     continue;
                 }

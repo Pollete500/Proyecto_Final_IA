@@ -402,6 +402,35 @@ namespace KartGame.EditorTools
             EditorUtility.DisplayDialog("Power-Ups", "Indicadores de contexto creados/configurados.", "OK");
         }
 
+        [MenuItem("Tools/Kart Racing/Coins/Create Coin Pickup")]
+        public static void CreateCoinPickup()
+        {
+            if (Selection.activeGameObject == null)
+            {
+                EditorUtility.DisplayDialog("Coins", "Selecciona primero el objeto padre donde crear la moneda.", "OK");
+                return;
+            }
+
+            var parent = Selection.activeGameObject.transform;
+            var coinObject = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            Undo.RegisterCreatedObjectUndo(coinObject, "Create Coin Pickup");
+            coinObject.name = "CoinPickup";
+            coinObject.transform.SetParent(parent, false);
+            coinObject.transform.localPosition = Vector3.zero;
+            coinObject.transform.localRotation = Quaternion.identity;
+            coinObject.transform.localScale = new Vector3(0.45f, 0.08f, 0.45f);
+
+            var coinPickup = coinObject.GetComponent<CoinPickup>();
+            if (coinPickup == null)
+            {
+                coinPickup = Undo.AddComponent<CoinPickup>(coinObject);
+            }
+
+            Selection.activeGameObject = coinObject;
+            EditorUtility.SetDirty(coinObject);
+            EditorUtility.DisplayDialog("Coins", "Moneda creada y lista para colocarse.", "OK");
+        }
+
         private static void ConfigureAnchors(Transform forwardAnchor, Transform rearAnchor)
         {
             forwardAnchor.localPosition = new Vector3(0f, 0.35f, 1.5f);

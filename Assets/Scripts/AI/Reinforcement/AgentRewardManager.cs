@@ -1,3 +1,4 @@
+using KartGame.PowerUps;
 using UnityEngine;
 
 namespace KartGame.AI.Reinforcement
@@ -28,12 +29,20 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private float stepPenaltyPerDecision = 0f; //0.005
         [SerializeField] private float episodeTimeoutPenalty = 0f; //0.25
 
+        [Header("Coin / Hazard Rewards")]
+        [SerializeField] private float coinPickupReward = 0.05f;
+        [SerializeField] private float bananaHitPenalty = 0.12f;
+        [SerializeField] private float shellHitPenalty = 0.08f;
+
         public float CheckpointReward => checkpointReward;
         public float WrongCheckpointPenalty => wrongCheckpointPenalty;
         public float WallCollisionPenalty => wallCollisionPenalty;
         public float OffTrackPenalty => offTrackPenalty;
         public float OutOfBoundsPenalty => outOfBoundsPenalty;
         public float EpisodeTimeoutPenalty => episodeTimeoutPenalty;
+        public float CoinPickupReward => coinPickupReward;
+        public float BananaHitPenalty => bananaHitPenalty;
+        public float ShellHitPenalty => shellHitPenalty;
 
         public float EvaluateProgressReward(float previousDistance, float currentDistance, float normalizationDistance)
         {
@@ -71,6 +80,21 @@ namespace KartGame.AI.Reinforcement
         public float GetStepPenalty()
         {
             return -stepPenaltyPerDecision;
+        }
+
+        public float GetCoinPickupReward(int coinAmount)
+        {
+            return coinPickupReward * Mathf.Max(1, coinAmount);
+        }
+
+        public float GetPowerUpHitPenalty(PowerUpType powerUpType)
+        {
+            return powerUpType switch
+            {
+                PowerUpType.Banana => -bananaHitPenalty,
+                PowerUpType.Shell => -shellHitPenalty,
+                _ => 0f
+            };
         }
     }
 }

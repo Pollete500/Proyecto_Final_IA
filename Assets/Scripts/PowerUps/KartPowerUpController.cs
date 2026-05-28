@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using KartGame.Core;
 using KartGame.Kart;
+using UnityEngine.Serialization;
 using UnityEngine;
 
 namespace KartGame.PowerUps
@@ -44,14 +45,16 @@ namespace KartGame.PowerUps
 
         [Header("Banana")]
         [SerializeField] private float bananaLifetime = 15f;
-        [SerializeField] private float bananaStunDuration = 2.5f;
+        [FormerlySerializedAs("bananaStunDuration")]
+        [SerializeField] private float bananaSlowDuration = 2.5f;
 
         [Header("Shell")]
         [SerializeField] private float shellLifetime = 8f;
         [SerializeField] private float shellSpeed = 14f;
         [SerializeField] private float shellTurnRateDegrees = 220f;
         [SerializeField] private float shellHitRadius = 0.45f;
-        [SerializeField] private float shellStunDuration = 2.25f;
+        [FormerlySerializedAs("shellStunDuration")]
+        [SerializeField] private float shellSlowDuration = 2.25f;
         [SerializeField] private float shellTargetDistance = 24f;
         [SerializeField] private float shellTargetMaxAngle = 70f;
         [SerializeField] private bool shellHomesToTargetAhead = true;
@@ -331,7 +334,7 @@ namespace KartGame.PowerUps
             }
 
             EnsureKinematicTriggerCollider(bananaObject, 0.6f);
-            bananaHazard.Initialize(this, kartController, PowerUpType.Banana, bananaStunDuration, bananaLifetime);
+            bananaHazard.Initialize(this, kartController, PowerUpType.Banana, bananaSlowDuration, bananaLifetime);
             RegisterActiveDeployable(bananaHazard);
             ConfigureRuntimeHazardObject(bananaObject);
             SyncDebugState();
@@ -394,7 +397,7 @@ namespace KartGame.PowerUps
                 kartController,
                 PowerUpType.Shell,
                 shellHomesToTargetAhead ? (preferredTarget != null ? preferredTarget : FindBestShellTarget()) : null,
-                shellStunDuration,
+                shellSlowDuration,
                 shellLifetime,
                 shellSpeed,
                 shellTurnRateDegrees,
@@ -659,6 +662,7 @@ namespace KartGame.PowerUps
         {
             var root = new GameObject("BananaHazard");
             root.transform.position = position;
+            ApplyLayerFromName(root, "Banana");
 
             var visual = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             visual.name = "Visual";
@@ -719,6 +723,37 @@ namespace KartGame.PowerUps
             }
 
             targetObject.hideFlags = HideFlags.HideInHierarchy;
+        }
+
+        private static void ApplyLayerFromName(GameObject targetObject, string layerName)
+        {
+            if (targetObject == null)
+            {
+                return;
+            }
+
+            var layer = LayerMask.NameToLayer(layerName);
+            if (layer < 0)
+            {
+                return;
+            }
+
+            ApplyLayerRecursively(targetObject.transform, layer);
+        }
+
+        private static void ApplyLayerRecursively(Transform targetTransform, int layer)
+        {
+            if (targetTransform == null)
+            {
+                return;
+            }
+
+            targetTransform.gameObject.layer = layer;
+
+            for (var childIndex = 0; childIndex < targetTransform.childCount; childIndex++)
+            {
+                ApplyLayerRecursively(targetTransform.GetChild(childIndex), layer);
+            }
         }
 
         private void ApplyLastUsedPowerUpColor(PowerUpType powerUpType)

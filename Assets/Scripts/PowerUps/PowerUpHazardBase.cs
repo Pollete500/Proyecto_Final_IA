@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using KartGame.Kart;
+using UnityEngine.Serialization;
 using UnityEngine;
 
 namespace KartGame.PowerUps
@@ -6,16 +8,18 @@ namespace KartGame.PowerUps
     public abstract class PowerUpHazardBase : MonoBehaviour
     {
         [SerializeField] private float fallbackLifetime = 10f;
-        [SerializeField] private float fallbackStunDuration = 2f;
+        [FormerlySerializedAs("fallbackStunDuration")]
+        [SerializeField] private float fallbackSlowDuration = 2f;
 
         private Collider[] _ownColliders;
         private float _despawnAt;
         private bool _didNotifyDisposed;
+        private readonly HashSet<int> _ignoredKartIds = new HashSet<int>();
 
         public KartPowerUpController OwnerPowerUpController { get; private set; }
         public KartController OwnerKart { get; private set; }
         public PowerUpType PowerUpType { get; private set; }
-        public float StunDuration { get; private set; }
+        public float SlowDuration { get; private set; }
         public event System.Action<PowerUpHazardBase> Disposed;
 
         protected virtual void Awake()
@@ -26,11 +30,13 @@ namespace KartGame.PowerUps
 
         protected virtual void Update()
         {
-            if (Time.time >= _despawnAt)
+            if (ShouldAutoDespawn && Time.time >= _despawnAt)
             {
                 Destroy(gameObject);
             }
         }
+
+        protected virtual bool ShouldAutoDespawn => true;
 
         protected virtual void OnDestroy()
         {
@@ -53,7 +59,7 @@ namespace KartGame.PowerUps
             OwnerPowerUpController = ownerPowerUpController;
             OwnerKart = ownerKart;
             PowerUpType = powerUpType;
-            StunDuration = stunDuration > 0f ? stunDuration : fallbackStunDuration;
+            SlowDuration = stunDuration > 0f ? stunDuration : fallbackSlowDuration;
             _despawnAt = Time.time + Mathf.Max(0.1f, lifetime > 0f ? lifetime : fallbackLifetime);
             IgnoreOwnerCollisions();
         }
@@ -65,7 +71,10 @@ namespace KartGame.PowerUps
                 return false;
             }
 
-            targetKart.ApplyStun(StunDuration);
+            var dropOrigin = targetKart.transform.position - targetKart.transform.forward * 0.35f + Vector3.up * 0.75f;
+            var dropDirection = (-targetKart.transform.forward + Vector3.up * 0.35f).normalized;
+            targetKart.TryLoseCoinAndDrop(dropOrigin, dropDirection);
+            targetKart.ApplyHazardSlow(SlowDuration);
             OwnerPowerUpController?.NotifyPowerUpHit(PowerUpType, targetKart);
             return true;
         }
@@ -82,7 +91,7 @@ namespace KartGame.PowerUps
                 return false;
             }
 
-            return !targetKart.IsInvincible;
+            return !targetKart.IsInvincible && !IsIgnoredFor(targetKart);
         }
 
         protected bool IsOwnerCollider(Collider other)
@@ -93,6 +102,47 @@ namespace KartGame.PowerUps
             }
 
             return other.transform.root == OwnerKart.transform.root;
+        }
+
+        public bool IsIgnoredFor(KartController targetKart)
+        {
+            return targetKart != null && _ignoredKartIds.Contains(targetKart.GetInstanceID());
+        }
+
+        public void IgnoreFor(KartController targetKart)
+        {
+            if (targetKart == null)
+            {
+                return;
+            }
+
+            if (!_ignoredKartIds.Add(targetKart.GetInstanceID()))
+            {
+                return;
+            }
+
+            _ownColliders ??= GetComponentsInChildren<Collider>(true);
+            var targetColliders = targetKart.GetComponentsInChildren<Collider>(true);
+
+            for (var ownIndex = 0; ownIndex < _ownColliders.Length; ownIndex++)
+            {
+                var ownCollider = _ownColliders[ownIndex];
+                if (ownCollider == null)
+                {
+                    continue;
+                }
+
+                for (var targetIndex = 0; targetIndex < targetColliders.Length; targetIndex++)
+                {
+                    var targetCollider = targetColliders[targetIndex];
+                    if (targetCollider == null)
+                    {
+                        continue;
+                    }
+
+                    Physics.IgnoreCollision(ownCollider, targetCollider, true);
+                }
+            }
         }
 
         protected void IgnoreOwnerCollisions()
