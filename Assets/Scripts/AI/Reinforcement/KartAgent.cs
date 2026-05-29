@@ -83,6 +83,7 @@ namespace KartGame.AI.Reinforcement
             }
 
             CoinPickup.AnyCoinCollected += HandleAnyCoinCollected;
+            CoinPickup.AnyTrainingCoinTouched += HandleTrainingCoinTouched;
             BananaHazard.AnyTrainingBananaTouched += HandleTrainingBananaTouched;
             KartPowerUpController.AnyPowerUpHit += HandleAnyPowerUpHit;
         }
@@ -90,6 +91,7 @@ namespace KartGame.AI.Reinforcement
         protected override void OnDisable()
         {
             CoinPickup.AnyCoinCollected -= HandleAnyCoinCollected;
+            CoinPickup.AnyTrainingCoinTouched -= HandleTrainingCoinTouched;
             BananaHazard.AnyTrainingBananaTouched -= HandleTrainingBananaTouched;
             KartPowerUpController.AnyPowerUpHit -= HandleAnyPowerUpHit;
 
@@ -438,6 +440,16 @@ namespace KartGame.AI.Reinforcement
         }
 
         private void HandleAnyCoinCollected(CoinPickup sourcePickup, KartController targetKart, int coinAmount)
+        {
+            if (!_episodeRunning || rewardManager == null || targetKart != kartController || sourcePickup == null)
+            {
+                return;
+            }
+
+            ApplyAgentReward(rewardManager.GetCoinPickupReward(coinAmount));
+        }
+
+        private void HandleTrainingCoinTouched(CoinPickup sourcePickup, KartController targetKart, int coinAmount)
         {
             if (!_episodeRunning || rewardManager == null || targetKart != kartController || sourcePickup == null)
             {

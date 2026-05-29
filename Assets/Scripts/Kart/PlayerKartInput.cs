@@ -165,7 +165,10 @@ namespace KartGame.Kart
 
             if (Keyboard.current.rKey.wasPressedThisFrame)
             {
-                checkpointTracker?.RespawnToRecoveryPoint();
+                if (checkpointTracker != null && !checkpointTracker.HasFinishedRace)
+                {
+                    checkpointTracker.RespawnToRecoveryPoint();
+                }
             }
 
             if (WasBindingPressedThisFrame(useStoredPowerUpBinding))
