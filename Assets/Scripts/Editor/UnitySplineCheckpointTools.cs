@@ -13,9 +13,6 @@ namespace KartGame.EditorTools
         private const string SplineRootName = "RoadSpline";
         private const string CheckpointsRootName = "Checkpoints";
         private const string CheckpointsBackupPrefix = "Checkpoints_Backup_";
-        private const float DefaultCheckpointSpacing = 8f;
-        private const float DefaultCheckpointHeight = 1.2f;
-        private static readonly Vector3 DefaultCheckpointColliderSize = new Vector3(10f, 3f, 2.5f);
 
         [MenuItem("Tools/Kart Racing/Track Data/Create Unity Spline And Checkpoints")]
         public static void CreateUnitySplineAndCheckpointsMenu()
@@ -28,10 +25,33 @@ namespace KartGame.EditorTools
             }
 
             var splineContainer = CreateOrReuseSplineContainer(trackData);
+            EnsureCheckpointSettings(splineContainer);
             ConfigureDefaultSpline(splineContainer, trackData);
             GenerateCheckpoints(splineContainer, trackData);
 
             Selection.activeGameObject = splineContainer.gameObject;
+        }
+
+        public static void GenerateCheckpointsFromSettings(UnitySplineCheckpointSettings settings)
+        {
+            if (settings == null)
+            {
+                return;
+            }
+
+            var splineContainer = settings.GetComponent<SplineContainer>();
+            if (splineContainer == null)
+            {
+                splineContainer = settings.GetComponentInParent<SplineContainer>();
+            }
+
+            var trackData = settings.GetComponentInParent<TrackData>();
+            if (splineContainer == null || trackData == null)
+            {
+                return;
+            }
+
+            GenerateCheckpoints(splineContainer, trackData);
         }
 
         [MenuItem("Tools/Kart Racing/Track Data/Generate Checkpoints From Selected Unity Spline")]
@@ -125,8 +145,14 @@ namespace KartGame.EditorTools
                 return;
             }
 
+            var settings = ResolveCheckpointSettings(splineContainer, trackData);
+            var checkpointVerticalOffset = settings != null ? settings.CheckpointVerticalOffset : 1.2f;
             var checkpointsRoot = CreateFreshCheckpointsRoot(trackData.transform);
-            var poses = SampleCheckpointPoses(splineContainer, DefaultCheckpointSpacing);
+            var spacing = settings != null ? settings.CheckpointSpacing : 8f;
+            var width = settings != null ? settings.CheckpointWidth : 14f;
+            var height = settings != null ? settings.CheckpointHeight : 3f;
+            var depth = settings != null ? settings.CheckpointDepth : 2.5f;
+            var poses = SampleCheckpointPoses(splineContainer, spacing);
             if (poses.Count == 0)
             {
                 EditorUtility.DisplayDialog("Unity Spline", "Could not sample the spline to generate checkpoints.", "OK");
@@ -144,7 +170,7 @@ namespace KartGame.EditorTools
                 checkpointObject.transform.SetParent(checkpointsRoot, false);
 
                 checkpointObject.transform.SetPositionAndRotation(
-                    pose.Position + Vector3.up * DefaultCheckpointHeight,
+                    pose.Position + Vector3.up * checkpointVerticalOffset,
                     Quaternion.LookRotation(pose.Forward, Vector3.up));
 
                 var checkpoint = Undo.AddComponent<Checkpoint>(checkpointObject);
@@ -157,13 +183,15 @@ namespace KartGame.EditorTools
 
                 var collider = Undo.AddComponent<BoxCollider>(checkpointObject);
                 collider.isTrigger = true;
-                collider.size = DefaultCheckpointColliderSize;
+                collider.size = new Vector3(width, height, depth);
             }
 
             trackData.SyncChildCollections();
             EditorUtility.SetDirty(trackData);
             EditorUtility.SetDirty(trackData.gameObject);
-            Selection.activeGameObject = splineContainer.gameObject;
+            Debug.Log($"Generated {poses.Count} checkpoints from Unity spline under {trackData.name}.");
+            Selection.activeGameObject = checkpointsRoot.gameObject;
+            EditorGUIUtility.PingObject(checkpointsRoot.gameObject);
         }
 
         private static List<SplineCheckpointPose> SampleCheckpointPoses(SplineContainer splineContainer, float spacing)
@@ -290,6 +318,7 @@ namespace KartGame.EditorTools
             var existing = trackData.GetComponentInChildren<SplineContainer>(true);
             if (existing != null)
             {
+                EnsureCheckpointSettings(existing);
                 return existing;
             }
 
@@ -300,8 +329,50 @@ namespace KartGame.EditorTools
             var splineContainer = Undo.AddComponent<SplineContainer>(splineObject);
             splineContainer.Spline = new Spline();
             splineContainer.Spline.Closed = true;
+            EnsureCheckpointSettings(splineContainer);
 
             return splineContainer;
+        }
+
+        private static UnitySplineCheckpointSettings EnsureCheckpointSettings(SplineContainer splineContainer)
+        {
+            if (splineContainer == null)
+            {
+                return null;
+            }
+
+            var settings = splineContainer.GetComponent<UnitySplineCheckpointSettings>();
+            if (settings != null)
+            {
+                return settings;
+            }
+
+            settings = Undo.AddComponent<UnitySplineCheckpointSettings>(splineContainer.gameObject);
+            EditorUtility.SetDirty(settings);
+            return settings;
+        }
+
+        private static UnitySplineCheckpointSettings ResolveCheckpointSettings(SplineContainer splineContainer, TrackData trackData)
+        {
+            if (splineContainer != null)
+            {
+                var splineSettings = splineContainer.GetComponent<UnitySplineCheckpointSettings>();
+                if (splineSettings != null)
+                {
+                    return splineSettings;
+                }
+            }
+
+            if (trackData != null)
+            {
+                var trackSettings = trackData.GetComponent<UnitySplineCheckpointSettings>();
+                if (trackSettings != null)
+                {
+                    return trackSettings;
+                }
+            }
+
+            return null;
         }
 
         private static SplineContainer ResolveSplineContainer()
