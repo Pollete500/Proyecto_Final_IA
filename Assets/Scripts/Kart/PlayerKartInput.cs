@@ -91,6 +91,11 @@ namespace KartGame.Kart
             checkpointTracker ??= GetComponent<CheckpointTracker>();
             powerUpController ??= GetComponent<KartPowerUpController>();
             powerUpController ??= GetComponentInChildren<KartPowerUpController>(true);
+
+            if (GetComponent<PlayerLapDataRecorder>() == null)
+            {
+                gameObject.AddComponent<PlayerLapDataRecorder>();
+            }
         }
 
         private void Update()
