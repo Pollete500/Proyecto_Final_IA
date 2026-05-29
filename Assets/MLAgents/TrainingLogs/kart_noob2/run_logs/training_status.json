@@ -1,0 +1,38 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 499955,
+                "file_path": "Assets/MLAgents/TrainingLogs\\kart_noob2\\KartAgent\\KartAgent-499955.onnx",
+                "reward": 63.0,
+                "creation_time": 1780054794.3643622,
+                "auxillary_file_paths": [
+                    "Assets/MLAgents/TrainingLogs\\kart_noob2\\KartAgent\\KartAgent-499955.pt"
+                ]
+            },
+            {
+                "steps": 886554,
+                "file_path": "Assets/MLAgents/TrainingLogs\\kart_noob2\\KartAgent\\KartAgent-886554.onnx",
+                "reward": 64.0,
+                "creation_time": 1780055587.287621,
+                "auxillary_file_paths": [
+                    "Assets/MLAgents/TrainingLogs\\kart_noob2\\KartAgent\\KartAgent-886554.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 886554,
+            "file_path": "Assets/MLAgents/TrainingLogs\\kart_noob2\\KartAgent.onnx",
+            "reward": 64.0,
+            "creation_time": 1780055587.287621,
+            "auxillary_file_paths": [
+                "Assets/MLAgents/TrainingLogs\\kart_noob2\\KartAgent\\KartAgent-886554.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

@@ -30,6 +30,7 @@ namespace KartGame.PowerUps
         private readonly HashSet<int> _ignoredKartIds = new HashSet<int>();
 
         public static event System.Action<CoinPickup, KartController, int> AnyCoinCollected;
+        public static event System.Action<CoinPickup, KartController, int> AnyTrainingCoinTouched;
 
         private void Awake()
         {
@@ -79,6 +80,7 @@ namespace KartGame.PowerUps
 
             if (coinTrain && IsBotKart(kartController))
             {
+                AnyTrainingCoinTouched?.Invoke(this, kartController, coinAmount);
                 IgnoreFor(kartController);
                 return;
             }

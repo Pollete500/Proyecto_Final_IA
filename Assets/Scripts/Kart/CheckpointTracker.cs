@@ -215,7 +215,7 @@ namespace KartGame.Kart
 
         public void RespawnToRecoveryPoint()
         {
-            if (kartController == null)
+            if (kartController == null || HasFinishedRace)
             {
                 return;
             }
