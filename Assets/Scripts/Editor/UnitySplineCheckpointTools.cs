@@ -12,6 +12,7 @@ namespace KartGame.EditorTools
     {
         private const string SplineRootName = "RoadSpline";
         private const string CheckpointsRootName = "Checkpoints";
+        private const string CheckpointsBackupPrefix = "Checkpoints_Backup_";
         private const float DefaultCheckpointSpacing = 8f;
         private const float DefaultCheckpointHeight = 1.2f;
         private static readonly Vector3 DefaultCheckpointColliderSize = new Vector3(10f, 3f, 2.5f);
@@ -124,7 +125,7 @@ namespace KartGame.EditorTools
                 return;
             }
 
-            var checkpointsRoot = EnsureChildContainer(trackData.transform, CheckpointsRootName);
+            var checkpointsRoot = CreateFreshCheckpointsRoot(trackData.transform);
             var poses = SampleCheckpointPoses(splineContainer, DefaultCheckpointSpacing);
             if (poses.Count == 0)
             {
@@ -135,20 +136,24 @@ namespace KartGame.EditorTools
             Undo.IncrementCurrentGroup();
             Undo.SetCurrentGroupName("Generate Checkpoints From Unity Spline");
 
-            ClearChildren(checkpointsRoot);
-
             for (var index = 0; index < poses.Count; index++)
             {
                 var pose = poses[index];
                 var checkpointObject = new GameObject($"Checkpoint_{index:00}");
                 Undo.RegisterCreatedObjectUndo(checkpointObject, "Create Spline Checkpoint");
                 checkpointObject.transform.SetParent(checkpointsRoot, false);
+
                 checkpointObject.transform.SetPositionAndRotation(
                     pose.Position + Vector3.up * DefaultCheckpointHeight,
                     Quaternion.LookRotation(pose.Forward, Vector3.up));
 
                 var checkpoint = Undo.AddComponent<Checkpoint>(checkpointObject);
-                checkpoint.Configure(trackData, index);
+
+                if (checkpoint != null)
+                {
+                    checkpoint.Configure(trackData, index);
+                    EditorUtility.SetDirty(checkpoint);
+                }
 
                 var collider = Undo.AddComponent<BoxCollider>(checkpointObject);
                 collider.isTrigger = true;
@@ -169,7 +174,7 @@ namespace KartGame.EditorTools
                 return sampledPoses;
             }
 
-            var length = Mathf.Max(0.01f, splineContainer.CalculateLength());
+            var length = Mathf.Max(0.01f, CalculateSplineLengthSafe(splineContainer));
             var denseStep = Mathf.Clamp(spacing * 0.25f, 0.25f, 2f);
             var denseSegments = Mathf.Max(16, Mathf.CeilToInt(length / denseStep));
 
@@ -218,6 +223,23 @@ namespace KartGame.EditorTools
             }
 
             return sampledPoses;
+        }
+
+        private static float CalculateSplineLengthSafe(SplineContainer splineContainer)
+        {
+            if (splineContainer == null || splineContainer.Spline == null || splineContainer.Spline.Count < 2)
+            {
+                return 0.01f;
+            }
+
+            try
+            {
+                return splineContainer.CalculateLength();
+            }
+            catch
+            {
+                return 0.01f;
+            }
         }
 
         private static SplineCheckpointPose CreateSamplePose(SplineContainer splineContainer, float t)
@@ -322,6 +344,28 @@ namespace KartGame.EditorTools
             Undo.RegisterCreatedObjectUndo(childObject, $"Create {childName}");
             childObject.transform.SetParent(parent, false);
             return childObject.transform;
+        }
+
+        private static Transform CreateFreshCheckpointsRoot(Transform trackRoot)
+        {
+            if (trackRoot == null)
+            {
+                return null;
+            }
+
+            var existing = trackRoot.Find(CheckpointsRootName);
+            if (existing != null)
+            {
+                var backupName = $"{CheckpointsBackupPrefix}{System.DateTime.Now:yyyyMMdd_HHmmss}";
+                Undo.RecordObject(existing, "Archive Existing Checkpoints Root");
+                existing.name = backupName;
+                EditorUtility.SetDirty(existing);
+            }
+
+            var checkpointsRoot = new GameObject(CheckpointsRootName);
+            Undo.RegisterCreatedObjectUndo(checkpointsRoot, "Create Checkpoints Root");
+            checkpointsRoot.transform.SetParent(trackRoot, false);
+            return checkpointsRoot.transform;
         }
 
         private static void ClearChildren(Transform root)
