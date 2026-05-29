@@ -1,0 +1,10 @@
+recta,enemigos_delante,enemigos_atras,platanos_delante,conchas_atras,power_up_tirado
+false,0,0,0,0,mushroom
+false,0,0,0,0,banana
+false,0,0,1,0,banana
+false,0,0,0,0,banana
+true,0,0,0,0,banana
+false,0,0,1,0,shell
+false,0,0,0,0,mushroom
+false,0,0,0,0,mushroom
+false,0,0,3,0,shell

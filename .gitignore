@@ -115,3 +115,5 @@ InitTestScene*.unity*
 
 
 .DS_Store
+
+/Assets/Data/player_classifier/raw/*
