@@ -12,7 +12,8 @@ namespace KartGame.EditorTools
     {
         private const string SplineRootName = "RoadSpline";
         private const string CheckpointsRootName = "Checkpoints";
-        private const string CheckpointsBackupPrefix = "Checkpoints_Backup_";
+        private const string RoadVisualRootName = "RoadVisual";
+        private const string RoadMaterialPath = "Assets/Generated/UnitySplineRoadBlack.mat";
 
         [MenuItem("Tools/Kart Racing/Track Data/Create Unity Spline And Checkpoints")]
         public static void CreateUnitySplineAndCheckpointsMenu()
@@ -27,6 +28,7 @@ namespace KartGame.EditorTools
             var splineContainer = CreateOrReuseSplineContainer(trackData);
             EnsureCheckpointSettings(splineContainer);
             ConfigureDefaultSpline(splineContainer, trackData);
+            GenerateRoadVisual(splineContainer, trackData);
             GenerateCheckpoints(splineContainer, trackData);
 
             Selection.activeGameObject = splineContainer.gameObject;
@@ -52,6 +54,48 @@ namespace KartGame.EditorTools
             }
 
             GenerateCheckpoints(splineContainer, trackData);
+        }
+
+        public static void GenerateRoadVisualFromSettings(UnitySplineCheckpointSettings settings)
+        {
+            if (settings == null)
+            {
+                return;
+            }
+
+            var splineContainer = settings.GetComponent<SplineContainer>();
+            if (splineContainer == null)
+            {
+                splineContainer = settings.GetComponentInParent<SplineContainer>();
+            }
+
+            var trackData = settings.GetComponentInParent<TrackData>();
+            if (splineContainer == null || trackData == null)
+            {
+                return;
+            }
+
+            GenerateRoadVisual(splineContainer, trackData);
+        }
+
+        [MenuItem("Tools/Kart Racing/Track Data/Generate Road Visual From Selected Unity Spline")]
+        public static void GenerateRoadVisualFromSelectedSplineMenu()
+        {
+            var splineContainer = ResolveSplineContainer();
+            if (splineContainer == null)
+            {
+                EditorUtility.DisplayDialog("Unity Spline", "Select a SplineContainer in the Hierarchy first.", "OK");
+                return;
+            }
+
+            var trackData = splineContainer.GetComponentInParent<TrackData>();
+            if (trackData == null)
+            {
+                EditorUtility.DisplayDialog("Unity Spline", "The selected spline must be under a TrackData object.", "OK");
+                return;
+            }
+
+            GenerateRoadVisual(splineContainer, trackData);
         }
 
         [MenuItem("Tools/Kart Racing/Track Data/Generate Checkpoints From Selected Unity Spline")]
@@ -192,6 +236,83 @@ namespace KartGame.EditorTools
             Debug.Log($"Generated {poses.Count} checkpoints from Unity spline under {trackData.name}.");
             Selection.activeGameObject = checkpointsRoot.gameObject;
             EditorGUIUtility.PingObject(checkpointsRoot.gameObject);
+        }
+
+        private static void GenerateRoadVisual(SplineContainer splineContainer, TrackData trackData)
+        {
+            if (splineContainer == null || trackData == null)
+            {
+                return;
+            }
+
+            var settings = ResolveCheckpointSettings(splineContainer, trackData);
+            if (settings != null && !settings.GenerateRoadVisual)
+            {
+                return;
+            }
+
+            if (splineContainer.Spline == null || splineContainer.Spline.Count < 2)
+            {
+                return;
+            }
+
+            var roadRoot = CreateFreshRoadRoot(trackData.transform);
+            var roadWidth = settings != null ? settings.RoadWidth : 12f;
+            var roadHeightOffset = settings != null ? settings.RoadHeightOffset : 0.05f;
+            var poses = SampleRoadPoses(splineContainer, settings != null ? settings.RoadSampleSpacing : 1.5f);
+            if (poses.Count < 2)
+            {
+                return;
+            }
+
+            var roadObject = roadRoot.gameObject;
+            var mesh = BuildRoadMesh(roadObject.transform, splineContainer, poses, roadWidth, roadHeightOffset);
+            if (mesh == null)
+            {
+                return;
+            }
+
+            var meshFilter = roadObject.GetComponent<MeshFilter>();
+            if (meshFilter == null)
+            {
+                meshFilter = Undo.AddComponent<MeshFilter>(roadObject);
+            }
+
+            var meshRenderer = roadObject.GetComponent<MeshRenderer>();
+            if (meshRenderer == null)
+            {
+                meshRenderer = Undo.AddComponent<MeshRenderer>(roadObject);
+            }
+
+            meshFilter.sharedMesh = mesh;
+            meshRenderer.sharedMaterial = LoadOrCreateRoadMaterial();
+            meshRenderer.receiveShadows = true;
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+
+            EditorUtility.SetDirty(meshFilter);
+            EditorUtility.SetDirty(meshRenderer);
+            EditorUtility.SetDirty(roadObject);
+        }
+
+        private static List<SplineCheckpointPose> SampleRoadPoses(SplineContainer splineContainer, float spacing)
+        {
+            var sampledPoses = new List<SplineCheckpointPose>();
+            if (splineContainer == null || splineContainer.Spline == null || splineContainer.Spline.Count < 2)
+            {
+                return sampledPoses;
+            }
+
+            var length = Mathf.Max(0.01f, CalculateSplineLengthSafe(splineContainer));
+            var denseStep = Mathf.Clamp(spacing * 0.5f, 0.05f, 1f);
+            var denseSegments = Mathf.Max(32, Mathf.CeilToInt(length / denseStep));
+
+            for (var sampleIndex = 0; sampleIndex <= denseSegments; sampleIndex++)
+            {
+                var t = sampleIndex / (float)denseSegments;
+                sampledPoses.Add(CreateSamplePose(splineContainer, t));
+            }
+
+            return sampledPoses;
         }
 
         private static List<SplineCheckpointPose> SampleCheckpointPoses(SplineContainer splineContainer, float spacing)
@@ -427,16 +548,151 @@ namespace KartGame.EditorTools
             var existing = trackRoot.Find(CheckpointsRootName);
             if (existing != null)
             {
-                var backupName = $"{CheckpointsBackupPrefix}{System.DateTime.Now:yyyyMMdd_HHmmss}";
-                Undo.RecordObject(existing, "Archive Existing Checkpoints Root");
-                existing.name = backupName;
-                EditorUtility.SetDirty(existing);
+                Undo.DestroyObjectImmediate(existing.gameObject);
             }
 
             var checkpointsRoot = new GameObject(CheckpointsRootName);
             Undo.RegisterCreatedObjectUndo(checkpointsRoot, "Create Checkpoints Root");
             checkpointsRoot.transform.SetParent(trackRoot, false);
             return checkpointsRoot.transform;
+        }
+
+        private static Transform CreateFreshRoadRoot(Transform trackRoot)
+        {
+            if (trackRoot == null)
+            {
+                return null;
+            }
+
+            var existing = trackRoot.Find(RoadVisualRootName);
+            if (existing != null)
+            {
+                Undo.DestroyObjectImmediate(existing.gameObject);
+            }
+
+            var roadObject = new GameObject(RoadVisualRootName);
+            Undo.RegisterCreatedObjectUndo(roadObject, "Create Road Visual Root");
+            roadObject.transform.SetParent(trackRoot, false);
+            return roadObject.transform;
+        }
+
+        private static Mesh BuildRoadMesh(Transform roadTransform, SplineContainer splineContainer, List<SplineCheckpointPose> poses, float roadWidth, float roadHeightOffset)
+        {
+            if (roadTransform == null || splineContainer == null || poses == null || poses.Count < 2)
+            {
+                return null;
+            }
+
+            var vertexCount = poses.Count * 2;
+            var vertices = new Vector3[vertexCount];
+            var normals = new Vector3[vertexCount];
+            var uvs = new Vector2[vertexCount];
+            var closed = splineContainer.Spline != null && splineContainer.Spline.Closed;
+            var segmentCount = closed ? poses.Count : poses.Count - 1;
+            var triangles = new int[segmentCount * 6];
+
+            var halfWidth = Mathf.Max(0.5f, roadWidth * 0.5f);
+            var totalLength = 0f;
+            var segmentLengths = new float[poses.Count];
+            segmentLengths[0] = 0f;
+            for (var index = 1; index < poses.Count; index++)
+            {
+                totalLength += Vector3.Distance(poses[index - 1].Position, poses[index].Position);
+                segmentLengths[index] = totalLength;
+            }
+
+            for (var index = 0; index < poses.Count; index++)
+            {
+                var current = poses[index];
+                var forward = current.Forward;
+                if (forward.sqrMagnitude < 0.0001f)
+                {
+                    forward = Vector3.forward;
+                }
+
+                var right = Vector3.Cross(Vector3.up, forward).normalized;
+                if (right.sqrMagnitude < 0.0001f)
+                {
+                    right = Vector3.right;
+                }
+
+                var center = current.Position + Vector3.up * roadHeightOffset;
+                var left = center - right * halfWidth;
+                var rightPoint = center + right * halfWidth;
+
+                var vertexIndex = index * 2;
+                vertices[vertexIndex] = roadTransform.InverseTransformPoint(left);
+                vertices[vertexIndex + 1] = roadTransform.InverseTransformPoint(rightPoint);
+                normals[vertexIndex] = Vector3.up;
+                normals[vertexIndex + 1] = Vector3.up;
+
+                var u = totalLength > 0.01f ? segmentLengths[index] / totalLength : index / (float)(poses.Count - 1);
+                uvs[vertexIndex] = new Vector2(0f, u);
+                uvs[vertexIndex + 1] = new Vector2(1f, u);
+            }
+
+            var triangleIndex = 0;
+            for (var index = 0; index < segmentCount; index++)
+            {
+                var vertexIndex = index * 2;
+                var nextIndex = index + 1;
+                if (nextIndex >= poses.Count)
+                {
+                    nextIndex = 0;
+                }
+
+                triangles[triangleIndex++] = vertexIndex;
+                triangles[triangleIndex++] = nextIndex * 2;
+                triangles[triangleIndex++] = vertexIndex + 1;
+
+                triangles[triangleIndex++] = vertexIndex + 1;
+                triangles[triangleIndex++] = nextIndex * 2;
+                triangles[triangleIndex++] = nextIndex * 2 + 1;
+            }
+
+            var mesh = new Mesh
+            {
+                name = "UnitySplineRoadMesh"
+            };
+            mesh.vertices = vertices;
+            mesh.normals = normals;
+            mesh.uv = uvs;
+            mesh.triangles = triangles;
+            mesh.RecalculateBounds();
+            return mesh;
+        }
+
+        private static Material LoadOrCreateRoadMaterial()
+        {
+            var material = AssetDatabase.LoadAssetAtPath<Material>(RoadMaterialPath);
+            if (material != null)
+            {
+                return material;
+            }
+
+            var shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+            if (shader == null)
+            {
+                return null;
+            }
+
+            material = new Material(shader)
+            {
+                name = "UnitySplineRoadBlack"
+            };
+            material.color = Color.black;
+            material.SetColor("_BaseColor", Color.black);
+
+            var folder = System.IO.Path.GetDirectoryName(RoadMaterialPath);
+            if (!string.IsNullOrEmpty(folder) && !AssetDatabase.IsValidFolder(folder))
+            {
+                AssetDatabase.CreateFolder("Assets", "Generated");
+            }
+
+            AssetDatabase.CreateAsset(material, RoadMaterialPath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            return AssetDatabase.LoadAssetAtPath<Material>(RoadMaterialPath);
         }
 
         private static void ClearChildren(Transform root)

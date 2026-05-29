@@ -17,6 +17,12 @@ namespace KartGame.EditorTools
 
             using (new EditorGUI.DisabledScope(Application.isPlaying))
             {
+                if (GUILayout.Button("Regenerate Road Visual Now", GUILayout.Height(30f)))
+                {
+                    var settings = (UnitySplineCheckpointSettings)target;
+                    UnitySplineCheckpointTools.GenerateRoadVisualFromSettings(settings);
+                }
+
                 if (GUILayout.Button("Regenerate Checkpoints Now", GUILayout.Height(30f)))
                 {
                     var settings = (UnitySplineCheckpointSettings)target;

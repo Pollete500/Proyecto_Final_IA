@@ -18,6 +18,10 @@ namespace KartGame.Core
         [SerializeField, Min(0.5f)] private float checkpointHeight = 3f;
         [SerializeField, Min(0.5f)] private float checkpointDepth = 2.5f;
         [SerializeField] private bool autoRegenerateCheckpoints = true;
+        [SerializeField, Min(1f)] private float roadWidth = 12f;
+        [SerializeField, Min(0f)] private float roadHeightOffset = 0.05f;
+        [SerializeField, Min(0.1f)] private float roadSampleSpacing = 1.5f;
+        [SerializeField] private bool generateRoadVisual = true;
 
         public float CheckpointSpacing => checkpointSpacing;
         public float CheckpointVerticalOffset => checkpointVerticalOffset;
@@ -25,6 +29,10 @@ namespace KartGame.Core
         public float CheckpointHeight => checkpointHeight;
         public float CheckpointDepth => checkpointDepth;
         public bool AutoRegenerateCheckpoints => autoRegenerateCheckpoints;
+        public float RoadWidth => roadWidth;
+        public float RoadHeightOffset => roadHeightOffset;
+        public float RoadSampleSpacing => roadSampleSpacing;
+        public bool GenerateRoadVisual => generateRoadVisual;
 
         [ContextMenu("Reset To Default Checkpoint Size")]
         private void ResetToDefaultCheckpointSize()
@@ -34,6 +42,18 @@ namespace KartGame.Core
             checkpointWidth = 14f;
             checkpointHeight = 3f;
             checkpointDepth = 2.5f;
+            roadWidth = 12f;
+            roadHeightOffset = 0.05f;
+            roadSampleSpacing = 1.5f;
+        }
+
+        [ContextMenu("Reset Road Visual Settings")]
+        private void ResetRoadVisualSettings()
+        {
+            roadWidth = 12f;
+            roadHeightOffset = 0.05f;
+            roadSampleSpacing = 1.5f;
+            generateRoadVisual = true;
         }
 
         private void OnValidate()
