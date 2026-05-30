@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using KartGame.Core;
 using KartGame.Kart;
 using UnityEditor;
@@ -18,7 +19,9 @@ namespace KartGame.EditorTools
     {
         private const int PrototypeCheckpointCount = 8;
         private const int PrototypeBotCount = 6;
-
+        private const string NoobKartPrefabPath = "Assets/Prefabs/Karts/Kart_Noob.prefab";
+        private const string ProKartPrefabPath = "Assets/Prefabs/Karts/Kart_Pro.prefab";
+        private const string NeutralKartPrefabPath = "Assets/Prefabs/Karts/Kart_Neutral.prefab";
         [MenuItem("Tools/Kart Racing/MVP Setup/Create Track Root")]
         public static void CreateTrackRootMenu()
         {
@@ -84,6 +87,28 @@ namespace KartGame.EditorTools
             Selection.activeGameObject = tracker.gameObject;
         }
 
+        [MenuItem("Tools/Kart Racing/MVP Setup/Spawn Bots From Selected Track Root Counts")]
+        public static void SpawnBotsFromSelectedTrackRootCountsMenu()
+        {
+            var trackData = Selection.activeGameObject != null
+                ? Selection.activeGameObject.GetComponentInParent<TrackData>()
+                : null;
+
+            if (trackData == null)
+            {
+                trackData = Object.FindFirstObjectByType<TrackData>();
+            }
+
+            if (trackData == null)
+            {
+                EditorUtility.DisplayDialog("Kart Racing Setup", "No TrackData found in the current scene.", "OK");
+                return;
+            }
+
+            EnsureConfiguredBots(trackData);
+            Selection.activeGameObject = trackData.gameObject;
+        }
+
         [MenuItem("Tools/Kart Racing/MVP Setup/Create Follow Camera")]
         public static void CreateFollowCameraMenu()
         {
@@ -98,7 +123,7 @@ namespace KartGame.EditorTools
             AutoConfigureTrack(trackData);
 
             var playerTracker = EnsurePlayerKart(trackData);
-            EnsureAiKarts(trackData, PrototypeBotCount);
+            EnsureConfiguredBots(trackData);
             EnsureFollowCamera(playerTracker.transform);
 
             var raceManager = EnsureRaceSystems(trackData);
@@ -108,6 +133,188 @@ namespace KartGame.EditorTools
             EditorUtility.SetDirty(trackData);
             EditorUtility.SetDirty(raceManager.gameObject);
             Selection.activeGameObject = raceManager.gameObject;
+        }
+
+        private static void EnsureConfiguredBots(TrackData trackData)
+        {
+            if (trackData == null)
+            {
+                return;
+            }
+
+            var spawnCursor = 0;
+            SyncBotFamily(trackData, ResolveBotPrefab(trackData.NoobBotPrefab, NoobKartPrefabPath), "Kart_Noob", trackData.NoobBotCount, ref spawnCursor);
+            SyncBotFamily(trackData, ResolveBotPrefab(trackData.ProBotPrefab, ProKartPrefabPath), "Kart_Pro", trackData.ProBotCount, ref spawnCursor);
+            SyncBotFamily(trackData, ResolveBotPrefab(trackData.NeutralBotPrefab, NeutralKartPrefabPath), "Kart_Neutral", trackData.NeutralBotCount, ref spawnCursor);
+        }
+
+        private static GameObject ResolveBotPrefab(GameObject configuredPrefab, string fallbackPath)
+        {
+            if (configuredPrefab != null)
+            {
+                return configuredPrefab;
+            }
+
+            return AssetDatabase.LoadAssetAtPath<GameObject>(fallbackPath);
+        }
+
+        private static void SyncBotFamily(
+            TrackData trackData,
+            GameObject botPrefab,
+            string botNamePrefix,
+            int desiredCount,
+            ref int spawnCursor)
+        {
+            if (trackData == null || desiredCount <= 0)
+            {
+                RemoveExcessBots(botNamePrefix, desiredCount);
+                return;
+            }
+
+            var desiredNames = new List<string>(desiredCount);
+            for (var index = 1; index <= desiredCount; index++)
+            {
+                desiredNames.Add($"{botNamePrefix}_{index:00}");
+            }
+
+            RemoveExcessBots(botNamePrefix, desiredCount);
+
+            for (var index = 0; index < desiredNames.Count; index++)
+            {
+                var botName = desiredNames[index];
+                var spawnPoint = GetCyclingSpawnPoint(trackData, spawnCursor++);
+                var botObject = GameObject.Find(botName);
+
+                if (botObject == null)
+                {
+                    botObject = SpawnBotPrefab(botPrefab, botName);
+                    if (botObject == null)
+                    {
+                        Debug.LogWarning($"Falling back to generated kart for '{botName}' because the prefab could not be spawned.");
+                        botObject = CreateKart(botName, false, spawnPoint, trackData).gameObject;
+                    }
+                }
+
+                ConfigureSpawnedBot(botObject, trackData, spawnPoint);
+            }
+        }
+
+        private static void RemoveExcessBots(string botNamePrefix, int desiredCount)
+        {
+            var trackers = Object.FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.InstanceID);
+            for (var index = 0; index < trackers.Length; index++)
+            {
+                var tracker = trackers[index];
+                if (tracker == null || tracker.IsPlayer || !tracker.name.StartsWith(botNamePrefix))
+                {
+                    continue;
+                }
+
+                var botIndex = ExtractTrailingIndex(tracker.name, botNamePrefix);
+                if (botIndex >= 1 && botIndex <= desiredCount)
+                {
+                    continue;
+                }
+
+                Undo.DestroyObjectImmediate(tracker.gameObject);
+            }
+        }
+
+        private static int ExtractTrailingIndex(string objectName, string prefix)
+        {
+            if (string.IsNullOrEmpty(objectName) || string.IsNullOrEmpty(prefix) || !objectName.StartsWith(prefix))
+            {
+                return -1;
+            }
+
+            var underscoreIndex = objectName.LastIndexOf('_');
+            if (underscoreIndex < 0 || underscoreIndex >= objectName.Length - 1)
+            {
+                return -1;
+            }
+
+            return int.TryParse(objectName.Substring(underscoreIndex + 1), out var parsedIndex) ? parsedIndex : -1;
+        }
+
+        private static GameObject SpawnBotPrefab(GameObject prefab, string botName)
+        {
+            if (prefab == null)
+            {
+                Debug.LogWarning($"Could not load bot prefab for '{botName}'.");
+                return null;
+            }
+
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            if (instance == null)
+            {
+                return null;
+            }
+
+            Undo.RegisterCreatedObjectUndo(instance, $"Spawn {botName}");
+            instance.name = botName;
+            return instance;
+        }
+
+        private static void ConfigureSpawnedBot(GameObject botObject, TrackData trackData, Transform spawnPoint)
+        {
+            if (botObject == null)
+            {
+                return;
+            }
+
+            var spawnPosition = spawnPoint != null ? spawnPoint.position : Vector3.zero;
+            var spawnRotation = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
+            botObject.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+
+            var kartController = botObject.GetComponent<KartController>();
+            if (kartController != null)
+            {
+                kartController.SetControlEnabled(true);
+            }
+
+            var checkpointTracker = botObject.GetComponent<CheckpointTracker>();
+            if (checkpointTracker != null)
+            {
+                checkpointTracker.SetTrackData(trackData);
+                checkpointTracker.SetPlayerFlag(false);
+                checkpointTracker.SetRecoveryReference(spawnPoint);
+                checkpointTracker.InitializeForRace(trackData);
+                checkpointTracker.SetInitialSpawnPose(spawnPosition, spawnRotation);
+            }
+
+            var kartAgent = botObject.GetComponent<KartGame.AI.Reinforcement.KartAgent>();
+            if (kartAgent != null)
+            {
+                var trainingSceneManager = Object.FindFirstObjectByType<KartGame.AI.Reinforcement.TrainingSceneManager>();
+                kartAgent.AutoAssignReferences(trainingSceneManager, trackData);
+            }
+        }
+
+        private static Transform GetCyclingSpawnPoint(TrackData trackData, int spawnIndex)
+        {
+            if (trackData == null)
+            {
+                return null;
+            }
+
+            var spawnSource = trackData.SpawnPointCount > 0
+                ? trackData.SpawnPoints
+                : trackData.CheckpointCount > 0
+                    ? trackData.Checkpoints
+                    : null;
+
+            if (spawnSource == null || spawnSource.Length == 0)
+            {
+                return null;
+            }
+
+            var normalizedIndex = spawnIndex % spawnSource.Length;
+            if (normalizedIndex < 0)
+            {
+                normalizedIndex += spawnSource.Length;
+            }
+
+            return spawnSource[normalizedIndex];
         }
 
         private static TrackData EnsureTrackRoot()

@@ -17,12 +17,41 @@ namespace KartGame.Core
      * Dependencies: Checkpoint, RaceManager, CheckpointTracker.
      * Inspector Setup: Place child containers named Checkpoints, SpawnPoints, PowerUpBoxes and RespawnPoints under TrackRoot, then run Sync Child Collections.
      */
+    [DefaultExecutionOrder(-1000)]
     public class TrackData : MonoBehaviour
     {
         [SerializeField] private Transform[] checkpoints = Array.Empty<Transform>();
         [SerializeField] private Transform[] spawnPoints = Array.Empty<Transform>();
         [SerializeField] private Transform[] powerUpBoxes = Array.Empty<Transform>();
         [SerializeField] private Transform[] respawnPoints = Array.Empty<Transform>();
+        [Header("Bot Spawns")]
+        [SerializeField, Min(0)] private int noobBotCount = 2;
+        [SerializeField, Min(0)] private int proBotCount = 2;
+        [SerializeField, Min(0)] private int neutralBotCount = 2;
+        [SerializeField] private GameObject noobBotPrefab;
+        [SerializeField] private GameObject proBotPrefab;
+        [SerializeField] private GameObject neutralBotPrefab;
+        [SerializeField] private string spawnedBotsRootName = "SpawnedBots";
+        [Space]
+        [Header("Pickup Spawning")]
+        [SerializeField] private bool enablePickupSpawning = true;
+        [SerializeField] private bool spawnPickupsOnlyWhenRaceActive = true;
+        [SerializeField, Min(0)] private int maxCoinsOnTrack = 6;
+        [SerializeField, Min(0)] private int maxBananasOnTrack = 6;
+        [SerializeField, Min(0.1f)] private float coinSpawnInterval = 8f;
+        [SerializeField, Min(0.1f)] private float bananaSpawnInterval = 12f;
+        [SerializeField] private bool spawnCoinsAsTrainingPickups;
+        [SerializeField] private bool spawnBananasAsTrainingHazards;
+        [SerializeField, Min(0f)] private float pickupSpawnHeight = 1.2f;
+        [SerializeField, Min(1f)] private float pickupRaycastHeight = 25f;
+        [SerializeField, Min(0f)] private float pickupSpawnLateralOffset = 3f;
+        [SerializeField] private LayerMask pickupSurfaceLayerMask = ~0;
+        [SerializeField] private GameObject coinPickupPrefab;
+        [SerializeField] private GameObject bananaHazardPrefab;
+        [SerializeField] private string spawnedCoinsRootName = "SpawnedCoins";
+        [SerializeField] private string spawnedBananasRootName = "SpawnedBananas";
+        [SerializeField] private bool logPickupSpawns;
+        [Space]
         [SerializeField] private int lapsToWin = 3;
         [SerializeField] private bool drawGizmos = true;
         [SerializeField] private bool closeCheckpointLoopGizmo = true;
@@ -43,11 +72,71 @@ namespace KartGame.Core
         private readonly Dictionary<string, Dictionary<PowerUpType, int>> _perKartPowerUpSuggestedCounts = new Dictionary<string, Dictionary<PowerUpType, int>>();
         private readonly Dictionary<string, Dictionary<PowerUpType, int>> _perKartPowerUpCorrectChoiceCounts = new Dictionary<string, Dictionary<PowerUpType, int>>();
         private bool _reportWritten;
+        private float _nextCoinSpawnTime;
+        private float _nextBananaSpawnTime;
+        private Transform _spawnedCoinsRoot;
+        private Transform _spawnedBananasRoot;
+        private Transform _spawnedBotsRoot;
+        private int _coinSpawnSerial;
+        private int _bananaSpawnSerial;
+        private bool _runtimeBotsSpawned;
         private bool ShouldGenerateAnyPowerUpReport => generatePowerUpUsageReport || generatePowerUpLearningReport;
+
+        private void OnValidate()
+        {
+            lapsToWin = Mathf.Max(1, lapsToWin);
+            noobBotCount = Mathf.Max(0, noobBotCount);
+            proBotCount = Mathf.Max(0, proBotCount);
+            neutralBotCount = Mathf.Max(0, neutralBotCount);
+            maxCoinsOnTrack = Mathf.Max(0, maxCoinsOnTrack);
+            maxBananasOnTrack = Mathf.Max(0, maxBananasOnTrack);
+            coinSpawnInterval = Mathf.Max(0.1f, coinSpawnInterval);
+            bananaSpawnInterval = Mathf.Max(0.1f, bananaSpawnInterval);
+            pickupRaycastHeight = Mathf.Max(1f, pickupRaycastHeight);
+
+#if UNITY_EDITOR
+            if (coinPickupPrefab == null)
+            {
+                coinPickupPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/CoinPickup.prefab");
+            }
+
+            if (bananaHazardPrefab == null)
+            {
+                bananaHazardPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BananaHazard.prefab");
+            }
+
+            if (noobBotPrefab == null)
+            {
+                noobBotPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Karts/Kart_Noob.prefab");
+            }
+
+            if (proBotPrefab == null)
+            {
+                proBotPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Karts/Kart_Pro.prefab");
+            }
+
+            if (neutralBotPrefab == null)
+            {
+                neutralBotPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Karts/Kart_Neutral.prefab");
+            }
+#endif
+        }
 
         public int LapsToWin => Mathf.Max(1, lapsToWin);
         public int CheckpointCount => checkpoints?.Length ?? 0;
         public int SpawnPointCount => spawnPoints?.Length ?? 0;
+        public int NoobBotCount => Mathf.Max(0, noobBotCount);
+        public int ProBotCount => Mathf.Max(0, proBotCount);
+        public int NeutralBotCount => Mathf.Max(0, neutralBotCount);
+        public int TotalBotCount => NoobBotCount + ProBotCount + NeutralBotCount;
+        public GameObject NoobBotPrefab => noobBotPrefab;
+        public GameObject ProBotPrefab => proBotPrefab;
+        public GameObject NeutralBotPrefab => neutralBotPrefab;
+        public int MaxCoinsOnTrack => Mathf.Max(0, maxCoinsOnTrack);
+        public int MaxBananasOnTrack => Mathf.Max(0, maxBananasOnTrack);
+        public float CoinSpawnInterval => Mathf.Max(0.1f, coinSpawnInterval);
+        public float BananaSpawnInterval => Mathf.Max(0.1f, bananaSpawnInterval);
+        public float PickupRaycastHeight => Mathf.Max(1f, pickupRaycastHeight);
         public Transform[] Checkpoints => checkpoints;
         public Transform[] SpawnPoints => spawnPoints;
         public Transform[] PowerUpBoxes => powerUpBoxes;
@@ -55,16 +144,59 @@ namespace KartGame.Core
 
         private void Awake()
         {
-            if (!Application.isPlaying || !ShouldGenerateAnyPowerUpReport)
+            if (Application.isPlaying && ShouldGenerateAnyPowerUpReport)
+            {
+                ResetPowerUpUsageTracking();
+                KartPowerUpController.AnyPowerUpUsed += HandlePowerUpUsed;
+                KartPowerUpController.AnyPowerUpHit += HandlePowerUpHit;
+                KartPowerUpAgent.AnyDecisionEvaluated += HandlePowerUpDecisionEvaluated;
+                KartPowerUpAgent.AnyPowerUpExecutionFailed += HandlePowerUpExecutionFailed;
+            }
+
+            if (Application.isPlaying)
+            {
+                SyncChildCollections();
+                SpawnConfiguredBotsAtRuntime();
+            }
+        }
+
+        private void Start()
+        {
+            if (!Application.isPlaying || !enablePickupSpawning)
             {
                 return;
             }
 
-            ResetPowerUpUsageTracking();
-            KartPowerUpController.AnyPowerUpUsed += HandlePowerUpUsed;
-            KartPowerUpController.AnyPowerUpHit += HandlePowerUpHit;
-            KartPowerUpAgent.AnyDecisionEvaluated += HandlePowerUpDecisionEvaluated;
-            KartPowerUpAgent.AnyPowerUpExecutionFailed += HandlePowerUpExecutionFailed;
+            SyncChildCollections();
+            EnsurePickupSpawnRoots();
+            ResetPickupSpawnTimers();
+        }
+
+        private void Update()
+        {
+            if (!Application.isPlaying || !enablePickupSpawning)
+            {
+                return;
+            }
+
+            if (spawnPickupsOnlyWhenRaceActive && RaceManager.Instance != null && !RaceManager.Instance.IsRaceActive())
+            {
+                return;
+            }
+
+            EnsurePickupSpawnRoots();
+
+            if (maxCoinsOnTrack > 0 && Time.time >= _nextCoinSpawnTime)
+            {
+                TrySpawnCoinPickup();
+                _nextCoinSpawnTime = Time.time + CoinSpawnInterval;
+            }
+
+            if (maxBananasOnTrack > 0 && Time.time >= _nextBananaSpawnTime)
+            {
+                TrySpawnBananaHazard();
+                _nextBananaSpawnTime = Time.time + BananaSpawnInterval;
+            }
         }
 
         private void OnDisable()
@@ -103,6 +235,18 @@ namespace KartGame.Core
         public void SetLapsToWin(int value)
         {
             lapsToWin = Mathf.Max(1, value);
+        }
+
+        public void SetBotCounts(int noobCount, int proCount, int neutralCount)
+        {
+            noobBotCount = Mathf.Max(0, noobCount);
+            proBotCount = Mathf.Max(0, proCount);
+            neutralBotCount = Mathf.Max(0, neutralCount);
+        }
+
+        public void SetPickupSpawnEnabled(bool value)
+        {
+            enablePickupSpawning = value;
         }
 
         public Transform GetCheckpoint(int index)
@@ -180,6 +324,412 @@ namespace KartGame.Core
             }
 
             return collection;
+        }
+
+        private void EnsurePickupSpawnRoots()
+        {
+            _spawnedCoinsRoot ??= EnsureChildContainer(spawnedCoinsRootName);
+            _spawnedBananasRoot ??= EnsureChildContainer(spawnedBananasRootName);
+        }
+
+        private void EnsureRuntimeBotsRoot()
+        {
+            if (_spawnedBotsRoot != null)
+            {
+                return;
+            }
+
+            var existingRoot = GameObject.Find(spawnedBotsRootName);
+            if (existingRoot != null)
+            {
+                existingRoot.transform.SetParent(null, true);
+                _spawnedBotsRoot = existingRoot.transform;
+                return;
+            }
+
+            var botsRootObject = new GameObject(spawnedBotsRootName);
+            _spawnedBotsRoot = botsRootObject.transform;
+        }
+
+        private void SpawnConfiguredBotsAtRuntime()
+        {
+            if (_runtimeBotsSpawned)
+            {
+                return;
+            }
+
+            if (NoobBotCount <= 0 && ProBotCount <= 0 && NeutralBotCount <= 0)
+            {
+                return;
+            }
+
+            EnsureRuntimeBotsRoot();
+
+            var spawnCursor = 0;
+            SpawnRuntimeBotFamily(NoobBotPrefab, "Kart_Noob", NoobBotCount, ref spawnCursor);
+            SpawnRuntimeBotFamily(ProBotPrefab, "Kart_Pro", ProBotCount, ref spawnCursor);
+            SpawnRuntimeBotFamily(NeutralBotPrefab, "Kart_Neutral", NeutralBotCount, ref spawnCursor);
+
+            _runtimeBotsSpawned = true;
+        }
+
+        private void SpawnRuntimeBotFamily(GameObject botPrefab, string botNamePrefix, int desiredCount, ref int spawnCursor)
+        {
+            if (desiredCount <= 0)
+            {
+                return;
+            }
+
+            for (var index = 1; index <= desiredCount; index++)
+            {
+                var botName = $"{botNamePrefix}_{index:00}";
+                if (GameObject.Find(botName) != null)
+                {
+                    continue;
+                }
+
+                var spawnPoint = GetRuntimeBotSpawnPoint(spawnCursor++);
+                var botObject = SpawnRuntimeBot(botPrefab, botName, spawnPoint);
+                if (botObject == null)
+                {
+                    Debug.LogWarning($"No se pudo spawnear el bot '{botName}' en runtime.", this);
+                    continue;
+                }
+
+                ConfigureRuntimeSpawnedBot(botObject, spawnPoint);
+            }
+        }
+
+        private Transform GetRuntimeBotSpawnPoint(int spawnIndex)
+        {
+            if (spawnPoints != null && spawnPoints.Length > 0)
+            {
+                return spawnPoints[Mathf.Abs(spawnIndex) % spawnPoints.Length];
+            }
+
+            if (checkpoints != null && checkpoints.Length > 0)
+            {
+                return checkpoints[Mathf.Abs(spawnIndex) % checkpoints.Length];
+            }
+
+            return null;
+        }
+
+        private GameObject SpawnRuntimeBot(GameObject botPrefab, string botName, Transform spawnPoint)
+        {
+            var spawnPosition = spawnPoint != null ? spawnPoint.position : transform.position;
+            var spawnRotation = spawnPoint != null ? spawnPoint.rotation : transform.rotation;
+
+            GameObject botObject;
+            if (botPrefab != null)
+            {
+                botObject = Instantiate(botPrefab, spawnPosition, spawnRotation, _spawnedBotsRoot);
+            }
+            else
+            {
+                botObject = CreateRuntimeFallbackBot(botName, spawnPosition, spawnRotation);
+                if (botObject != null)
+                {
+                    botObject.transform.SetParent(_spawnedBotsRoot, true);
+                }
+            }
+
+            if (botObject != null)
+            {
+                botObject.name = botName;
+            }
+
+            return botObject;
+        }
+
+        private void ConfigureRuntimeSpawnedBot(GameObject botObject, Transform spawnPoint)
+        {
+            if (botObject == null)
+            {
+                return;
+            }
+
+            var spawnPosition = spawnPoint != null ? spawnPoint.position : transform.position;
+            var spawnRotation = spawnPoint != null ? spawnPoint.rotation : transform.rotation;
+            botObject.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+
+            var kartController = botObject.GetComponent<KartController>();
+            if (kartController != null)
+            {
+                kartController.SetControlEnabled(true);
+            }
+
+            var checkpointTracker = botObject.GetComponent<CheckpointTracker>();
+            if (checkpointTracker != null)
+            {
+                checkpointTracker.SetTrackData(this);
+                checkpointTracker.SetPlayerFlag(false);
+                checkpointTracker.SetRecoveryReference(spawnPoint);
+                checkpointTracker.InitializeForRace(this);
+                checkpointTracker.SetInitialSpawnPose(spawnPosition, spawnRotation);
+            }
+
+            var kartAgent = botObject.GetComponent<KartGame.AI.Reinforcement.KartAgent>();
+            if (kartAgent != null)
+            {
+                var trainingSceneManager = FindFirstObjectByType<KartGame.AI.Reinforcement.TrainingSceneManager>();
+                kartAgent.AutoAssignReferences(trainingSceneManager, this);
+            }
+        }
+
+        private GameObject CreateRuntimeFallbackBot(string botName, Vector3 position, Quaternion rotation)
+        {
+            var kartObject = new GameObject(botName);
+            kartObject.transform.SetPositionAndRotation(position, rotation);
+
+            var rigidbody = kartObject.AddComponent<Rigidbody>();
+            rigidbody.mass = 140f;
+            rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+
+            var collider = kartObject.AddComponent<BoxCollider>();
+            collider.center = new Vector3(0f, 0.45f, 0f);
+            collider.size = new Vector3(1.4f, 0.9f, 2.4f);
+
+            kartObject.AddComponent<KartController>();
+            var checkpointTracker = kartObject.AddComponent<CheckpointTracker>();
+            checkpointTracker.SetTrackData(this);
+            checkpointTracker.SetPlayerFlag(false);
+
+            kartObject.AddComponent<AIKartInput>();
+
+            var visual = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            visual.name = "Visual";
+            visual.transform.SetParent(kartObject.transform, false);
+            visual.transform.localPosition = new Vector3(0f, 0.55f, 0f);
+            visual.transform.localScale = new Vector3(1.35f, 0.6f, 2.2f);
+
+            var visualCollider = visual.GetComponent<Collider>();
+            if (visualCollider != null)
+            {
+                Destroy(visualCollider);
+            }
+
+            var renderer = visual.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                var shader = Shader.Find("Universal Render Pipeline/Lit");
+                if (shader != null)
+                {
+                    var material = new Material(shader)
+                    {
+                        color = new Color(0.35f, 0.35f, 0.35f)
+                    };
+
+                    renderer.sharedMaterial = material;
+                }
+            }
+
+            return kartObject;
+        }
+
+        private Transform EnsureChildContainer(string childName)
+        {
+            var child = transform.Find(childName);
+            if (child != null)
+            {
+                return child;
+            }
+
+            var childObject = new GameObject(childName);
+            childObject.transform.SetParent(transform, false);
+            return childObject.transform;
+        }
+
+        private void ResetPickupSpawnTimers()
+        {
+            _nextCoinSpawnTime = Time.time + UnityEngine.Random.Range(0f, CoinSpawnInterval);
+            _nextBananaSpawnTime = Time.time + UnityEngine.Random.Range(0f, BananaSpawnInterval);
+        }
+
+        private void TrySpawnCoinPickup()
+        {
+            if (CountActivePickups<CoinPickup>(_spawnedCoinsRoot) >= MaxCoinsOnTrack)
+            {
+                return;
+            }
+
+            if (!TryGetRandomPickupPose(out var position, out var rotation))
+            {
+                return;
+            }
+
+            var coinObject = coinPickupPrefab != null
+                ? Instantiate(coinPickupPrefab, position, rotation, _spawnedCoinsRoot)
+                : CreateFallbackCoin(position, rotation);
+
+            if (coinObject == null)
+            {
+                return;
+            }
+
+            coinObject.name = $"TrackCoin_{++_coinSpawnSerial:00}";
+            coinObject.transform.SetParent(_spawnedCoinsRoot, true);
+            coinObject.transform.SetPositionAndRotation(position, rotation);
+
+            var coinPickup = coinObject.GetComponent<CoinPickup>();
+            if (coinPickup != null)
+            {
+                coinPickup.SetTrainingMode(spawnCoinsAsTrainingPickups);
+            }
+
+            if (logPickupSpawns)
+            {
+                Debug.Log($"Moneda generada: {coinObject.name}", this);
+            }
+        }
+
+        private void TrySpawnBananaHazard()
+        {
+            if (CountActivePickups<BananaHazard>(_spawnedBananasRoot) >= MaxBananasOnTrack)
+            {
+                return;
+            }
+
+            if (!TryGetRandomPickupPose(out var position, out var rotation))
+            {
+                return;
+            }
+
+            var bananaObject = bananaHazardPrefab != null
+                ? Instantiate(bananaHazardPrefab, position, rotation, _spawnedBananasRoot)
+                : CreateFallbackBanana(position, rotation);
+
+            if (bananaObject == null)
+            {
+                return;
+            }
+
+            bananaObject.name = $"TrackBanana_{++_bananaSpawnSerial:00}";
+            bananaObject.transform.SetParent(_spawnedBananasRoot, true);
+            bananaObject.transform.SetPositionAndRotation(position, rotation);
+
+            var bananaHazard = bananaObject.GetComponent<BananaHazard>();
+            if (bananaHazard != null)
+            {
+                bananaHazard.SetTrainingMode(spawnBananasAsTrainingHazards);
+            }
+
+            if (logPickupSpawns)
+            {
+                Debug.Log($"Platano generado: {bananaObject.name}", this);
+            }
+        }
+
+        private bool TryGetRandomPickupPose(out Vector3 position, out Quaternion rotation)
+        {
+            position = transform.position;
+            rotation = transform.rotation;
+
+            if (checkpoints == null || checkpoints.Length < 2)
+            {
+                if (spawnPoints != null && spawnPoints.Length > 0)
+                {
+                    var spawnPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
+                    if (spawnPoint != null)
+                    {
+                        position = AdjustPickupHeight(spawnPoint.position);
+                        rotation = spawnPoint.rotation;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            var checkpointIndex = UnityEngine.Random.Range(0, checkpoints.Length);
+            var current = checkpoints[checkpointIndex];
+            var next = checkpoints[(checkpointIndex + 1) % checkpoints.Length];
+
+            if (current == null || next == null)
+            {
+                return false;
+            }
+
+            var segment = next.position - current.position;
+            var segmentLength = segment.magnitude;
+            if (segmentLength <= 0.01f)
+            {
+                return false;
+            }
+
+            var direction = segment / segmentLength;
+            var right = Vector3.Cross(Vector3.up, direction).normalized;
+            var alongFactor = UnityEngine.Random.Range(0.2f, 0.8f);
+            var lateralOffset = UnityEngine.Random.Range(-pickupSpawnLateralOffset, pickupSpawnLateralOffset);
+
+            var surfacePoint = current.position + direction * (segmentLength * alongFactor) + right * lateralOffset;
+            position = AdjustPickupHeight(surfacePoint);
+            rotation = Quaternion.LookRotation(direction, Vector3.up);
+            return true;
+        }
+
+        private Vector3 AdjustPickupHeight(Vector3 basePoint)
+        {
+            var surfaceClearance = Mathf.Clamp(pickupSpawnHeight, 0.05f, 0.35f);
+            var rayOrigin = basePoint + Vector3.up * PickupRaycastHeight;
+            if (Physics.Raycast(rayOrigin, Vector3.down, out var hit, PickupRaycastHeight * 2f, pickupSurfaceLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                return hit.point + Vector3.up * surfaceClearance;
+            }
+
+            return basePoint + Vector3.up * surfaceClearance;
+        }
+
+        private static int CountActivePickups<T>(Transform root) where T : Component
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+
+            var pickups = root.GetComponentsInChildren<T>(true);
+            var count = 0;
+            for (var index = 0; index < pickups.Length; index++)
+            {
+                if (pickups[index] != null && pickups[index].gameObject.activeInHierarchy)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private GameObject CreateFallbackCoin(Vector3 position, Quaternion rotation)
+        {
+            var coinObject = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            coinObject.name = "CoinPickup";
+            coinObject.transform.SetPositionAndRotation(position, rotation);
+            coinObject.transform.localScale = new Vector3(0.45f, 0.08f, 0.45f);
+
+            var rigidbody = coinObject.AddComponent<Rigidbody>();
+            rigidbody.isKinematic = true;
+            rigidbody.useGravity = false;
+
+            var coinPickup = coinObject.GetComponent<CoinPickup>() ?? coinObject.AddComponent<CoinPickup>();
+            coinPickup.SetTrainingMode(spawnCoinsAsTrainingPickups);
+            return coinObject;
+        }
+
+        private GameObject CreateFallbackBanana(Vector3 position, Quaternion rotation)
+        {
+            var bananaObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            bananaObject.name = "BananaHazard";
+            bananaObject.transform.SetPositionAndRotation(position, rotation);
+            bananaObject.transform.localScale = new Vector3(0.6f, 0.12f, 0.6f);
+
+            var rigidbody = bananaObject.AddComponent<Rigidbody>();
+            rigidbody.isKinematic = true;
+            rigidbody.useGravity = false;
+
+            var bananaHazard = bananaObject.GetComponent<BananaHazard>() ?? bananaObject.AddComponent<BananaHazard>();
+            bananaHazard.SetTrainingMode(spawnBananasAsTrainingHazards);
+            return bananaObject;
         }
 
         private void OnDrawGizmosSelected()

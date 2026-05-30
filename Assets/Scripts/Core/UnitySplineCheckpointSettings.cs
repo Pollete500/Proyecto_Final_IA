@@ -22,6 +22,12 @@ namespace KartGame.Core
         [SerializeField, Min(0f)] private float roadHeightOffset = 0.05f;
         [SerializeField, Min(0.1f)] private float roadSampleSpacing = 1.5f;
         [SerializeField] private bool generateRoadVisual = true;
+        [SerializeField] private bool generateWallVisual = true;
+        [SerializeField, Min(1f)] private float wallHeight = 2f;
+        [SerializeField, Min(0.05f)] private float wallThickness = 0.25f;
+        [SerializeField, Min(0f)] private float wallOffset = 0.5f;
+        [SerializeField, Min(0.1f)] private float wallSampleSpacing = 0.75f;
+        [SerializeField, Min(0f)] private float wallSegmentOverlap = 0.2f;
 
         public float CheckpointSpacing => checkpointSpacing;
         public float CheckpointVerticalOffset => checkpointVerticalOffset;
@@ -33,6 +39,12 @@ namespace KartGame.Core
         public float RoadHeightOffset => roadHeightOffset;
         public float RoadSampleSpacing => roadSampleSpacing;
         public bool GenerateRoadVisual => generateRoadVisual;
+        public bool GenerateWallVisual => generateWallVisual;
+        public float WallHeight => wallHeight;
+        public float WallThickness => wallThickness;
+        public float WallOffset => wallOffset;
+        public float WallSampleSpacing => wallSampleSpacing;
+        public float WallSegmentOverlap => wallSegmentOverlap;
 
         [ContextMenu("Reset To Default Checkpoint Size")]
         private void ResetToDefaultCheckpointSize()
@@ -45,6 +57,11 @@ namespace KartGame.Core
             roadWidth = 12f;
             roadHeightOffset = 0.05f;
             roadSampleSpacing = 1.5f;
+            wallHeight = 2f;
+            wallThickness = 0.25f;
+            wallOffset = 0.5f;
+            wallSampleSpacing = 0.75f;
+            wallSegmentOverlap = 0.2f;
         }
 
         [ContextMenu("Reset Road Visual Settings")]
@@ -54,6 +71,12 @@ namespace KartGame.Core
             roadHeightOffset = 0.05f;
             roadSampleSpacing = 1.5f;
             generateRoadVisual = true;
+            wallHeight = 2f;
+            wallThickness = 0.25f;
+            wallOffset = 0.5f;
+            wallSampleSpacing = 0.75f;
+            wallSegmentOverlap = 0.2f;
+            generateWallVisual = true;
         }
 
         private void OnValidate()

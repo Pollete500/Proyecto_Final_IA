@@ -23,6 +23,12 @@ namespace KartGame.EditorTools
                     UnitySplineCheckpointTools.GenerateRoadVisualFromSettings(settings);
                 }
 
+                if (GUILayout.Button("Regenerate Walls Now", GUILayout.Height(30f)))
+                {
+                    var settings = (UnitySplineCheckpointSettings)target;
+                    UnitySplineCheckpointTools.GenerateWallVisualFromSettings(settings);
+                }
+
                 if (GUILayout.Button("Regenerate Checkpoints Now", GUILayout.Height(30f)))
                 {
                     var settings = (UnitySplineCheckpointSettings)target;

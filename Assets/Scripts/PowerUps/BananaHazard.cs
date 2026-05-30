@@ -54,6 +54,11 @@ namespace KartGame.PowerUps
             }
         }
 
+        public void SetTrainingMode(bool trainingMode)
+        {
+            bananaTrain = trainingMode;
+        }
+
         private static bool IsBotKart(KartController kartController)
         {
             return kartController != null && kartController.GetComponentInParent<PlayerKartInput>() == null;

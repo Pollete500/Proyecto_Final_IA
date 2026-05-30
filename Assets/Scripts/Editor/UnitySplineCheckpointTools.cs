@@ -13,7 +13,41 @@ namespace KartGame.EditorTools
         private const string SplineRootName = "RoadSpline";
         private const string CheckpointsRootName = "Checkpoints";
         private const string RoadVisualRootName = "RoadVisual";
+        private const string WallVisualRootName = "TrackWalls";
         private const string RoadMaterialPath = "Assets/Generated/UnitySplineRoadBlack.mat";
+
+        [MenuItem("Tools/Kart Racing/Track Data/Create Configured Track Root With Unity Spline")]
+        public static void CreateConfiguredTrackRootWithUnitySplineMenu()
+        {
+            EnsureTagsAndLayers();
+
+            var trackData = ResolveTrackData();
+            if (trackData == null)
+            {
+                var trackRoot = new GameObject("TrackRoot");
+                Undo.RegisterCreatedObjectUndo(trackRoot, "Create TrackRoot");
+                trackData = Undo.AddComponent<TrackData>(trackRoot);
+            }
+
+            Undo.IncrementCurrentGroup();
+            Undo.SetCurrentGroupName("Create Configured Track Root With Unity Spline");
+
+            EnsureDefaultTrackHierarchy(trackData);
+            ConfigureTrackDataDefaults(trackData);
+
+            var splineContainer = CreateOrReuseSplineContainer(trackData);
+            EnsureCheckpointSettings(splineContainer);
+            ConfigureDefaultSpline(splineContainer, trackData);
+            GenerateRoadVisual(splineContainer, trackData);
+            GenerateWallVisual(splineContainer, trackData);
+            GenerateCheckpoints(splineContainer, trackData);
+            GenerateDefaultSpawnAndRespawnPoints(trackData);
+
+            trackData.SyncChildCollections();
+            EditorUtility.SetDirty(trackData);
+            Selection.activeGameObject = trackData.gameObject;
+            EditorGUIUtility.PingObject(trackData.gameObject);
+        }
 
         [MenuItem("Tools/Kart Racing/Track Data/Create Unity Spline And Checkpoints")]
         public static void CreateUnitySplineAndCheckpointsMenu()
@@ -29,7 +63,9 @@ namespace KartGame.EditorTools
             EnsureCheckpointSettings(splineContainer);
             ConfigureDefaultSpline(splineContainer, trackData);
             GenerateRoadVisual(splineContainer, trackData);
+            GenerateWallVisual(splineContainer, trackData);
             GenerateCheckpoints(splineContainer, trackData);
+            GenerateDefaultSpawnAndRespawnPoints(trackData);
 
             Selection.activeGameObject = splineContainer.gameObject;
         }
@@ -78,6 +114,28 @@ namespace KartGame.EditorTools
             GenerateRoadVisual(splineContainer, trackData);
         }
 
+        public static void GenerateWallVisualFromSettings(UnitySplineCheckpointSettings settings)
+        {
+            if (settings == null)
+            {
+                return;
+            }
+
+            var splineContainer = settings.GetComponent<SplineContainer>();
+            if (splineContainer == null)
+            {
+                splineContainer = settings.GetComponentInParent<SplineContainer>();
+            }
+
+            var trackData = settings.GetComponentInParent<TrackData>();
+            if (splineContainer == null || trackData == null)
+            {
+                return;
+            }
+
+            GenerateWallVisual(splineContainer, trackData);
+        }
+
         [MenuItem("Tools/Kart Racing/Track Data/Generate Road Visual From Selected Unity Spline")]
         public static void GenerateRoadVisualFromSelectedSplineMenu()
         {
@@ -116,6 +174,26 @@ namespace KartGame.EditorTools
             }
 
             GenerateCheckpoints(splineContainer, trackData);
+        }
+
+        [MenuItem("Tools/Kart Racing/Track Data/Generate Wall Visual From Selected Unity Spline")]
+        public static void GenerateWallVisualFromSelectedSplineMenu()
+        {
+            var splineContainer = ResolveSplineContainer();
+            if (splineContainer == null)
+            {
+                EditorUtility.DisplayDialog("Unity Spline", "Select a SplineContainer in the Hierarchy first.", "OK");
+                return;
+            }
+
+            var trackData = splineContainer.GetComponentInParent<TrackData>();
+            if (trackData == null)
+            {
+                EditorUtility.DisplayDialog("Unity Spline", "The selected spline must be under a TrackData object.", "OK");
+                return;
+            }
+
+            GenerateWallVisual(splineContainer, trackData);
         }
 
         [MenuItem("Tools/Kart Racing/Track Data/Generate Checkpoints From Selected Unity Spline", true)]
@@ -170,6 +248,108 @@ namespace KartGame.EditorTools
             EditorUtility.SetDirty(splineContainer.gameObject);
         }
 
+        private static void EnsureDefaultTrackHierarchy(TrackData trackData)
+        {
+            if (trackData == null)
+            {
+                return;
+            }
+
+            EnsureChildContainer(trackData.transform, "Checkpoints");
+            EnsureChildContainer(trackData.transform, "SpawnPoints");
+            EnsureChildContainer(trackData.transform, "PowerUpBoxes");
+            EnsureChildContainer(trackData.transform, "RespawnPoints");
+            EnsureChildContainer(trackData.transform, "TrackBounds");
+            EnsureChildContainer(trackData.transform, "OffTrackZones");
+        }
+
+        private static void ConfigureTrackDataDefaults(TrackData trackData)
+        {
+            if (trackData == null)
+            {
+                return;
+            }
+
+            trackData.SetLapsToWin(1);
+
+            var serializedTrackData = new SerializedObject(trackData);
+            SetSerializedBool(serializedTrackData, "drawGizmos", true);
+            SetSerializedBool(serializedTrackData, "closeCheckpointLoopGizmo", true);
+            SetSerializedColor(serializedTrackData, "checkpointGizmoColor", new Color(1f, 0.78f, 0.2f, 0.9f));
+            SetSerializedBool(serializedTrackData, "generatePowerUpUsageReport", true);
+            SetSerializedBool(serializedTrackData, "generatePowerUpLearningReport", true);
+            serializedTrackData.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(trackData);
+        }
+
+        private static void GenerateDefaultSpawnAndRespawnPoints(TrackData trackData)
+        {
+            if (trackData == null)
+            {
+                return;
+            }
+
+            var checkpointsRoot = trackData.transform.Find("Checkpoints");
+            var spawnPointsRoot = EnsureChildContainer(trackData.transform, "SpawnPoints");
+            var respawnPointsRoot = EnsureChildContainer(trackData.transform, "RespawnPoints");
+            var powerUpBoxesRoot = EnsureChildContainer(trackData.transform, "PowerUpBoxes");
+
+            if (checkpointsRoot == null || checkpointsRoot.childCount == 0)
+            {
+                return;
+            }
+
+            if (spawnPointsRoot.childCount == 0)
+            {
+                var startReference = checkpointsRoot.GetChild(0);
+                var spawnOffsets = new[]
+                {
+                    new Vector3(0f, 0f, -8f),
+                    new Vector3(-2f, 0f, -11f),
+                    new Vector3(2f, 0f, -11f),
+                    new Vector3(-2f, 0f, -14f),
+                    new Vector3(2f, 0f, -14f),
+                    new Vector3(-2f, 0f, -17f),
+                    new Vector3(2f, 0f, -17f)
+                };
+
+                for (var index = 0; index < spawnOffsets.Length; index++)
+                {
+                    var spawnObject = new GameObject($"Spawn_{index:00}");
+                    Undo.RegisterCreatedObjectUndo(spawnObject, "Create Track Spawn");
+                    spawnObject.transform.SetParent(spawnPointsRoot, false);
+                    spawnObject.transform.position = startReference.TransformPoint(spawnOffsets[index]);
+                    spawnObject.transform.rotation = startReference.rotation;
+                }
+            }
+
+            if (respawnPointsRoot.childCount == 0)
+            {
+                for (var index = 0; index < checkpointsRoot.childCount; index++)
+                {
+                    var checkpointTransform = checkpointsRoot.GetChild(index);
+                    var respawnObject = new GameObject($"Respawn_{index:00}");
+                    Undo.RegisterCreatedObjectUndo(respawnObject, "Create Track Respawn");
+                    respawnObject.transform.SetParent(respawnPointsRoot, false);
+                    respawnObject.transform.position = checkpointTransform.position - checkpointTransform.forward * 2.5f;
+                    respawnObject.transform.rotation = checkpointTransform.rotation;
+                }
+            }
+
+            if (powerUpBoxesRoot.childCount == 0 && checkpointsRoot.childCount >= 4)
+            {
+                for (var index = 1; index < checkpointsRoot.childCount; index += 2)
+                {
+                    var checkpointTransform = checkpointsRoot.GetChild(index);
+                    var powerUpObject = new GameObject($"PowerUpBox_{index:00}");
+                    Undo.RegisterCreatedObjectUndo(powerUpObject, "Create Track PowerUp Box");
+                    powerUpObject.transform.SetParent(powerUpBoxesRoot, false);
+                    powerUpObject.transform.position = checkpointTransform.position - checkpointTransform.right * 3f + Vector3.up * 0.75f;
+                    powerUpObject.transform.rotation = checkpointTransform.rotation;
+                }
+            }
+        }
+
         private static void GenerateCheckpoints(SplineContainer splineContainer, TrackData trackData)
         {
             if (splineContainer == null)
@@ -212,22 +392,26 @@ namespace KartGame.EditorTools
                 var checkpointObject = new GameObject($"Checkpoint_{index:00}");
                 Undo.RegisterCreatedObjectUndo(checkpointObject, "Create Spline Checkpoint");
                 checkpointObject.transform.SetParent(checkpointsRoot, false);
+                TryAssignTag(checkpointObject, "Checkpoint");
+                TryAssignLayer(checkpointObject, "KartCheckpoint");
+                checkpointObject.transform.localScale = new Vector3(1f, 1f, 0.12f);
 
                 checkpointObject.transform.SetPositionAndRotation(
                     pose.Position + Vector3.up * checkpointVerticalOffset,
                     Quaternion.LookRotation(pose.Forward, Vector3.up));
 
-                var checkpoint = Undo.AddComponent<Checkpoint>(checkpointObject);
+                var collider = Undo.AddComponent<BoxCollider>(checkpointObject);
+                collider.isTrigger = true;
+                collider.center = Vector3.zero;
+                collider.size = new Vector3(width, height, depth);
+                EditorUtility.SetDirty(collider);
 
+                var checkpoint = Undo.AddComponent<Checkpoint>(checkpointObject);
                 if (checkpoint != null)
                 {
                     checkpoint.Configure(trackData, index);
                     EditorUtility.SetDirty(checkpoint);
                 }
-
-                var collider = Undo.AddComponent<BoxCollider>(checkpointObject);
-                collider.isTrigger = true;
-                collider.size = new Vector3(width, height, depth);
             }
 
             trackData.SyncChildCollections();
@@ -285,13 +469,145 @@ namespace KartGame.EditorTools
             }
 
             meshFilter.sharedMesh = mesh;
+
+            var meshCollider = roadObject.GetComponent<MeshCollider>();
+            if (meshCollider == null)
+            {
+                meshCollider = Undo.AddComponent<MeshCollider>(roadObject);
+            }
+
+            meshCollider.sharedMesh = null;
+            meshCollider.sharedMesh = mesh;
+            meshCollider.convex = false;
+            meshCollider.isTrigger = false;
+
             meshRenderer.sharedMaterial = LoadOrCreateRoadMaterial();
             meshRenderer.receiveShadows = true;
             meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 
             EditorUtility.SetDirty(meshFilter);
+            EditorUtility.SetDirty(meshCollider);
             EditorUtility.SetDirty(meshRenderer);
             EditorUtility.SetDirty(roadObject);
+        }
+
+        private static void GenerateWallVisual(SplineContainer splineContainer, TrackData trackData)
+        {
+            if (splineContainer == null || trackData == null)
+            {
+                return;
+            }
+
+            var settings = ResolveCheckpointSettings(splineContainer, trackData);
+            if (settings != null && !settings.GenerateWallVisual)
+            {
+                return;
+            }
+
+            if (splineContainer.Spline == null || splineContainer.Spline.Count < 2)
+            {
+                return;
+            }
+
+            var wallRoot = CreateFreshWallRoot(trackData.transform);
+            var roadWidth = settings != null ? settings.RoadWidth : 12f;
+            var wallHeight = settings != null ? settings.WallHeight : 2f;
+            var wallThickness = settings != null ? settings.WallThickness : 0.25f;
+            var wallOffset = settings != null ? settings.WallOffset : 0.5f;
+            var wallSpacing = settings != null ? settings.WallSampleSpacing : 2f;
+            var wallOverlap = settings != null ? settings.WallSegmentOverlap : 0.2f;
+            var poses = SampleRoadPoses(splineContainer, wallSpacing);
+            if (poses.Count < 2)
+            {
+                return;
+            }
+
+            var closed = splineContainer.Spline.Closed;
+            var segmentCount = closed ? poses.Count : poses.Count - 1;
+            var wallMaterial = LoadOrCreateRoadMaterial();
+
+            ClearChildren(wallRoot);
+
+            CreateWallSide(wallRoot, poses, segmentCount, roadWidth, wallHeight, wallThickness, wallOffset, wallOverlap, -1f, wallMaterial, "LeftWall");
+            CreateWallSide(wallRoot, poses, segmentCount, roadWidth, wallHeight, wallThickness, wallOffset, wallOverlap, 1f, wallMaterial, "RightWall");
+
+            EditorUtility.SetDirty(wallRoot.gameObject);
+        }
+
+        private static void CreateWallSide(
+            Transform wallRoot,
+            List<SplineCheckpointPose> poses,
+            int segmentCount,
+            float roadWidth,
+            float wallHeight,
+            float wallThickness,
+            float wallOffset,
+            float wallOverlap,
+            float sideSign,
+            Material wallMaterial,
+            string sideName)
+        {
+            if (wallRoot == null || poses == null || poses.Count < 2)
+            {
+                return;
+            }
+
+            var sideRoot = new GameObject(sideName);
+            Undo.RegisterCreatedObjectUndo(sideRoot, "Create Wall Side");
+            sideRoot.transform.SetParent(wallRoot, false);
+
+            for (var index = 0; index < segmentCount; index++)
+            {
+                var nextIndex = index + 1;
+                if (nextIndex >= poses.Count)
+                {
+                    nextIndex = 0;
+                }
+
+                var current = poses[index];
+                var next = poses[nextIndex];
+                var segmentVector = next.Position - current.Position;
+                var segmentLength = segmentVector.magnitude;
+                if (segmentLength <= 0.001f)
+                {
+                    continue;
+                }
+
+                var segmentDir = segmentVector / segmentLength;
+                var right = Vector3.Cross(Vector3.up, segmentDir).normalized;
+                if (right.sqrMagnitude < 0.0001f)
+                {
+                    right = Vector3.right;
+                }
+
+                var edgeOffset = roadWidth * 0.5f + wallOffset;
+                var baseMid = (current.Position + next.Position) * 0.5f + Vector3.up * (wallHeight * 0.5f);
+                var outwardOffset = right * sideSign * edgeOffset;
+
+                var wallObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                Undo.RegisterCreatedObjectUndo(wallObject, "Create Wall Segment");
+                wallObject.name = $"{sideName}_{index:00}";
+                wallObject.transform.SetParent(sideRoot.transform, false);
+                TryAssignTag(wallObject, "Wall");
+                TryAssignLayer(wallObject, "KartWall");
+                wallObject.transform.position = baseMid + outwardOffset;
+                wallObject.transform.rotation = Quaternion.LookRotation(segmentDir, Vector3.up);
+                wallObject.transform.localScale = new Vector3(wallThickness, wallHeight, segmentLength + wallOverlap);
+
+                var renderer = wallObject.GetComponent<MeshRenderer>();
+                if (renderer != null)
+                {
+                    renderer.sharedMaterial = wallMaterial;
+                    renderer.receiveShadows = true;
+                    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                }
+
+                var collider = wallObject.GetComponent<Collider>();
+                if (collider != null)
+                {
+                    collider.isTrigger = false;
+                }
+            }
         }
 
         private static List<SplineCheckpointPose> SampleRoadPoses(SplineContainer splineContainer, float spacing)
@@ -538,6 +854,49 @@ namespace KartGame.EditorTools
             return childObject.transform;
         }
 
+        private static void TryAssignLayer(GameObject target, string layerName)
+        {
+            if (target == null || string.IsNullOrWhiteSpace(layerName))
+            {
+                return;
+            }
+
+            var layerIndex = LayerMask.NameToLayer(layerName);
+            if (layerIndex >= 0)
+            {
+                target.layer = layerIndex;
+            }
+        }
+
+        private static void TryAssignTag(GameObject target, string tagName)
+        {
+            if (target == null || string.IsNullOrWhiteSpace(tagName))
+            {
+                return;
+            }
+
+            try
+            {
+                if (target.CompareTag(tagName))
+                {
+                    return;
+                }
+            }
+            catch
+            {
+                // Tag may not exist yet.
+            }
+
+            try
+            {
+                target.tag = tagName;
+            }
+            catch
+            {
+                // Ignore if the tag is not defined in the project.
+            }
+        }
+
         private static Transform CreateFreshCheckpointsRoot(Transform trackRoot)
         {
             if (trackRoot == null)
@@ -574,6 +933,25 @@ namespace KartGame.EditorTools
             Undo.RegisterCreatedObjectUndo(roadObject, "Create Road Visual Root");
             roadObject.transform.SetParent(trackRoot, false);
             return roadObject.transform;
+        }
+
+        private static Transform CreateFreshWallRoot(Transform trackRoot)
+        {
+            if (trackRoot == null)
+            {
+                return null;
+            }
+
+            var existing = trackRoot.Find(WallVisualRootName);
+            if (existing != null)
+            {
+                Undo.DestroyObjectImmediate(existing.gameObject);
+            }
+
+            var wallObject = new GameObject(WallVisualRootName);
+            Undo.RegisterCreatedObjectUndo(wallObject, "Create Wall Visual Root");
+            wallObject.transform.SetParent(trackRoot, false);
+            return wallObject.transform;
         }
 
         private static Mesh BuildRoadMesh(Transform roadTransform, SplineContainer splineContainer, List<SplineCheckpointPose> poses, float roadWidth, float roadHeightOffset)
@@ -710,6 +1088,93 @@ namespace KartGame.EditorTools
                     Undo.DestroyObjectImmediate(child.gameObject);
                 }
             }
+        }
+
+        private static void SetSerializedBool(SerializedObject serializedObject, string propertyName, bool value)
+        {
+            if (serializedObject == null)
+            {
+                return;
+            }
+
+            var property = serializedObject.FindProperty(propertyName);
+            if (property != null && property.propertyType == SerializedPropertyType.Boolean)
+            {
+                property.boolValue = value;
+            }
+        }
+
+        private static void SetSerializedColor(SerializedObject serializedObject, string propertyName, Color value)
+        {
+            if (serializedObject == null)
+            {
+                return;
+            }
+
+            var property = serializedObject.FindProperty(propertyName);
+            if (property != null && property.propertyType == SerializedPropertyType.Color)
+            {
+                property.colorValue = value;
+            }
+        }
+
+        private static void EnsureTagsAndLayers()
+        {
+            EnsureTagExists("Wall");
+            EnsureTagExists("Checkpoint");
+            EnsureTagExists("OffTrack");
+            EnsureLayerExists("KartWall");
+            EnsureLayerExists("KartCheckpoint");
+            EnsureLayerExists("OffTrack");
+        }
+
+        private static void EnsureTagExists(string tagName)
+        {
+            var tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+            var tagsProp = tagManager.FindProperty("tags");
+
+            for (var index = 0; index < tagsProp.arraySize; index++)
+            {
+                if (tagsProp.GetArrayElementAtIndex(index).stringValue == tagName)
+                {
+                    return;
+                }
+            }
+
+            tagsProp.InsertArrayElementAtIndex(tagsProp.arraySize);
+            tagsProp.GetArrayElementAtIndex(tagsProp.arraySize - 1).stringValue = tagName;
+            tagManager.ApplyModifiedProperties();
+        }
+
+        private static int EnsureLayerExists(string layerName)
+        {
+            var existingLayer = LayerMask.NameToLayer(layerName);
+            if (existingLayer != -1)
+            {
+                return existingLayer;
+            }
+
+            var tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+            var layersProp = tagManager.FindProperty("layers");
+
+            for (var index = 8; index < layersProp.arraySize; index++)
+            {
+                var layerProp = layersProp.GetArrayElementAtIndex(index);
+                if (string.IsNullOrEmpty(layerProp.stringValue))
+                {
+                    layerProp.stringValue = layerName;
+                    tagManager.ApplyModifiedProperties();
+                    return index;
+                }
+
+                if (layerProp.stringValue == layerName)
+                {
+                    return index;
+                }
+            }
+
+            Debug.LogWarning($"Could not create layer '{layerName}'. All user layer slots are already occupied.");
+            return -1;
         }
 
         private static Bounds CalculateTrackBounds(TrackData trackData)

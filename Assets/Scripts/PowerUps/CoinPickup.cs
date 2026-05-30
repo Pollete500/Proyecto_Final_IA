@@ -272,6 +272,11 @@ namespace KartGame.PowerUps
             }
         }
 
+        public void SetTrainingMode(bool trainingMode)
+        {
+            coinTrain = trainingMode;
+        }
+
         private void ApplyCoinVisuals()
         {
             if (visualRenderers == null)
