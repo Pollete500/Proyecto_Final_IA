@@ -5,100 +5,145 @@ INTRODUCTION
 Duration: 30 seconds
 
 Voiceover:
-"This project is an AI-powered racing game where intelligent bots learn to drive a circuit and adapt to the human player. We will show the gameplay, explain how the bots learn, and describe how player data is used to influence bot power-up behavior."
+"This project is an AI-powered kart racing game built in Unity. It combines two machine learning
+systems: reinforcement learning bots that learn to drive the circuit, and a Random Forest model
+that gives each bot its own power-up strategy. At the end of each race, a third classifier tells
+the player what kind of driver they are."
 
 Show:
-- A short race start sequence
-- The track, player car, and bots
-- The main idea of the project in one simple sentence
+- A short race start sequence with countdown.
+- The track, the player kart, and the AI bots.
+- The results screen at the end showing the player behavior label.
+
 
 GAMEPLAY OVERVIEW
 -----------------
 Duration: 1 minute 30 seconds
 
 Voiceover:
-"In the game, the player races against AI bots. The bots do not just follow fixed paths. They make decisions about speed, steering, and item use. The project mixes reinforcement learning, player data collection, and machine learning classification to create a more adaptive racing experience."
+"The player races against AI bots on a kart circuit. The bots navigate the track autonomously.
+They pick up and use power-ups during the race. The game records what the player does each lap.
+At the finish line, the player learns what type of racer they are."
 
 Main points:
-- The bots drive on the same circuit as the player.
-- The game records what happens each lap.
-- The player’s style affects future bot behavior.
+- The player and bots race together on the same circuit.
+- Bots drive using a trained reinforcement learning model.
+- Bots use power-ups using a separate machine learning model.
+- The game silently collects the player's lap data throughout the race.
+- The results screen shows the final standings and the player's behavior profile.
 
 Show:
-- A typical race with the player and several bots.
-- Power-up use, overtaking, and basic AI behavior.
-- The race interface: lap count, position, and items.
+- A full race: player and bots driving, using power-ups, overtaking.
+- The HUD: lap count, race position, and current power-up.
+- The results screen appearing after the race with the player classification line.
 
-REINFORCEMENT LEARNING MODEL
-----------------------------
+
+REINFORCEMENT LEARNING — BOT DRIVING
+--------------------------------------
 Duration: 2 minutes
 
 Voiceover:
-"The bot driving model is trained using reinforcement learning. During training, the bot receives information about the track, its speed, and its position. It chooses actions such as steering, accelerating, and braking. The training algorithm rewards good driving and penalizes mistakes."
+"The bots learn to drive using reinforcement learning. The agent is trained with PPO —
+Proximal Policy Optimization — inside Unity ML-Agents. During training, the agent observes
+its speed, the direction to the next checkpoint, nearby walls through raycasts, and its
+progress around the track. It earns rewards for reaching checkpoints in the correct order
+and is penalized for collisions, going the wrong way, or sitting still."
 
 Main points:
-- The model is trained with PPO (Proximal Policy Optimization).
-- Observations include track layout, speed, and checkpoints.
-- Rewards are given for passing checkpoints and completing laps.
-- Penalties are applied for collisions and going off track.
-- After training, bots can complete laps reliably and improve over time.
+- Algorithm: PPO (Proximal Policy Optimization) via Unity ML-Agents.
+- Observations: speed, direction to next checkpoint, distance, grounded state, ray sensors.
+- Positive rewards: passing checkpoints in order, moving toward the next checkpoint.
+- Penalties: hitting walls, idling, going in reverse, leaving the track.
+- Training converged around 180,000 steps; the final reward stabilized at 64.0.
+- The trained model is exported as an ONNX file and loaded back into Unity at runtime.
 
 Show:
-- A bot racing on the circuit.
-- An early training example with mistakes and a later, smoother lap.
-- A brief caption: "RL model learns the track." 
+- An early training run: the bot spinning, crashing, going backwards.
+- A late training run: the bot completing clean laps.
+- A TensorBoard reward curve showing the learning progression.
+- Caption: "RL agent learns the circuit from scratch."
 
-DATA COLLECTION AND CLASSIFICATION
-----------------------------------
+
+POWER-UP DECISION MODEL — BOT ITEM STRATEGY
+--------------------------------------------
 Duration: 2 minutes
 
 Voiceover:
-"Every race collects data about the player. The system records metrics for each lap, including lap time, final position, collisions, power-ups used, and hits received. These metrics are combined to describe the player’s behavior."
+"Bots also need to decide which power-up to use and when. This is handled by a second,
+completely separate machine learning model: a Random Forest classifier trained in Python
+and exported as a JSON file that Unity reads at runtime."
 
 Main points:
-- The system captures raw lap data each race.
-- It computes additional values such as aggressiveness.
-- A Random Forest classifier uses these features.
-- The classifier assigns the player to a behavior type.
+- Every 0.25 seconds, each bot observes five things: whether it is on a straight section,
+  how many enemies are ahead, how many are behind, banana skins in its path, and shells
+  approaching from behind.
+- The Random Forest takes those five values and predicts the best power-up:
+  shell to attack, banana to defend, mushroom to boost on a straight, or star against
+  multiple threats.
+- There are three trained bot profiles. The balanced bot uses all power-ups equally.
+  The aggressive bot favors shell and banana attacks. The pacifist bot prefers mushroom
+  boosts and star defense.
+- A fourth model, imitar_player, is trained directly on the human player's own power-up
+  history. A bot using this model will tend to make the same item choices the player makes.
+- The model runs entirely in C# with no Python dependency at runtime.
 
 Show:
-- A results screen with key player metrics.
-- A label showing a simple classification result.
-- The categories: aggressive, conservative, professional, clumsy, chaotic, slow.
+- A bot picking up a power-up and immediately using it based on context.
+- A side-by-side showing aggressive vs pacifist bot behavior with power-ups.
+- Brief caption: "Random Forest decides which item the bot uses, every 0.25 seconds."
 
-Voiceover:
-"The classifier is trained on multiple races. It groups players into behavior types so the AI can respond differently depending on the player."
 
-ADAPTIVE POWER-UP BEHAVIOR
--------------------------
+DATA COLLECTION AND PLAYER BEHAVIOR CLASSIFICATION
+---------------------------------------------------
 Duration: 2 minutes
 
 Voiceover:
-"Once the player is classified, the bot behavior changes how it uses power-ups. The player type does not change the driving model directly, but it changes the tactical decisions bots make when using items."
+"Throughout the race the game records nine metrics about the player for every lap: lap time,
+finishing position, wall collisions, and the count of each power-up used or received.
+When the race ends, those numbers are aggregated across all laps and fed into a third
+machine learning model: the player behavior classifier."
 
 Main points:
-- The player classification selects one of several power-up strategies.
-- Aggressive players cause bots to use more offensive items.
-- Defensive players cause bots to choose safer or supportive items.
-- The result is a different experience for different player styles.
+- The recorder component attaches automatically to the player kart at runtime.
+- At the end of the race it computes three extra features: aggressiveness, hit ratio,
+  and power-up efficiency — twelve features in total.
+- A Random Forest classifier, trained on synthetic race data, maps those twelve features
+  to one of six player archetypes: Pro, Aggressive, Conservative, Chaotic, Clumsy, or Slow.
+- The result appears on the results screen as a single line: for example,
+  "Player profile: Aggressive (84%)".
+- This classification is purely informational. It does not change how the bots drive
+  or which power-ups they use in that race.
 
 Show:
-- A short example of an aggressive player race.
-- A short example of a defensive or careful player race.
-- A simple caption: "Player type changes bot item strategy." 
+- The results screen after the race, highlighting the player profile line.
+- A brief table showing the six archetypes and what each one means.
+- Caption: "After the race, the game tells you what kind of driver you are."
 
 Voiceover:
-"This adaptation makes the game feel more responsive. The bots use the learned driving model and also select power-ups based on the player’s behavior."
+"The six archetypes cover the main ways people play: the fast and consistent Pro, the risky
+Aggressive driver, the careful Conservative, the unpredictable Chaotic, the collision-prone
+Clumsy, and the simply Slow. The classifier was trained on over two thousand synthetic race
+sessions and validated with real player data."
+
 
 CONCLUSION
 ----------
 Duration: 1 minute
 
 Voiceover:
-"In summary, this project combines reinforcement learning for bot driving, per-lap player data collection, and Random Forest classification to influence bot power-up behavior. The result is a racing game where the AI learns the circuit and adapts to the player’s style."
+"In summary, this project combines three machine learning systems inside a single racing game.
+Reinforcement learning trains the bots to drive the circuit from scratch. A Random Forest
+model gives each bot a distinct power-up strategy based on live race context. And a third
+classifier analyses the player's performance and tells them what type of racer they are.
+Each system is independent: the driving model, the power-up model, and the player classifier
+each solve a different problem with a different technique."
 
 Show:
-- A closing race highlight.
-- A final text: "AI Racing Game: Learning, classification, and adaptive bots."
+- A closing race highlight with bots and the player in a close finish.
+- Three brief captions appearing one by one:
+    "RL: bots learn to drive."
+    "Random Forest: bots choose power-ups."
+    "Classifier: player learns their style."
+- Final text: "Kart AI Racing — Reinforcement Learning, Supervised Classification, Adaptive Bots."
 
 End of script.
