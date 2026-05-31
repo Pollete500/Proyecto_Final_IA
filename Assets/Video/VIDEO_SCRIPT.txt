@@ -1,0 +1,104 @@
+AI RACING GAME - VIDEO SCRIPT (ENGLISH)
+
+INTRODUCTION
+------------
+Duration: 30 seconds
+
+Voiceover:
+"This project is an AI-powered racing game where intelligent bots learn to drive a circuit and adapt to the human player. We will show the gameplay, explain how the bots learn, and describe how player data is used to influence bot power-up behavior."
+
+Show:
+- A short race start sequence
+- The track, player car, and bots
+- The main idea of the project in one simple sentence
+
+GAMEPLAY OVERVIEW
+-----------------
+Duration: 1 minute 30 seconds
+
+Voiceover:
+"In the game, the player races against AI bots. The bots do not just follow fixed paths. They make decisions about speed, steering, and item use. The project mixes reinforcement learning, player data collection, and machine learning classification to create a more adaptive racing experience."
+
+Main points:
+- The bots drive on the same circuit as the player.
+- The game records what happens each lap.
+- The player’s style affects future bot behavior.
+
+Show:
+- A typical race with the player and several bots.
+- Power-up use, overtaking, and basic AI behavior.
+- The race interface: lap count, position, and items.
+
+REINFORCEMENT LEARNING MODEL
+----------------------------
+Duration: 2 minutes
+
+Voiceover:
+"The bot driving model is trained using reinforcement learning. During training, the bot receives information about the track, its speed, and its position. It chooses actions such as steering, accelerating, and braking. The training algorithm rewards good driving and penalizes mistakes."
+
+Main points:
+- The model is trained with PPO (Proximal Policy Optimization).
+- Observations include track layout, speed, and checkpoints.
+- Rewards are given for passing checkpoints and completing laps.
+- Penalties are applied for collisions and going off track.
+- After training, bots can complete laps reliably and improve over time.
+
+Show:
+- A bot racing on the circuit.
+- An early training example with mistakes and a later, smoother lap.
+- A brief caption: "RL model learns the track." 
+
+DATA COLLECTION AND CLASSIFICATION
+----------------------------------
+Duration: 2 minutes
+
+Voiceover:
+"Every race collects data about the player. The system records metrics for each lap, including lap time, final position, collisions, power-ups used, and hits received. These metrics are combined to describe the player’s behavior."
+
+Main points:
+- The system captures raw lap data each race.
+- It computes additional values such as aggressiveness.
+- A Random Forest classifier uses these features.
+- The classifier assigns the player to a behavior type.
+
+Show:
+- A results screen with key player metrics.
+- A label showing a simple classification result.
+- The categories: aggressive, conservative, professional, clumsy, chaotic, slow.
+
+Voiceover:
+"The classifier is trained on multiple races. It groups players into behavior types so the AI can respond differently depending on the player."
+
+ADAPTIVE POWER-UP BEHAVIOR
+-------------------------
+Duration: 2 minutes
+
+Voiceover:
+"Once the player is classified, the bot behavior changes how it uses power-ups. The player type does not change the driving model directly, but it changes the tactical decisions bots make when using items."
+
+Main points:
+- The player classification selects one of several power-up strategies.
+- Aggressive players cause bots to use more offensive items.
+- Defensive players cause bots to choose safer or supportive items.
+- The result is a different experience for different player styles.
+
+Show:
+- A short example of an aggressive player race.
+- A short example of a defensive or careful player race.
+- A simple caption: "Player type changes bot item strategy." 
+
+Voiceover:
+"This adaptation makes the game feel more responsive. The bots use the learned driving model and also select power-ups based on the player’s behavior."
+
+CONCLUSION
+----------
+Duration: 1 minute
+
+Voiceover:
+"In summary, this project combines reinforcement learning for bot driving, per-lap player data collection, and Random Forest classification to influence bot power-up behavior. The result is a racing game where the AI learns the circuit and adapts to the player’s style."
+
+Show:
+- A closing race highlight.
+- A final text: "AI Racing Game: Learning, classification, and adaptive bots."
+
+End of script.
