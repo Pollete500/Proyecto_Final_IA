@@ -69,7 +69,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.PowerUps.BananaHazard
   fallbackLifetime: 10
   fallbackSlowDuration: 2
-  bananaTrain: 1
+  bananaSlowMultiplier: 0.979
+  bananaTrain: 0
 --- !u!1 &8908315956806961444
 GameObject:
   m_ObjectHideFlags: 0

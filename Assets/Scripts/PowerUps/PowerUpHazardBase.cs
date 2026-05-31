@@ -66,6 +66,11 @@ namespace KartGame.PowerUps
 
         protected bool TryAffect(KartController targetKart)
         {
+            return TryAffect(targetKart, -1f);
+        }
+
+        protected bool TryAffect(KartController targetKart, float slowMultiplier)
+        {
             if (!CanAffect(targetKart))
             {
                 return false;
@@ -74,7 +79,7 @@ namespace KartGame.PowerUps
             var dropOrigin = targetKart.transform.position - targetKart.transform.forward * 0.35f + Vector3.up * 0.75f;
             var dropDirection = (-targetKart.transform.forward + Vector3.up * 0.35f).normalized;
             targetKart.TryLoseCoinAndDrop(dropOrigin, dropDirection);
-            targetKart.ApplyHazardSlow(SlowDuration);
+            targetKart.ApplyHazardSlow(SlowDuration, slowMultiplier);
             OwnerPowerUpController?.NotifyPowerUpHit(PowerUpType, targetKart);
             return true;
         }

@@ -102,6 +102,18 @@ namespace KartGame.Kart
         private void FixedUpdate()
         {
             TickStatusEffects(Time.fixedDeltaTime);
+
+            if (_stunTimer > 0f)
+            {
+                if (_rigidbody != null)
+                {
+                    _rigidbody.linearVelocity = Vector3.zero;
+                    _rigidbody.angularVelocity = Vector3.zero;
+                }
+
+                return;
+            }
+
             UpdateGroundedState();
             ApplyMotorForce();
             ApplySteering();
@@ -112,9 +124,24 @@ namespace KartGame.Kart
 
         public void SetInput(float acceleration, float steering, float brake)
         {
+            if (!_controlEnabled)
+            {
+                _accelerationInput = 0f;
+                _steeringInput = 0f;
+                _brakeInput = 0f;
+                return;
+            }
+
             _accelerationInput = Mathf.Clamp(acceleration, -1f, 1f);
             _steeringInput = Mathf.Clamp(steering, -1f, 1f);
             _brakeInput = Mathf.Clamp01(brake);
+        }
+
+        public void ClearInput()
+        {
+            _accelerationInput = 0f;
+            _steeringInput = 0f;
+            _brakeInput = 0f;
         }
 
         public float GetCurrentSpeed()
@@ -125,7 +152,7 @@ namespace KartGame.Kart
         public void SetControlEnabled(bool isEnabled, bool freezePhysics = true)
         {
             _controlEnabled = isEnabled;
-            SetInput(0f, 0f, 0f);
+            ClearInput();
 
             if (_rigidbody == null) return;
 
@@ -149,7 +176,15 @@ namespace KartGame.Kart
 
         public void ApplyStun(float duration)
         {
-            ApplyHazardSlow(duration, hazardSlowMultiplier);
+            _stunTimer = Mathf.Max(_stunTimer, Mathf.Max(0f, duration));
+
+            if (_rigidbody != null)
+            {
+                _rigidbody.linearVelocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
+            }
+
+            SetInput(0f, 0f, 0f);
         }
 
         public void ApplyHazardSlow(float duration, float multiplier = -1f)

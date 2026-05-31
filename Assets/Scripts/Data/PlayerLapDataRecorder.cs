@@ -23,6 +23,19 @@ namespace KartGame.Kart
     [RequireComponent(typeof(CheckpointTracker))]
     public class PlayerLapDataRecorder : MonoBehaviour
     {
+        public struct PlayerRaceMetrics
+        {
+            public float LapTimeDelta;
+            public int PositionDelta;
+            public int MapCollisionsTotal;
+            public int BananaHitsReceivedTotal;
+            public int ShellHitsReceivedTotal;
+            public int BananasUsedTotal;
+            public int ShellsUsedTotal;
+            public int MushroomsUsedTotal;
+            public int StarsUsedTotal;
+        }
+
         [Header("References")]
         [SerializeField] private CheckpointTracker checkpointTracker;
         [SerializeField] private KartController kartController;
@@ -66,6 +79,14 @@ namespace KartGame.Kart
         private int _shellsThrown;
         private int _mushroomsUsed;
         private int _starsUsed;
+        private float _raceLapSeconds;
+        private int _raceMapCollisions;
+        private int _raceBananaCollisions;
+        private int _raceShellCollisions;
+        private int _raceBananasThrown;
+        private int _raceShellsThrown;
+        private int _raceMushroomsUsed;
+        private int _raceStarsUsed;
 
         private void Awake()
         {
@@ -122,6 +143,7 @@ namespace KartGame.Kart
             if (IsMapCollision(collision.collider))
             {
                 _mapCollisions++;
+                _raceMapCollisions++;
                 SyncDebugState();
             }
         }
@@ -136,6 +158,7 @@ namespace KartGame.Kart
             if (IsMapCollision(other))
             {
                 _mapCollisions++;
+                _raceMapCollisions++;
                 SyncDebugState();
             }
         }
@@ -179,15 +202,19 @@ namespace KartGame.Kart
             {
                 case PowerUpType.Banana:
                     _bananasThrown++;
+                    _raceBananasThrown++;
                     break;
                 case PowerUpType.Shell:
                     _shellsThrown++;
+                    _raceShellsThrown++;
                     break;
                 case PowerUpType.Mushroom:
                     _mushroomsUsed++;
+                    _raceMushroomsUsed++;
                     break;
                 case PowerUpType.Star:
                     _starsUsed++;
+                    _raceStarsUsed++;
                     break;
             }
 
@@ -205,9 +232,11 @@ namespace KartGame.Kart
             {
                 case PowerUpType.Banana:
                     _bananaCollisions++;
+                    _raceBananaCollisions++;
                     break;
                 case PowerUpType.Shell:
                     _shellCollisions++;
+                    _raceShellCollisions++;
                     break;
             }
 
@@ -223,6 +252,7 @@ namespace KartGame.Kart
 
             EnsureCsvCreated();
             ResetLapCounters();
+            ResetRaceCounters();
             _lapStartTime = Time.time;
             _isRaceRecording = true;
             debugCurrentLapIndex = 0;
@@ -234,6 +264,7 @@ namespace KartGame.Kart
             EnsureCsvCreated();
 
             var lapTime = Mathf.Max(0f, Time.time - _lapStartTime);
+            _raceLapSeconds += lapTime;
             var position = GetCurrentPosition();
             var builder = new StringBuilder();
             builder.Append(lapTime.ToString("0.000", CultureInfo.InvariantCulture))
@@ -256,6 +287,33 @@ namespace KartGame.Kart
                 .AppendLine();
 
             WriteTextWithRetry(_csvPath, builder.ToString(), append: true);
+        }
+
+        public PlayerRaceMetrics GetRaceMetrics()
+        {
+            var elapsed = _raceLapSeconds;
+            if (_isRaceRecording)
+            {
+                elapsed += Mathf.Max(0f, Time.time - _lapStartTime);
+            }
+
+            if (raceManager != null && raceManager.RaceElapsedTime > 0f)
+            {
+                elapsed = Mathf.Max(elapsed, raceManager.RaceElapsedTime);
+            }
+
+            return new PlayerRaceMetrics
+            {
+                LapTimeDelta = elapsed,
+                PositionDelta = GetCurrentPosition(),
+                MapCollisionsTotal = _raceMapCollisions,
+                BananaHitsReceivedTotal = _raceBananaCollisions,
+                ShellHitsReceivedTotal = _raceShellCollisions,
+                BananasUsedTotal = _raceBananasThrown,
+                ShellsUsedTotal = _raceShellsThrown,
+                MushroomsUsedTotal = _raceMushroomsUsed,
+                StarsUsedTotal = _raceStarsUsed
+            };
         }
 
         private void EnsureCsvCreated()
@@ -391,9 +449,10 @@ namespace KartGame.Kart
 
         private bool ShouldRecordThisKart()
         {
+            var hasPlayerInput = GetComponent<PlayerKartInput>() != null || GetComponentInParent<PlayerKartInput>() != null;
             return checkpointTracker != null
                 && kartController != null
-                && (!recordOnlyPlayer || checkpointTracker.IsPlayer);
+                && (!recordOnlyPlayer || checkpointTracker.IsPlayer || hasPlayerInput);
         }
 
         private void ResetLapCounters()
@@ -405,6 +464,18 @@ namespace KartGame.Kart
             _shellsThrown = 0;
             _mushroomsUsed = 0;
             _starsUsed = 0;
+        }
+
+        private void ResetRaceCounters()
+        {
+            _raceLapSeconds = 0f;
+            _raceMapCollisions = 0;
+            _raceBananaCollisions = 0;
+            _raceShellCollisions = 0;
+            _raceBananasThrown = 0;
+            _raceShellsThrown = 0;
+            _raceMushroomsUsed = 0;
+            _raceStarsUsed = 0;
         }
 
         private void CacheReferences()

@@ -147,7 +147,8 @@ namespace KartGame.AI.Reinforcement
 
             checkpointTracker.SetTrackData(trackData);
             checkpointTracker.InitializeForRace(trackData);
-            kartController.SetControlEnabled(true);
+            var raceManager = RaceManager.Instance;
+            kartController.SetControlEnabled(raceManager == null || raceManager.IsRaceActive());
 
             var spawnPosition = transform.position + Vector3.up * 0.35f;
             var spawnRotation = transform.rotation;
@@ -245,6 +246,12 @@ namespace KartGame.AI.Reinforcement
             CacheReferences();
             if (!HasRequiredReferences())
             {
+                return;
+            }
+
+            if (RaceManager.Instance != null && !RaceManager.Instance.IsRaceActive())
+            {
+                kartController.SetControlEnabled(false);
                 return;
             }
 
@@ -429,6 +436,13 @@ namespace KartGame.AI.Reinforcement
         private void HandleLapCompleted(CheckpointTracker tracker, int completedLaps)
         {
             if (tracker != checkpointTracker)
+            {
+                return;
+            }
+
+            var raceManager = RaceManager.Instance;
+            var raceTrackData = raceManager != null ? raceManager.TrackData : trackData;
+            if (raceManager != null && raceManager.IsRaceActive() && raceTrackData != null && completedLaps < raceTrackData.LapsToWin)
             {
                 return;
             }

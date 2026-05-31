@@ -1,0 +1,83 @@
+Kart Racing Power-Up Usage Report
+================================
+Generated: 2026-05-31 13:50:30
+Scene: Test scene Pol
+TrackRoot: TrackRoot
+
+Totals
+------
+Total Power Ups Used: 1
+Banana: 0
+Shell: 1
+Mushroom: 0
+Star: 0
+
+Learning Summary
+----------------
+Total Failed Uses: 0
+Total Power Up Hits: 3
+Correct Choices: 0
+Wrong Choices: 0
+Missed Opportunities: 0
+Unnecessary Uses: 0
+Uses Without Points: 0
+Overall Decision Accuracy: N/A
+Overall Execution Success Rate: 100 %
+Overall Learning Verdict: Sin datos suficientes todavia.
+
+Per Power Up Learning
+---------------------
+Banana:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 0
+  Failed Uses: 0
+  Hits: 0
+  Decision Accuracy: N/A
+  Execution Success Rate: N/A
+  Learning Verdict: Sin oportunidades suficientes.
+Shell:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 1
+  Failed Uses: 0
+  Hits: 3
+  Decision Accuracy: N/A
+  Execution Success Rate: 100 %
+  Learning Verdict: Sin oportunidades suficientes.
+Mushroom:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 0
+  Failed Uses: 0
+  Hits: 0
+  Decision Accuracy: N/A
+  Execution Success Rate: N/A
+  Learning Verdict: Sin oportunidades suficientes.
+Star:
+  Suggested Opportunities: 0
+  Correct Context Choices: 0
+  Successful Uses: 0
+  Failed Uses: 0
+  Hits: 0
+  Decision Accuracy: N/A
+  Execution Success Rate: N/A
+  Learning Verdict: Sin oportunidades suficientes.
+
+Per Kart
+--------
+PlayerKart: 1
+  Banana: 0
+  Shell: 1
+  Mushroom: 0
+  Star: 0
+  Learning:
+    Correct Choices: 0
+    Wrong Choices: 0
+    Missed Opportunities: 0
+    Unnecessary Uses: 0
+    Uses Without Points: 0
+    Banana -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Shell -> suggested: 0, correct: 0, failed: 0, hits: 3
+    Mushroom -> suggested: 0, correct: 0, failed: 0, hits: 0
+    Star -> suggested: 0, correct: 0, failed: 0, hits: 0

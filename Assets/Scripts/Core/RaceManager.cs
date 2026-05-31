@@ -29,6 +29,7 @@ namespace KartGame.Core
         [SerializeField] private PositionManager positionManager;
         [SerializeField] private List<CheckpointTracker> registeredRacers = new List<CheckpointTracker>();
         [SerializeField] private float countdownDuration = 3f;
+        [SerializeField] private bool enableStartCountdown = true;
         [SerializeField] private bool autoRegisterSceneRacers = true;
         [SerializeField] private bool autoPlaceRacersOnSpawnPoints = true;
         [SerializeField] private bool finishRaceWhenPlayerFinishes = true;
@@ -39,6 +40,7 @@ namespace KartGame.Core
         private float _countdownRemaining;
         private float _raceStartTime;
         private float _raceEndTime;
+        private readonly List<CheckpointTracker> _directLapSubscriptions = new List<CheckpointTracker>();
 
         public static RaceManager Instance { get; private set; }
         public TrackData TrackData => trackData;
@@ -75,6 +77,8 @@ namespace KartGame.Core
 
         private void OnDestroy()
         {
+            UnsubscribeDirectLapEvents();
+
             if (lapManager != null)
             {
                 lapManager.RacerFinished -= HandleRacerFinished;
@@ -156,17 +160,21 @@ namespace KartGame.Core
                 yield break;
             }
 
-            SetRaceState(RaceState.Countdown);
-            SetKartControlEnabled(false);
-
-            _countdownRemaining = Mathf.Max(0f, countdownDuration);
-            while (_countdownRemaining > 0f)
+            if (enableStartCountdown)
             {
-                _countdownRemaining -= Time.deltaTime;
-                yield return null;
+                SetRaceState(RaceState.Countdown);
+                SetKartControlEnabled(false);
+
+                _countdownRemaining = Mathf.Max(0f, countdownDuration);
+                while (_countdownRemaining > 0f)
+                {
+                    _countdownRemaining -= Time.deltaTime;
+                    yield return null;
+                }
+
+                _countdownRemaining = 0f;
             }
 
-            _countdownRemaining = 0f;
             _raceStartTime = Time.time;
             SetKartControlEnabled(true);
             SetRaceState(RaceState.Racing);
@@ -218,6 +226,8 @@ namespace KartGame.Core
 
         private void WireSystems()
         {
+            UnsubscribeDirectLapEvents();
+
             if (trackData == null)
             {
                 Debug.LogWarning("RaceManager requires a TrackData reference.");
@@ -235,6 +245,8 @@ namespace KartGame.Core
                 positionManager.SetTrackData(trackData);
                 positionManager.ResetRacers(registeredRacers);
             }
+
+            SubscribeDirectLapEvents();
         }
 
         private void PrepareRacersForRace()
@@ -300,15 +312,15 @@ namespace KartGame.Core
                 return;
             }
 
-            if (finishRaceWhenPlayerFinishes && tracker.IsPlayer && _postPlayerFinishRoutine == null)
+            if (finishRaceWhenPlayerFinishes && IsPlayerTracker(tracker))
             {
-                // Disable only the player kart; bots keep running so they can finish and record times.
-                // freezePhysics=false lets the kart coast to a stop naturally via drag.
                 var playerController = tracker.GetComponent<KartController>();
                 if (playerController != null)
+                {
                     playerController.SetControlEnabled(false, freezePhysics: false);
+                }
 
-                _postPlayerFinishRoutine = StartCoroutine(PostPlayerFinishRoutine());
+                FinishRace();
             }
         }
 
@@ -342,6 +354,11 @@ namespace KartGame.Core
 
         private void FinishRace()
         {
+            if (CurrentState == RaceState.Finished)
+            {
+                return;
+            }
+
             _raceEndTime = Time.time;
             SetKartControlEnabled(false);
             SetRaceState(RaceState.Finished);
@@ -369,6 +386,98 @@ namespace KartGame.Core
         {
             CurrentState = newState;
             RaceStateChanged?.Invoke(newState);
+        }
+
+        private void SubscribeDirectLapEvents()
+        {
+            for (var index = 0; index < registeredRacers.Count; index++)
+            {
+                SubscribeDirectLapEvent(registeredRacers[index]);
+            }
+
+            var sceneTrackers = FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.InstanceID);
+            for (var index = 0; index < sceneTrackers.Length; index++)
+            {
+                SubscribeDirectLapEvent(sceneTrackers[index]);
+            }
+        }
+
+        private void SubscribeDirectLapEvent(CheckpointTracker tracker)
+        {
+            if (tracker == null || _directLapSubscriptions.Contains(tracker))
+            {
+                return;
+            }
+
+            tracker.LapCompleted += HandleTrackerLapCompleted;
+            _directLapSubscriptions.Add(tracker);
+        }
+
+        private void UnsubscribeDirectLapEvents()
+        {
+            for (var index = 0; index < _directLapSubscriptions.Count; index++)
+            {
+                var tracker = _directLapSubscriptions[index];
+                if (tracker != null)
+                {
+                    tracker.LapCompleted -= HandleTrackerLapCompleted;
+                }
+            }
+
+            _directLapSubscriptions.Clear();
+        }
+
+        private void HandleTrackerLapCompleted(CheckpointTracker tracker, int completedLaps)
+        {
+            if (tracker == null || trackData == null || tracker.HasFinishedRace)
+            {
+                return;
+            }
+
+            if (completedLaps < trackData.LapsToWin)
+            {
+                return;
+            }
+
+            var placement = lapManager != null ? lapManager.GetFinishPlacement(tracker) : 0;
+            if (placement <= 0)
+            {
+                placement = GetNextFallbackFinishPlacement();
+                tracker.MarkFinished(placement);
+                RacerFinished?.Invoke(tracker);
+            }
+
+            if (finishRaceWhenPlayerFinishes && IsPlayerTracker(tracker))
+            {
+                var playerController = tracker.GetComponent<KartController>() ?? tracker.GetComponentInChildren<KartController>(true);
+                if (playerController != null)
+                {
+                    playerController.SetControlEnabled(false, freezePhysics: false);
+                }
+
+                FinishRace();
+            }
+        }
+
+        private int GetNextFallbackFinishPlacement()
+        {
+            var maxPlacement = 0;
+            for (var index = 0; index < registeredRacers.Count; index++)
+            {
+                var tracker = registeredRacers[index];
+                if (tracker != null && tracker.FinishPlacement > maxPlacement)
+                {
+                    maxPlacement = tracker.FinishPlacement;
+                }
+            }
+
+            return maxPlacement + 1;
+        }
+
+        private static bool IsPlayerTracker(CheckpointTracker tracker)
+        {
+            return tracker != null &&
+                   (tracker.IsPlayer || tracker.GetComponent<PlayerKartInput>() != null || tracker.GetComponentInChildren<PlayerKartInput>(true) != null);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using KartGame.Core;
+using KartGame.Data;
 using KartGame.Kart;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,11 +18,14 @@ namespace KartGame.UI
         [SerializeField] private string mainMenuSceneName = "MainMenu";
         [SerializeField] private float showDelay = 2.5f;
         [SerializeField] private GameObject trophyIconPrefab;
+        [SerializeField] private TextAsset playerClassifierJson;
 
         private RaceManager _raceManager;
         private PositionManager _positionManager;
         private Canvas _canvas;
         private GameObject _panel;
+        private Coroutine _showRoutine;
+        private string _playerClassificationLine = "Perfil jugador: sin datos";
 
         private readonly Dictionary<CheckpointTracker, float> _finishTimes =
             new Dictionary<CheckpointTracker, float>();
@@ -39,7 +43,12 @@ namespace KartGame.UI
             }
 
             BuildCanvas();
-            _panel.SetActive(false);
+            _canvas.gameObject.SetActive(false);
+
+            if (_raceManager != null && _raceManager.CurrentState == RaceState.Finished)
+            {
+                OnRaceStateChanged(RaceState.Finished);
+            }
         }
 
         private void EnsureEventSystem()
@@ -82,12 +91,21 @@ namespace KartGame.UI
         private void OnRaceStateChanged(RaceState state)
         {
             if (state == RaceState.Finished)
-                StartCoroutine(ShowAfterDelay());
+            {
+                _playerClassificationLine = BuildPlayerClassificationLine();
+                if (_showRoutine != null)
+                {
+                    StopCoroutine(_showRoutine);
+                }
+
+                _showRoutine = StartCoroutine(ShowAfterDelay());
+            }
         }
 
         private IEnumerator ShowAfterDelay()
         {
             yield return new WaitForSecondsRealtime(showDelay);
+            _showRoutine = null;
             BuildLeaderboard();
         }
 
@@ -99,17 +117,20 @@ namespace KartGame.UI
             Cursor.lockState = CursorLockMode.None;
             var racers = CollectSortedRacers();
 
+            _canvas.gameObject.SetActive(true);
+
             foreach (Transform child in _panel.transform)
                 Destroy(child.gameObject);
 
             const float rowH = 54f;
             const float titleH = 72f;
+            const float classifierH = 42f;
             const float headerH = 48f;
             const float buttonH = 58f;
             const float pad = 28f;
             const float panelW = 720f;
 
-            float panelH = pad + titleH + headerH + 6f + racers.Count * rowH + pad + buttonH + pad;
+            float panelH = pad + titleH + classifierH + headerH + 6f + racers.Count * rowH + pad + buttonH + pad;
             _panel.GetComponent<RectTransform>().sizeDelta = new Vector2(panelW, panelH);
 
             float topY = panelH * 0.5f;
@@ -136,8 +157,13 @@ namespace KartGame.UI
                 new Vector2(20, titleCY), new Vector2(620, titleH),
                 52, FontStyle.Bold, Color.yellow, TextAnchor.MiddleCenter, outline: true);
 
+            float classifierCY = titleCY - titleH * 0.5f - classifierH * 0.5f;
+            AddText(_panel.transform, "PlayerClassifier", _playerClassificationLine,
+                new Vector2(0f, classifierCY), new Vector2(panelW - 56f, classifierH),
+                26, FontStyle.Bold, new Color(0.7f, 1f, 0.75f), TextAnchor.MiddleCenter);
+
             // Column headers
-            float hCY = titleCY - titleH * 0.5f - headerH * 0.5f;
+            float hCY = classifierCY - classifierH * 0.5f - headerH * 0.5f;
             AddText(_panel.transform, "HPos",    "Pos",
                 new Vector2(-240f, hCY), new Vector2(80f, headerH),
                 26, FontStyle.Bold, new Color(0.7f, 0.8f, 1f), TextAnchor.MiddleCenter);
@@ -217,6 +243,46 @@ namespace KartGame.UI
             int m = Mathf.FloorToInt(t / 60f);
             float s = t % 60f;
             return $"{m:0}:{s:00.00}";
+        }
+
+        private string BuildPlayerClassificationLine()
+        {
+            var recorder = FindPlayerRecorder();
+            if (recorder == null)
+            {
+                return "Perfil jugador: sin datos";
+            }
+
+            var metrics = recorder.GetRaceMetrics();
+            if (!PlayerBehaviorRandomForestClassifier.TryClassify(metrics, playerClassifierJson, out var result, out var error))
+            {
+                Debug.LogWarning($"No se pudo clasificar al jugador: {error}", this);
+                return "Perfil jugador: no clasificado";
+            }
+
+            return $"Perfil jugador: {result.Label} ({Mathf.RoundToInt(result.Confidence * 100f)}%)";
+        }
+
+        private static PlayerLapDataRecorder FindPlayerRecorder()
+        {
+            var recorders = FindObjectsByType<PlayerLapDataRecorder>(FindObjectsSortMode.InstanceID);
+            for (var index = 0; index < recorders.Length; index++)
+            {
+                var recorder = recorders[index];
+                if (recorder == null)
+                {
+                    continue;
+                }
+
+                var tracker = recorder.GetComponent<CheckpointTracker>() ?? recorder.GetComponentInParent<CheckpointTracker>();
+                var playerInput = recorder.GetComponent<PlayerKartInput>() ?? recorder.GetComponentInParent<PlayerKartInput>();
+                if ((tracker != null && tracker.IsPlayer) || playerInput != null)
+                {
+                    return recorder;
+                }
+            }
+
+            return recorders.Length > 0 ? recorders[0] : null;
         }
 
         private static string OrdinalStr(int pos) => pos switch

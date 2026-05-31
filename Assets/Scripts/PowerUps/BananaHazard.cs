@@ -7,6 +7,7 @@ namespace KartGame.PowerUps
     public class BananaHazard : PowerUpHazardBase
     {
         private const string BananaLayerName = "Banana";
+        [SerializeField, Min(0f)] private float bananaStunDuration = 2.5f;
         [SerializeField] private bool bananaTrain = false;
 
         public static event System.Action<BananaHazard, KartController> AnyTrainingBananaTouched;
@@ -44,14 +45,14 @@ namespace KartGame.PowerUps
             if (bananaTrain && IsBotKart(targetKart))
             {
                 AnyTrainingBananaTouched?.Invoke(this, targetKart);
+                targetKart.ApplyStun(bananaStunDuration);
                 IgnoreFor(targetKart);
                 return;
             }
 
-            if (TryAffect(targetKart))
-            {
-                Destroy(gameObject);
-            }
+            targetKart.ApplyStun(bananaStunDuration);
+            OwnerPowerUpController?.NotifyPowerUpHit(PowerUpType, targetKart);
+            Destroy(gameObject);
         }
 
         public void SetTrainingMode(bool trainingMode)

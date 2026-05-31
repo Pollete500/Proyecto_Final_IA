@@ -166,7 +166,7 @@ namespace KartGame.Kart
 
         public bool ProcessCheckpoint(Checkpoint checkpoint)
         {
-            if (checkpoint == null || HasFinishedRace)
+            if (checkpoint == null)
             {
                 return false;
             }
@@ -186,24 +186,33 @@ namespace KartGame.Kart
                 return false;
             }
 
-            if (checkpoint.CheckpointIndex != NextCheckpointIndex)
+            var checkpointCount = Mathf.Max(1, trackData.CheckpointCount);
+            var checkpointIndex = NormalizeCheckpointIndex(checkpoint.CheckpointIndex, checkpointCount);
+            var nextCheckpointIndex = NormalizeCheckpointIndex(NextCheckpointIndex, checkpointCount);
+            var wasFinished = HasFinishedRace;
+
+            if (checkpointIndex != nextCheckpointIndex)
             {
                 return false;
             }
 
-            LastPassedCheckpointIndex = checkpoint.CheckpointIndex;
-            NextCheckpointIndex = (checkpoint.CheckpointIndex + 1) % Mathf.Max(1, trackData.CheckpointCount);
+            LastPassedCheckpointIndex = checkpointIndex;
+            NextCheckpointIndex = (checkpointIndex + 1) % checkpointCount;
             _lastRecoveryReference = checkpoint.transform;
             _stuckTimer = 0f;
 
-            if (trackData.CheckpointCount > 0 && checkpoint.CheckpointIndex == trackData.CheckpointCount - 1)
+            if (!wasFinished && trackData.CheckpointCount > 0 && checkpointIndex == trackData.CheckpointCount - 1)
             {
                 CompletedLaps++;
                 LapCompleted?.Invoke(this, CompletedLaps);
             }
 
             SyncDebugState();
-            CheckpointPassed?.Invoke(this, checkpoint);
+            if (!wasFinished)
+            {
+                CheckpointPassed?.Invoke(this, checkpoint);
+            }
+
             return true;
         }
 
@@ -280,6 +289,17 @@ namespace KartGame.Kart
             debugNextCheckpointIndex = NextCheckpointIndex;
             debugLastPassedCheckpointIndex = LastPassedCheckpointIndex;
             debugCompletedLaps = CompletedLaps;
+        }
+
+        private static int NormalizeCheckpointIndex(int checkpointIndex, int checkpointCount)
+        {
+            if (checkpointCount <= 0)
+            {
+                return checkpointIndex;
+            }
+
+            var normalized = checkpointIndex % checkpointCount;
+            return normalized < 0 ? normalized + checkpointCount : normalized;
         }
     }
 }

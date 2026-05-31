@@ -644,7 +644,7 @@ namespace KartGame.AI.Reinforcement
                     return false;
                 }
 
-                var checkpoint = hitCollider.GetComponent<Checkpoint>();
+                var checkpoint = hitCollider.GetComponent<Checkpoint>() ?? hitCollider.GetComponentInParent<Checkpoint>();
                 if (checkpoint == null)
                 {
                     return false;
@@ -652,7 +652,7 @@ namespace KartGame.AI.Reinforcement
 
                 if (checkpointTracker.TrackData != null && checkpoint.TrackData != null && checkpoint.TrackData != checkpointTracker.TrackData)
                 {
-                    return false;
+                    return true;
                 }
 
                 var checkpointCount = checkpointTracker.TrackData != null
@@ -661,9 +661,11 @@ namespace KartGame.AI.Reinforcement
 
                 if (limitCheckpointDetectionWindow && checkpointCount > 0)
                 {
-                    var targetCheckpointIndex = checkpointTracker.NextCheckpointIndex;
-                    var relativeDistance = (checkpoint.CheckpointIndex - targetCheckpointIndex + checkpointCount) % checkpointCount;
-                    return relativeDistance > Mathf.Max(0, additionalVisibleCheckpointsAhead);
+                    var targetCheckpointIndex = NormalizeCheckpointIndex(checkpointTracker.NextCheckpointIndex, checkpointCount);
+                    var hitCheckpointIndex = NormalizeCheckpointIndex(checkpoint.CheckpointIndex, checkpointCount);
+                    var visibleAhead = Mathf.Clamp(additionalVisibleCheckpointsAhead, 0, checkpointCount - 1);
+                    var relativeDistance = (hitCheckpointIndex - targetCheckpointIndex + checkpointCount) % checkpointCount;
+                    return relativeDistance > visibleAhead;
                 }
 
                 if (!ignorePassedCheckpoints)
@@ -671,18 +673,25 @@ namespace KartGame.AI.Reinforcement
                     return false;
                 }
 
-                if (checkpoint.CheckpointIndex == checkpointTracker.LastPassedCheckpointIndex)
+                if (checkpointCount > 0)
                 {
-                    return true;
+                    var hitCheckpointIndex = NormalizeCheckpointIndex(checkpoint.CheckpointIndex, checkpointCount);
+                    var lastPassedCheckpointIndex = NormalizeCheckpointIndex(checkpointTracker.LastPassedCheckpointIndex, checkpointCount);
+                    return checkpointTracker.LastPassedCheckpointIndex >= 0 && hitCheckpointIndex == lastPassedCheckpointIndex;
                 }
 
-                var nextCheckpointIndex = checkpointTracker.NextCheckpointIndex;
-                if (nextCheckpointIndex <= 0)
+                return checkpoint.CheckpointIndex == checkpointTracker.LastPassedCheckpointIndex;
+            }
+
+            private static int NormalizeCheckpointIndex(int checkpointIndex, int checkpointCount)
+            {
+                if (checkpointCount <= 0)
                 {
-                    return false;
+                    return checkpointIndex;
                 }
 
-                return checkpoint.CheckpointIndex < nextCheckpointIndex;
+                var normalized = checkpointIndex % checkpointCount;
+                return normalized < 0 ? normalized + checkpointCount : normalized;
             }
         }
     }

@@ -283,7 +283,8 @@ namespace KartGame.PowerUps
             }
 
             debugCurrentLapIndex = completedLap;
-            if (FlushLapRows(writeLapFile: writeLapCsv))
+            var wroteLapData = FlushLapRows(writeLapFile: writeLapCsv);
+            if (writeLapCsv && wroteLapData)
             {
                 TryBuildPlayerModelAfterLap(_lastLapCsvPath);
             }

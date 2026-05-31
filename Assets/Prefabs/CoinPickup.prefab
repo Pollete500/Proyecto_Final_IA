@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.PowerUps.CoinPickup
   coinAmount: 1
-  coinTrain: 1
+  coinTrain: 0
   respawnAfterPickup: 0
   respawnDelay: 6
   droppedCoinLifetime: 8
