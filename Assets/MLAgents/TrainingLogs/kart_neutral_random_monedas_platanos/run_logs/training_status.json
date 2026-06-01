@@ -1,0 +1,38 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 499984,
+                "file_path": "Assets/MLAgents/TrainingLogs\\kart_neutral_random_monedas_platanos\\KartAgent\\KartAgent-499984.onnx",
+                "reward": 64.0,
+                "creation_time": 1780332799.1311922,
+                "auxillary_file_paths": [
+                    "Assets/MLAgents/TrainingLogs\\kart_neutral_random_monedas_platanos\\KartAgent\\KartAgent-499984.pt"
+                ]
+            },
+            {
+                "steps": 578747,
+                "file_path": "Assets/MLAgents/TrainingLogs\\kart_neutral_random_monedas_platanos\\KartAgent\\KartAgent-578747.onnx",
+                "reward": 59.0,
+                "creation_time": 1780332990.3672426,
+                "auxillary_file_paths": [
+                    "Assets/MLAgents/TrainingLogs\\kart_neutral_random_monedas_platanos\\KartAgent\\KartAgent-578747.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 578747,
+            "file_path": "Assets/MLAgents/TrainingLogs\\kart_neutral_random_monedas_platanos\\KartAgent.onnx",
+            "reward": 59.0,
+            "creation_time": 1780332990.3672426,
+            "auxillary_file_paths": [
+                "Assets/MLAgents/TrainingLogs\\kart_neutral_random_monedas_platanos\\KartAgent\\KartAgent-578747.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

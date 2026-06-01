@@ -1,0 +1,29 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 382215,
+                "file_path": "Assets/MLAgents/TrainingLogs\\kart_noob_random_monedas_platanos_4\\KartAgent\\KartAgent-382215.onnx",
+                "reward": 63.20000001788139,
+                "creation_time": 1780334293.5893033,
+                "auxillary_file_paths": [
+                    "Assets/MLAgents/TrainingLogs\\kart_noob_random_monedas_platanos_4\\KartAgent\\KartAgent-382215.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 382215,
+            "file_path": "Assets/MLAgents/TrainingLogs\\kart_noob_random_monedas_platanos_4\\KartAgent.onnx",
+            "reward": 63.20000001788139,
+            "creation_time": 1780334293.5893033,
+            "auxillary_file_paths": [
+                "Assets/MLAgents/TrainingLogs\\kart_noob_random_monedas_platanos_4\\KartAgent\\KartAgent-382215.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}
