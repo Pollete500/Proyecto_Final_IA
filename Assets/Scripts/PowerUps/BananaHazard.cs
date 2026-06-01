@@ -45,7 +45,6 @@ namespace KartGame.PowerUps
             if (bananaTrain && IsBotKart(targetKart))
             {
                 AnyTrainingBananaTouched?.Invoke(this, targetKart);
-                targetKart.ApplyStun(bananaStunDuration);
                 IgnoreFor(targetKart);
                 return;
             }

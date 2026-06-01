@@ -419,7 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.Kart.KartController
   accelerationForce: 100
   reverseAccelerationForce: 1
-  maxSpeed: 7
+  maxSpeed: 15
   steeringStrength: 110
   brakingForce: 18
   lateralGrip: 0.88
