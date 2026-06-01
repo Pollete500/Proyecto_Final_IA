@@ -326,7 +326,9 @@ Estado general:
 - Bots con seguimiento básico de checkpoints.
 - Escena de entrenamiento ML-Agents preparada.
 - Menú principal, HUD de carrera, modo espectador y pantalla de resultados implementados.
-- Documentación técnica en desarrollo.
+- Documentación técnica completada.
+- Manual de usuario final completado.
+- Vídeo de demostración completado.
 
 Sistemas pendientes o en desarrollo:
 
@@ -335,8 +337,6 @@ Sistemas pendientes o en desarrollo:
 - Clasificador de comportamiento final.
 - Resultados definitivos de entrenamiento.
 - Selección final de escenas de carrera.
-- Manual de usuario final.
-- Vídeo de demostración.
 
 ---
 
