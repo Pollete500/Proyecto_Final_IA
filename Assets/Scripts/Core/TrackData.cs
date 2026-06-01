@@ -40,6 +40,8 @@ namespace KartGame.Core
         [SerializeField, Min(0)] private int maxBananasOnTrack = 6;
         [SerializeField, Min(0.1f)] private float coinSpawnInterval = 8f;
         [SerializeField, Min(0.1f)] private float bananaSpawnInterval = 12f;
+        [SerializeField, Min(0f)] private float coinPickupLifetime = 30f;
+        [SerializeField, Min(0f)] private float bananaPickupLifetime = 30f;
         [SerializeField] private bool spawnCoinsAsTrainingPickups;
         [SerializeField] private bool spawnBananasAsTrainingHazards;
         [SerializeField, Min(0f)] private float pickupSpawnHeight = 1.2f;
@@ -92,6 +94,8 @@ namespace KartGame.Core
             maxBananasOnTrack = Mathf.Max(0, maxBananasOnTrack);
             coinSpawnInterval = Mathf.Max(0.1f, coinSpawnInterval);
             bananaSpawnInterval = Mathf.Max(0.1f, bananaSpawnInterval);
+            coinPickupLifetime = Mathf.Max(0f, coinPickupLifetime);
+            bananaPickupLifetime = Mathf.Max(0f, bananaPickupLifetime);
             pickupRaycastHeight = Mathf.Max(1f, pickupRaycastHeight);
 
 #if UNITY_EDITOR
@@ -136,6 +140,8 @@ namespace KartGame.Core
         public int MaxBananasOnTrack => Mathf.Max(0, maxBananasOnTrack);
         public float CoinSpawnInterval => Mathf.Max(0.1f, coinSpawnInterval);
         public float BananaSpawnInterval => Mathf.Max(0.1f, bananaSpawnInterval);
+        public float CoinPickupLifetime => Mathf.Max(0f, coinPickupLifetime);
+        public float BananaPickupLifetime => Mathf.Max(0f, bananaPickupLifetime);
         public float PickupRaycastHeight => Mathf.Max(1f, pickupRaycastHeight);
         public Transform[] Checkpoints => checkpoints;
         public Transform[] SpawnPoints => spawnPoints;
@@ -227,6 +233,11 @@ namespace KartGame.Core
         public void SyncChildCollections()
         {
             checkpoints = CollectDirectChildren("Checkpoints");
+            if (checkpoints == null || checkpoints.Length == 0)
+            {
+                checkpoints = CollectOwnedCheckpointTransforms();
+            }
+
             spawnPoints = CollectDirectChildren("SpawnPoints");
             powerUpBoxes = CollectDirectChildren("PowerUpBoxes");
             respawnPoints = CollectDirectChildren("RespawnPoints");
@@ -321,6 +332,44 @@ namespace KartGame.Core
             for (var index = 0; index < root.childCount; index++)
             {
                 collection[index] = root.GetChild(index);
+            }
+
+            return collection;
+        }
+
+        private Transform[] CollectOwnedCheckpointTransforms()
+        {
+            var checkpointComponents = GetComponentsInChildren<Checkpoint>(false);
+            if (checkpointComponents == null || checkpointComponents.Length == 0)
+            {
+                return Array.Empty<Transform>();
+            }
+
+            var byIndex = new SortedDictionary<int, Transform>();
+            foreach (var checkpoint in checkpointComponents)
+            {
+                if (checkpoint == null || checkpoint.TrackData != this)
+                {
+                    continue;
+                }
+
+                var checkpointIndex = Mathf.Max(0, checkpoint.CheckpointIndex);
+                if (!byIndex.ContainsKey(checkpointIndex))
+                {
+                    byIndex.Add(checkpointIndex, checkpoint.transform);
+                }
+            }
+
+            if (byIndex.Count == 0)
+            {
+                return Array.Empty<Transform>();
+            }
+
+            var collection = new Transform[byIndex.Count];
+            var outputIndex = 0;
+            foreach (var pair in byIndex)
+            {
+                collection[outputIndex++] = pair.Value;
             }
 
             return collection;
@@ -577,6 +626,8 @@ namespace KartGame.Core
                 coinPickup.SetTrainingMode(spawnCoinsAsTrainingPickups);
             }
 
+            SchedulePickupDespawn(coinObject, CoinPickupLifetime);
+
             if (logPickupSpawns)
             {
                 Debug.Log($"Moneda generada: {coinObject.name}", this);
@@ -613,6 +664,8 @@ namespace KartGame.Core
             {
                 bananaHazard.SetTrainingMode(spawnBananasAsTrainingHazards);
             }
+
+            SchedulePickupDespawn(bananaObject, BananaPickupLifetime);
 
             if (logPickupSpawns)
             {
@@ -714,6 +767,16 @@ namespace KartGame.Core
             var coinPickup = coinObject.GetComponent<CoinPickup>() ?? coinObject.AddComponent<CoinPickup>();
             coinPickup.SetTrainingMode(spawnCoinsAsTrainingPickups);
             return coinObject;
+        }
+
+        private static void SchedulePickupDespawn(GameObject pickupObject, float lifetime)
+        {
+            if (pickupObject == null || lifetime <= 0f)
+            {
+                return;
+            }
+
+            Destroy(pickupObject, lifetime);
         }
 
         private GameObject CreateFallbackBanana(Vector3 position, Quaternion rotation)

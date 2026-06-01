@@ -187,7 +187,12 @@ namespace KartGame.Kart
             }
 
             var checkpointCount = Mathf.Max(1, trackData.CheckpointCount);
-            var checkpointIndex = NormalizeCheckpointIndex(checkpoint.CheckpointIndex, checkpointCount);
+            if (!TryGetRegisteredCheckpointIndex(checkpoint, trackData, out var registeredCheckpointIndex))
+            {
+                return false;
+            }
+
+            var checkpointIndex = NormalizeCheckpointIndex(registeredCheckpointIndex, checkpointCount);
             var nextCheckpointIndex = NormalizeCheckpointIndex(NextCheckpointIndex, checkpointCount);
             var wasFinished = HasFinishedRace;
 
@@ -300,6 +305,36 @@ namespace KartGame.Kart
 
             var normalized = checkpointIndex % checkpointCount;
             return normalized < 0 ? normalized + checkpointCount : normalized;
+        }
+
+        private static bool TryGetRegisteredCheckpointIndex(Checkpoint checkpoint, TrackData trackData, out int checkpointIndex)
+        {
+            checkpointIndex = checkpoint != null ? checkpoint.CheckpointIndex : -1;
+            var checkpoints = trackData != null ? trackData.Checkpoints : null;
+            if (checkpoint == null || checkpoints == null || checkpoints.Length == 0)
+            {
+                return false;
+            }
+
+            var checkpointTransform = checkpoint.transform;
+            for (var index = 0; index < checkpoints.Length; index++)
+            {
+                var registeredTransform = checkpoints[index];
+                if (registeredTransform == null)
+                {
+                    continue;
+                }
+
+                if (registeredTransform == checkpointTransform ||
+                    checkpointTransform.IsChildOf(registeredTransform) ||
+                    registeredTransform.IsChildOf(checkpointTransform))
+                {
+                    checkpointIndex = index;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

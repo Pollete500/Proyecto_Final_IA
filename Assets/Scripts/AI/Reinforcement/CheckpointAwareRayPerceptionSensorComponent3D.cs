@@ -650,19 +650,26 @@ namespace KartGame.AI.Reinforcement
                     return false;
                 }
 
-                if (checkpointTracker.TrackData != null && checkpoint.TrackData != null && checkpoint.TrackData != checkpointTracker.TrackData)
+                var trackerTrackData = checkpointTracker.TrackData;
+                if (trackerTrackData != null && checkpoint.TrackData != null && checkpoint.TrackData != trackerTrackData)
                 {
                     return true;
                 }
 
-                var checkpointCount = checkpointTracker.TrackData != null
-                    ? checkpointTracker.TrackData.CheckpointCount
-                    : 0;
+                var checkpointCount = trackerTrackData != null ? trackerTrackData.CheckpointCount : 0;
+                var checkpointIndex = checkpoint.CheckpointIndex;
+                if (trackerTrackData != null)
+                {
+                    if (!TryGetRegisteredCheckpointIndex(checkpoint, trackerTrackData, out checkpointIndex))
+                    {
+                        return true;
+                    }
+                }
 
                 if (limitCheckpointDetectionWindow && checkpointCount > 0)
                 {
                     var targetCheckpointIndex = NormalizeCheckpointIndex(checkpointTracker.NextCheckpointIndex, checkpointCount);
-                    var hitCheckpointIndex = NormalizeCheckpointIndex(checkpoint.CheckpointIndex, checkpointCount);
+                    var hitCheckpointIndex = NormalizeCheckpointIndex(checkpointIndex, checkpointCount);
                     var visibleAhead = Mathf.Clamp(additionalVisibleCheckpointsAhead, 0, checkpointCount - 1);
                     var relativeDistance = (hitCheckpointIndex - targetCheckpointIndex + checkpointCount) % checkpointCount;
                     return relativeDistance > visibleAhead;
@@ -675,12 +682,42 @@ namespace KartGame.AI.Reinforcement
 
                 if (checkpointCount > 0)
                 {
-                    var hitCheckpointIndex = NormalizeCheckpointIndex(checkpoint.CheckpointIndex, checkpointCount);
+                    var hitCheckpointIndex = NormalizeCheckpointIndex(checkpointIndex, checkpointCount);
                     var lastPassedCheckpointIndex = NormalizeCheckpointIndex(checkpointTracker.LastPassedCheckpointIndex, checkpointCount);
                     return checkpointTracker.LastPassedCheckpointIndex >= 0 && hitCheckpointIndex == lastPassedCheckpointIndex;
                 }
 
-                return checkpoint.CheckpointIndex == checkpointTracker.LastPassedCheckpointIndex;
+                return checkpointIndex == checkpointTracker.LastPassedCheckpointIndex;
+            }
+
+            private static bool TryGetRegisteredCheckpointIndex(Checkpoint checkpoint, TrackData trackData, out int checkpointIndex)
+            {
+                checkpointIndex = checkpoint != null ? checkpoint.CheckpointIndex : -1;
+                var checkpoints = trackData != null ? trackData.Checkpoints : null;
+                if (checkpoint == null || checkpoints == null || checkpoints.Length == 0)
+                {
+                    return false;
+                }
+
+                var checkpointTransform = checkpoint.transform;
+                for (var index = 0; index < checkpoints.Length; index++)
+                {
+                    var registeredTransform = checkpoints[index];
+                    if (registeredTransform == null)
+                    {
+                        continue;
+                    }
+
+                    if (registeredTransform == checkpointTransform ||
+                        checkpointTransform.IsChildOf(registeredTransform) ||
+                        registeredTransform.IsChildOf(checkpointTransform))
+                    {
+                        checkpointIndex = index;
+                        return true;
+                    }
+                }
+
+                return false;
             }
 
             private static int NormalizeCheckpointIndex(int checkpointIndex, int checkpointCount)

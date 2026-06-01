@@ -48,7 +48,7 @@ namespace KartGame.AI.Reinforcement
         [SerializeField] private string wallTag = "Wall";
         [SerializeField] private string checkpointTag = "Checkpoint";
         [SerializeField] private string offTrackTag = "OffTrack";
-        [SerializeField] private bool ignoreCheckpointsInRaySensor;
+        [SerializeField] private bool ignoreCheckpointsInRaySensor = true;
         [SerializeField, Min(0)] private int visibleCheckpointsAheadInRaySensor = 3;
 
         [Header("Debug")]
