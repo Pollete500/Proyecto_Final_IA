@@ -131,45 +131,50 @@ El agente de ML-Agents utiliza observaciones estructuradas como velocidad, direc
 
 ### 4. Sistema de power-ups
 
-El sistema de power-ups forma parte del alcance del MVP.
+El sistema de power-ups está implementado y activo en el juego.
 
-Power-ups previstos:
+Power-ups implementados:
 
-- Banana
-- Concha
-- Seta boost
-- Estrella
+- Banana — obstáculo que ralentiza al que lo pisa.
+- Concha (Shell) — proyectil teledirigido hacia el enemigo más cercano.
+- Seta (Mushroom) — boost temporal de velocidad.
+- Estrella (Star) — invencibilidad temporal y velocidad aumentada.
 
-La idea principal es asignar power-ups según la posición del corredor, de forma que los jugadores en posiciones bajas tengan más probabilidad de recibir objetos fuertes.
+La asignación se basa en la posición del corredor: los jugadores en posiciones bajas tienen más probabilidad de recibir objetos potentes.
+
+Los bots utilizan dos cerebros de IA intercambiables:
+
+- `KartPowerUpBotBrain.cs`: lógica basada en reglas (proximidad a enemigos, obstáculos en ruta, posición).
+- `RandomForestPowerUpBrain.cs`: Random Forest entrenado para imitar el comportamiento del jugador humano.
 
 ---
 
 ### 5. Clasificación del comportamiento del jugador
 
-El proyecto contempla un sistema de clasificación del jugador al finalizar la carrera.
+El proyecto incluye un sistema de clasificación del jugador que se ejecuta automáticamente al finalizar la carrera y muestra el perfil en la pantalla de resultados.
 
-Métricas previstas:
+Métricas utilizadas:
 
-- Velocidad media.
-- Velocidad máxima.
-- Número de choques.
-- Salidas de pista.
-- Power-ups usados.
+- Tiempo de vuelta.
 - Posición final.
-- Tiempo total de carrera.
+- Colisiones con el mapa.
+- Conchas usadas y recibidas.
+- Bananas usadas y recibidas.
+- Setas usadas.
+- Estrellas usadas.
 
-Modelo previsto:
+Modelo implementado:
 
-- Árbol de decisión exportado a reglas C#.
+- Random Forest exportado a JSON e interpretado en C# (`PlayerBehaviorRandomForestClassifier.cs`).
 
-Etiquetas previstas:
+Etiquetas del clasificador:
 
-- Patoso
-- Agresivo
-- Conservador
+- Aggressive
+- Chaotic
+- Clumsy
+- Conservative
 - Pro
-- Caótico
-- Lento
+- Slow
 
 ---
 
@@ -233,7 +238,10 @@ GameObject con **ResultsScreen**:
 
 ## Escenas
 
-Las escenas del proyecto se encuentran en `Assets/Scenes/`. La selección final de escenas que formarán parte del MVP está pendiente de definirse.
+Las escenas del proyecto se encuentran en `Assets/Scenes/`.
+
+- `MainMenu.unity`: menú principal con selección de vueltas, calidad gráfica y volumen.
+- `Test scene Pol.unity`: escena principal de carrera con circuito completo, bots, power-ups y sistemas de IA.
 
 ---
 
@@ -290,24 +298,16 @@ mlagents-learn Assets/MLAgents/Config/kart_agent_config.yaml --run-id kart_agent
 
 ## Documentación
 
-La documentación técnica del proyecto se encuentra en:
+La documentación del proyecto se encuentra en:
 
 ```text
-Assets/Documentation/
+Documentación Proyecto/
 ```
 
-Incluye información sobre:
+Incluye:
 
-- Descripción general del proyecto.
-- Configuración de Unity.
-- Sistema de kart.
-- Sistema de carrera.
-- Checkpoints, vueltas y posiciones.
-- ML-Agents.
-- Dataset.
-- Clasificador de comportamiento.
-- Resultados de entrenamiento.
-- Problemas conocidos y trabajo futuro.
+- `Manual_Usuario_Kart_AI_Racing.docx.pdf`: manual de usuario completo con instrucciones de instalación, controles, sistemas de juego y descripción de la IA.
+- `video.txt`: enlace al vídeo de demostración en YouTube.
 
 ---
 
@@ -323,20 +323,19 @@ Estado general:
 
 - Base jugable del kart implementada.
 - Sistema de checkpoints, vueltas y posiciones implementado.
-- Bots con seguimiento básico de checkpoints.
+- Bots con seguimiento de checkpoints implementado.
 - Escena de entrenamiento ML-Agents preparada.
 - Menú principal, HUD de carrera, modo espectador y pantalla de resultados implementados.
+- Sistema de power-ups completo (Banana, Concha, Seta, Estrella) con IA basada en reglas y Random Forest.
+- Clasificador de comportamiento del jugador implementado (Random Forest, 6 perfiles).
 - Documentación técnica completada.
 - Manual de usuario final completado.
 - Vídeo de demostración completado.
 
 Sistemas pendientes o en desarrollo:
 
-- Power-ups completos.
-- Dataset final.
-- Clasificador de comportamiento final.
-- Resultados definitivos de entrenamiento.
-- Selección final de escenas de carrera.
+- Dataset final ampliado.
+- Resultados definitivos de entrenamiento ML-Agents.
 
 ---
 
@@ -363,8 +362,8 @@ Este proyecto utiliza assets externos únicamente con fines académicos.
 
 **Assets ya integrados en el proyecto:**
 
-- [**POLYGON - Icons Pack**](https://assetstore.unity.com/packages/3d/environments/fantastic-seaside-town-323176) (Synty Studios).
-- [**Modular Cyber Racing Cars**](https://assetstore.unity.com/packages/3d/environments/urban/polygon-battle-royale-pack-art-by-synty-128513) (ithappy).
+- **POLYGON - Icons Pack** (Synty Studios).
+- **Modular Cyber Racing Cars** (ithappy).
 
 **Assets previstos para los escenarios de carrera** (uso condicionado al tiempo disponible de desarrollo; pueden no llegar a incorporarse al MVP final):
 
