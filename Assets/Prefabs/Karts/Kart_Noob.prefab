@@ -49,7 +49,7 @@ MonoBehaviour:
   checkpointTracker: {fileID: 4933193758124320945}
   modelJson: {fileID: 4900000, guid: 90c667376bee1e24794a9ec496254286, type: 3}
   defaultModelJson: {fileID: 0}
-  followLatestPlayerModel: 0
+  followLatestPlayerModel: 1
   resetToDefaultModelOnRaceFinished: 1
   decisionInterval: 0.25
   requireRaceToBeActive: 1

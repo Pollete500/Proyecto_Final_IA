@@ -293,6 +293,12 @@ namespace KartGame.PowerUps
             LoadModel();
         }
 
+        public void SetRuntimeModel(TextAsset newModelJson)
+        {
+            modelJson = newModelJson;
+            LoadModel();
+        }
+
         private bool TryResetToDefaultModelIfRaceFinished()
         {
             if (!resetToDefaultModelOnRaceFinished)

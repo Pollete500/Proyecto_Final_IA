@@ -762,14 +762,15 @@ namespace KartGame.PowerUps
 
                 var rootName = brain.transform.root != null ? brain.transform.root.name : brain.gameObject.name;
                 var shouldFollowLatestPlayerModel = brain.FollowLatestPlayerModel
-                    || rootName.IndexOf("imitador", StringComparison.OrdinalIgnoreCase) >= 0;
+                    || rootName.IndexOf("imitador", StringComparison.OrdinalIgnoreCase) >= 0
+                    || rootName.IndexOf("Kart_", StringComparison.OrdinalIgnoreCase) >= 0;
 
                 if (!shouldFollowLatestPlayerModel)
                 {
                     continue;
                 }
 
-                brain.SetModelReferences(latestPlayerModel, latestPlayerModel);
+                brain.SetRuntimeModel(latestPlayerModel);
                 UnityEditor.EditorUtility.SetDirty(brain);
                 updatedBrains++;
             }

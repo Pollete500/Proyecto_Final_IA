@@ -92147,10 +92147,12 @@ MonoBehaviour:
   spawnedBotsRootName: SpawnedBots
   enablePickupSpawning: 1
   spawnPickupsOnlyWhenRaceActive: 1
-  maxCoinsOnTrack: 12
-  maxBananasOnTrack: 12
+  maxCoinsOnTrack: 6
+  maxBananasOnTrack: 6
   coinSpawnInterval: 1
   bananaSpawnInterval: 1
+  coinPickupLifetime: 30
+  bananaPickupLifetime: 30
   spawnCoinsAsTrainingPickups: 0
   spawnBananasAsTrainingHazards: 0
   pickupSpawnHeight: 1.2
@@ -92164,7 +92166,7 @@ MonoBehaviour:
   spawnedCoinsRootName: SpawnedCoins
   spawnedBananasRootName: SpawnedBananas
   logPickupSpawns: 0
-  lapsToWin: 1
+  lapsToWin: 2
   drawGizmos: 1
   closeCheckpointLoopGizmo: 1
   checkpointGizmoColor: {r: 1, g: 0.78, b: 0.2, a: 0.9}
