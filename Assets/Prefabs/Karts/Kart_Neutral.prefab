@@ -1046,7 +1046,7 @@ MonoBehaviour:
   maxAccumulatedPowerUpPoints: 3
   manualPowerUpType: 2
   logPowerUpUsage: 1
-  awardPointEveryXCheckpointsForBots: 0
+  awardPointEveryXCheckpointsForBots: 1
   checkpointsPerPowerUpPoint: 3
   logCheckpointPointGain: 0
   forwardLaunchPoint: {fileID: 7232180002688083788}

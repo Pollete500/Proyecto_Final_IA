@@ -25037,8 +25037,8 @@ MonoBehaviour:
   - {fileID: 25088490}
   - {fileID: 1632912765}
   - {fileID: 932225416}
-  noobBotCount: 0
-  proBotCount: 10
+  noobBotCount: 10
+  proBotCount: 0
   neutralBotCount: 0
   noobBotPrefab: {fileID: 3544321151148859466, guid: cfbbdd7f8ce9ab54d8849f3ba00f88db, type: 3}
   proBotPrefab: {fileID: 3544321151148859466, guid: e141c19e14b38e5428413517e8ea29e0, type: 3}
