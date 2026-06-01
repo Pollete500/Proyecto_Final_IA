@@ -425,7 +425,7 @@ MonoBehaviour:
   lateralGrip: 0.88
   coastingDrag: 0.35
   maxCoins: 10
-  coinSpeedMultiplierAtMax: 2
+  coinSpeedMultiplierAtMax: 1.5
   hazardSlowMultiplier: 0.2
   coinDropLifetime: 6
   coinDropImpulse: 2.5
