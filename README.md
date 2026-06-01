@@ -330,7 +330,7 @@ Sistemas pendientes o en desarrollo:
 - Resultados definitivos de entrenamiento.
 - Selección final de escenas de carrera.
 - Manual de usuario final.
-- Vídeo de demostración.
+- Vídeo de demostración: https://youtu.be/wgJ4_h7_Qyc
 
 ---
 
