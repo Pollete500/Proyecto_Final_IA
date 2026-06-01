@@ -311,6 +311,12 @@ Incluye información sobre:
 
 ---
 
+## Vídeo de demostración
+
+[https://youtu.be/wgJ4_h7_Qyc](https://youtu.be/wgJ4_h7_Qyc)
+
+---
+
 ## Estado actual del proyecto
 
 Estado general:
@@ -330,7 +336,7 @@ Sistemas pendientes o en desarrollo:
 - Resultados definitivos de entrenamiento.
 - Selección final de escenas de carrera.
 - Manual de usuario final.
-- Vídeo de demostración: https://youtu.be/wgJ4_h7_Qyc
+- Vídeo de demostración.
 
 ---
 
