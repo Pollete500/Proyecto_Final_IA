@@ -393,6 +393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1948908612}
   - component: {fileID: 1948908611}
+  - component: {fileID: 1948908613}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -412,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c127421913faccd44b4ea2e085951536, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartGame.UI.MainMenuUI
-  raceSceneName: XJJ TrainingScene
+  raceSceneName: Test scene Pol
   gearIconPrefab: {fileID: 1101246696297462, guid: 8a9afd1a143bf2b4fa786793bb289821, type: 3}
 --- !u!4 &1948908612
 Transform:
@@ -429,6 +430,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1948908613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948908610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d6ec27488eec1a4e9d894cf624902fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KartGame.UI.BotSelectionUI
+  kartNoobPrefab: {fileID: 3544321151148859466, guid: cfbbdd7f8ce9ab54d8849f3ba00f88db, type: 3}
+  kartNeutralPrefab: {fileID: 3544321151148859466, guid: d5ab217f4429ac445a5a2ffe14bcdd7d, type: 3}
+  kartProPrefab: {fileID: 3544321151148859466, guid: e141c19e14b38e5428413517e8ea29e0, type: 3}
+  kartImitadoresPrefab: {fileID: 3544321151148859466, guid: cbe42ba2973ede24fb2c0af475aecca3, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

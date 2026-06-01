@@ -33,7 +33,7 @@ namespace KartGame.Core
         [SerializeField] private bool autoRegisterSceneRacers = true;
         [SerializeField] private bool autoPlaceRacersOnSpawnPoints = true;
         [SerializeField] private bool finishRaceWhenPlayerFinishes = true;
-        [SerializeField] private float postPlayerFinishTimeout = 90f;
+        [SerializeField] private float postPlayerFinishTimeout = 18f;
 
         private Coroutine _raceFlowRoutine;
         private Coroutine _postPlayerFinishRoutine;
@@ -41,6 +41,7 @@ namespace KartGame.Core
         private float _raceStartTime;
         private float _raceEndTime;
         private readonly List<CheckpointTracker> _directLapSubscriptions = new List<CheckpointTracker>();
+        private float _nextTrackerScanTime;
 
         public static RaceManager Instance { get; private set; }
         public TrackData TrackData => trackData;
@@ -72,6 +73,19 @@ namespace KartGame.Core
             if (_raceFlowRoutine == null)
             {
                 _raceFlowRoutine = StartCoroutine(BootstrapRaceRoutine());
+            }
+        }
+
+        private void Update()
+        {
+            // Periodically re-subscribe any CheckpointTrackers that became active after initial wiring
+            if (Time.time < _nextTrackerScanTime) return;
+            _nextTrackerScanTime = Time.time + 2f;
+            if (CurrentState != RaceState.Racing && CurrentState != RaceState.Countdown) return;
+            var activeTrackers = FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.InstanceID);
+            for (var i = 0; i < activeTrackers.Length; i++)
+            {
+                SubscribeDirectLapEvent(activeTrackers[i]);
             }
         }
 
@@ -150,6 +164,7 @@ namespace KartGame.Core
 
         private IEnumerator BootstrapRaceRoutine()
         {
+            Time.timeScale = 1f;
             RefreshSceneReferences();
             WireSystems();
             PrepareRacersForRace();
@@ -168,7 +183,7 @@ namespace KartGame.Core
                 _countdownRemaining = Mathf.Max(0f, countdownDuration);
                 while (_countdownRemaining > 0f)
                 {
-                    _countdownRemaining -= Time.deltaTime;
+                    _countdownRemaining -= Time.unscaledDeltaTime;
                     yield return null;
                 }
 
@@ -182,7 +197,7 @@ namespace KartGame.Core
 
         private void RefreshSceneReferences()
         {
-            trackData ??= FindFirstObjectByType<TrackData>();
+            trackData ??= FindFirstObjectByType<TrackData>(FindObjectsInactive.Include);
             if (trackData != null && PlayerPrefs.HasKey("LapsToWin"))
                 trackData.SetLapsToWin(PlayerPrefs.GetInt("LapsToWin"));
             lapManager ??= FindFirstObjectByType<LapManager>();
@@ -199,7 +214,7 @@ namespace KartGame.Core
                 return;
             }
 
-            var foundTrackers = FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.InstanceID);
+            var foundTrackers = FindObjectsByType<CheckpointTracker>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
             var orderedTrackers = new List<CheckpointTracker>(foundTrackers.Length);
 
             for (var index = 0; index < foundTrackers.Length; index++)
@@ -208,6 +223,23 @@ namespace KartGame.Core
                 if (tracker != null)
                 {
                     orderedTrackers.Add(tracker);
+                }
+            }
+
+            // Explicitly add player tracker found via PlayerKartInput in case FindObjectsByType missed it
+            var allPlayerInputs = FindObjectsByType<PlayerKartInput>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
+            for (var i = 0; i < allPlayerInputs.Length; i++)
+            {
+                var pi = allPlayerInputs[i];
+                if (pi == null)
+                {
+                    continue;
+                }
+
+                var pt = pi.GetComponent<CheckpointTracker>() ?? pi.GetComponentInParent<CheckpointTracker>();
+                if (pt != null && !orderedTrackers.Contains(pt))
+                {
+                    orderedTrackers.Insert(0, pt);
                 }
             }
 
@@ -260,6 +292,16 @@ namespace KartGame.Core
                 }
 
                 tracker.InitializeForRace(trackData);
+
+                if (PlayerPrefs.HasKey("MaxSpeed"))
+                {
+                    var ms = PlayerPrefs.GetFloat("MaxSpeed");
+                    if (ms > 0f)
+                    {
+                        var ctrl = tracker.GetComponent<KartController>();
+                        ctrl?.SetMaxSpeed(ms);
+                    }
+                }
 
                 if (!autoPlaceRacersOnSpawnPoints)
                 {
@@ -320,7 +362,10 @@ namespace KartGame.Core
                     playerController.SetControlEnabled(false, freezePhysics: false);
                 }
 
-                FinishRace();
+                if (_postPlayerFinishRoutine == null)
+                {
+                    _postPlayerFinishRoutine = StartCoroutine(PostPlayerFinishRoutine());
+                }
             }
         }
 
@@ -340,6 +385,8 @@ namespace KartGame.Core
 
         private bool AllRacersFinished()
         {
+            EnsurePlayerRegistered();
+
             for (var index = 0; index < registeredRacers.Count; index++)
             {
                 var tracker = registeredRacers[index];
@@ -352,6 +399,31 @@ namespace KartGame.Core
             return registeredRacers.Count > 0;
         }
 
+        private void EnsurePlayerRegistered()
+        {
+            for (var i = 0; i < registeredRacers.Count; i++)
+            {
+                if (IsPlayerTracker(registeredRacers[i]))
+                {
+                    return;
+                }
+            }
+
+            var playerInput = FindFirstObjectByType<PlayerKartInput>();
+            if (playerInput == null)
+            {
+                return;
+            }
+
+            var playerTracker = playerInput.GetComponent<CheckpointTracker>()
+                             ?? playerInput.GetComponentInParent<CheckpointTracker>();
+            if (playerTracker != null && !registeredRacers.Contains(playerTracker))
+            {
+                registeredRacers.Insert(0, playerTracker);
+                SubscribeDirectLapEvent(playerTracker);
+            }
+        }
+
         private void FinishRace()
         {
             if (CurrentState == RaceState.Finished)
@@ -360,7 +432,14 @@ namespace KartGame.Core
             }
 
             _raceEndTime = Time.time;
-            SetKartControlEnabled(false);
+            for (var index = 0; index < registeredRacers.Count; index++)
+            {
+                var tracker = registeredRacers[index];
+                if (tracker == null) continue;
+                var controller = tracker.GetComponent<KartController>();
+                if (controller != null)
+                    controller.SetControlEnabled(false, freezePhysics: !IsPlayerTracker(tracker));
+            }
             SetRaceState(RaceState.Finished);
         }
 
@@ -395,7 +474,7 @@ namespace KartGame.Core
                 SubscribeDirectLapEvent(registeredRacers[index]);
             }
 
-            var sceneTrackers = FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.InstanceID);
+            var sceneTrackers = FindObjectsByType<CheckpointTracker>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
             for (var index = 0; index < sceneTrackers.Length; index++)
             {
                 SubscribeDirectLapEvent(sceneTrackers[index]);
@@ -455,7 +534,19 @@ namespace KartGame.Core
                     playerController.SetControlEnabled(false, freezePhysics: false);
                 }
 
-                FinishRace();
+                if (AllRacersFinished())
+                {
+                    if (_postPlayerFinishRoutine != null)
+                    {
+                        StopCoroutine(_postPlayerFinishRoutine);
+                        _postPlayerFinishRoutine = null;
+                    }
+                    FinishRace();
+                }
+                else if (_postPlayerFinishRoutine == null)
+                {
+                    _postPlayerFinishRoutine = StartCoroutine(PostPlayerFinishRoutine());
+                }
             }
         }
 

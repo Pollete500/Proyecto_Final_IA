@@ -45,6 +45,8 @@ namespace KartGame.UI
 
         private RawImage _timerIconImage;
         private RawImage _pauseIconImage;
+        private Text _pauseText;
+        private Text _pauseHintText;
 
         private PlayerKartInput _playerInput;
         private CheckpointTracker _playerTracker;
@@ -56,6 +58,7 @@ namespace KartGame.UI
         private GameObject _pauseOverlay;
         private bool _isPaused;
         private bool _uiCreated;
+        private bool _playerFinishMessageShown;
         private int _totalRacers = 1;
         private RaceManager _subscribedRaceManager;
         private CheckpointTracker _subscribedPlayerTracker;
@@ -69,6 +72,29 @@ namespace KartGame.UI
             if (!TryBindExistingUiHierarchy())
             {
                 CreateUI();
+            }
+
+            EnsurePauseText();
+        }
+
+        private void EnsurePauseText()
+        {
+            if (_pauseText == null && _pauseOverlay != null)
+            {
+                _pauseText = CreateText(_pauseOverlay.transform, "PauseText", "PAUSA",
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 60f), new Vector2(600f, 160f),
+                    120, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white, true);
+
+                CreateText(_pauseOverlay.transform, "PauseHintOverlay", "ESC - Reanudar",
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -60f), new Vector2(500f, 50f),
+                    28, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.75f, 0.75f, 0.75f));
+            }
+
+            if (_pauseHintText == null && _canvas != null)
+            {
+                _pauseHintText = CreateText(_canvas.transform, "PauseHint", "ESC - Pausar",
+                    new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 18f), new Vector2(500f, 36f),
+                    20, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.5f, 0.5f, 0.5f));
             }
         }
 
@@ -85,7 +111,7 @@ namespace KartGame.UI
             SubscribeRuntimeEvents();
 
             _cameraFollow = FindFirstObjectByType<CameraFollow>();
-            _totalRacers = Mathf.Max(1, FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.InstanceID).Length);
+            RefreshTotalRacers();
 
             ApplyIcons();
             UpdatePlayerHud();
@@ -169,7 +195,7 @@ namespace KartGame.UI
             _timerIconImage = CreateRawImage(_canvas.transform, "TimerIcon", new Vector2(-130f, -40f), new Vector2(80f, 80f));
             _timerIconImage.gameObject.SetActive(false);
 
-            CreateText(_canvas.transform, "PauseHint", "ESC - Pausar / Reanudar",
+            _pauseHintText = CreateText(_canvas.transform, "PauseHint", "ESC - Pausar",
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 18f), new Vector2(500f, 36f),
                 20, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.5f, 0.5f, 0.5f));
 
@@ -198,6 +224,8 @@ namespace KartGame.UI
             _positionText = FindTextInHierarchy("PositionText");
             _finishText = FindTextInHierarchy("FinishText");
             _spectateText = FindTextInHierarchy("SpectateText");
+            _pauseText = FindTextInHierarchy("PauseText");
+            _pauseHintText = FindTextInHierarchy("PauseHint");
             _timerIconImage = FindRawImageInHierarchy("TimerIcon");
             _pauseIconImage = FindRawImageInHierarchy("PauseIcon");
             _pauseOverlay = FindGameObjectInHierarchy("PauseOverlay");
@@ -358,6 +386,9 @@ namespace KartGame.UI
                 goElapsed += Time.unscaledDeltaTime;
                 yield return null;
             }
+
+            _countdownText.gameObject.SetActive(false);
+            SetHudVisible(true);
         }
 
         private void OnLapCompleted(CheckpointTracker tracker, int completedLaps)
@@ -389,21 +420,32 @@ namespace KartGame.UI
         {
             SetHudVisible(false);
             _timerIconImage?.gameObject.SetActive(false);
-            _spectateText?.gameObject.SetActive(false);
-            _spectateTarget = null;
+
+            if (_spectateTarget != null)
+            {
+                // Already spectating — keep the view, results screen will overlay shortly
+                return;
+            }
 
             if (_waitSpectateRoutine != null)
             {
+                // Waiting to spectate but race is over — skip the delay and spectate immediately
                 StopCoroutine(_waitSpectateRoutine);
                 _waitSpectateRoutine = null;
+                _finishText?.gameObject.SetActive(false);
+                SwitchSpectateTarget();
+                if (_spectateTarget != null) return;
             }
 
+            // No spectate target available — reset camera to player and show finish message
+            _spectateText?.gameObject.SetActive(false);
+            _spectateTarget = null;
             if (_cameraFollow != null && _playerTracker != null)
             {
                 _cameraFollow.SetTarget(_playerTracker.transform);
             }
 
-            if (_playerTracker != null && !_finishText.gameObject.activeSelf)
+            if (!_playerFinishMessageShown)
             {
                 ShowPlayerFinish();
             }
@@ -426,6 +468,8 @@ namespace KartGame.UI
                 return;
             }
 
+            RefreshTotalRacers();
+
             if (tracker.IsPlayer)
             {
                 ShowPlayerFinish();
@@ -444,6 +488,7 @@ namespace KartGame.UI
                 return;
             }
 
+            _playerFinishMessageShown = true;
             var placement = _playerTracker.FinishPlacement;
             var suffix = placement switch { 1 => "st", 2 => "nd", 3 => "rd", _ => "th" };
             _finishText.text = placement <= 3
@@ -499,6 +544,14 @@ namespace KartGame.UI
             overlayRect.anchorMax = Vector2.one;
             overlayRect.offsetMin = overlayRect.offsetMax = Vector2.zero;
             overlay.AddComponent<Image>().color = new Color(0f, 0f, 0f, 0.72f);
+
+            _pauseText = CreateText(overlay.transform, "PauseText", "PAUSA",
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 60f), new Vector2(600f, 160f),
+                120, FontStyle.Bold, TextAnchor.MiddleCenter, Color.white, true);
+
+            CreateText(overlay.transform, "PauseHintOverlay", "ESC - Reanudar",
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -60f), new Vector2(500f, 50f),
+                28, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.75f, 0.75f, 0.75f));
 
             _pauseIconImage = CreateRawImage(overlay.transform, "PauseIcon", new Vector2(0f, 0f), new Vector2(200f, 200f));
 
@@ -570,12 +623,18 @@ namespace KartGame.UI
 
         private void CycleSpectateTarget(int delta)
         {
+            RefreshSpectateCandidates();
             if (_spectateCandidates.Count == 0)
             {
+                _spectateTarget = null;
+                _spectateText?.gameObject.SetActive(false);
                 return;
             }
 
-            _spectateIndex = (_spectateIndex + delta + _spectateCandidates.Count) % _spectateCandidates.Count;
+            var currentIdx = _spectateTarget != null ? _spectateCandidates.IndexOf(_spectateTarget) : -1;
+            _spectateIndex = currentIdx >= 0
+                ? (currentIdx + delta + _spectateCandidates.Count) % _spectateCandidates.Count
+                : 0;
             SetSpectateTarget(_spectateCandidates[_spectateIndex]);
         }
 
@@ -794,14 +853,17 @@ namespace KartGame.UI
             _timerText.text = $"{minutes:0}:{seconds:00.00}";
         }
 
+        private void RefreshTotalRacers()
+        {
+            _totalRacers = Mathf.Max(1, FindObjectsByType<CheckpointTracker>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID).Length);
+        }
+
         private void UpdatePlayerHud()
         {
             if (_playerTracker == null)
             {
                 return;
             }
-
-            _totalRacers = Mathf.Max(1, FindObjectsByType<CheckpointTracker>(FindObjectsSortMode.InstanceID).Length);
 
             var position = positionManager != null ? positionManager.GetPosition(_playerTracker) : 0;
             var trackData = raceManager != null ? raceManager.TrackData : _playerTracker.TrackData;
@@ -857,6 +919,11 @@ namespace KartGame.UI
             if (_timerText != null)
             {
                 _timerText.gameObject.SetActive(visible);
+            }
+
+            if (_pauseHintText != null)
+            {
+                _pauseHintText.gameObject.SetActive(visible);
             }
         }
 

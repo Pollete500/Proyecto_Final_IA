@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using KartGame.Core;
 using KartGame.PowerUps;
 using UnityEngine;
@@ -67,6 +68,7 @@ namespace KartGame.Kart
         public int debugStarsUsed;
 
         private string _csvPath;
+        private Task _lastWriteTask = Task.CompletedTask;
         private bool _isRaceRecording;
         private bool _subscribedToPowerUpEvents;
         private CheckpointTracker _subscribedCheckpointTracker;
@@ -286,7 +288,7 @@ namespace KartGame.Kart
                 .Append(_starsUsed.ToString(CultureInfo.InvariantCulture))
                 .AppendLine();
 
-            WriteTextWithRetry(_csvPath, builder.ToString(), append: true);
+            EnqueueWrite(_csvPath, builder.ToString(), append: true);
         }
 
         public PlayerRaceMetrics GetRaceMetrics()
@@ -332,7 +334,7 @@ namespace KartGame.Kart
             debugCsvPath = _csvPath;
 
             const string header = "lapTime_delta,position_delta,mapCollisions_total,bananaHitsRecived_total,shellHitsRecived_Total,bananasUsed_total,shellsUsed_total,mushroomsUsed_total,starsUsed_total";
-            WriteTextWithRetry(_csvPath, header + Environment.NewLine, append: false);
+            EnqueueWrite(_csvPath, header + Environment.NewLine, append: false);
 
             if (logCsvPathOnCreate)
             {
@@ -567,6 +569,12 @@ namespace KartGame.Kart
             debugStarsUsed = _starsUsed;
         }
 
+
+        private void EnqueueWrite(string path, string contents, bool append)
+        {
+            _lastWriteTask = _lastWriteTask.ContinueWith(_ => WriteTextWithRetry(path, contents, append),
+                TaskContinuationOptions.None);
+        }
 
         private static bool WriteTextWithRetry(string path, string contents, bool append)
         {

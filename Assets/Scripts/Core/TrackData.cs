@@ -28,9 +28,11 @@ namespace KartGame.Core
         [SerializeField, Min(0)] private int noobBotCount = 2;
         [SerializeField, Min(0)] private int proBotCount = 2;
         [SerializeField, Min(0)] private int neutralBotCount = 2;
+        [SerializeField, Min(0)] private int imitadoresBotCount = 0;
         [SerializeField] private GameObject noobBotPrefab;
         [SerializeField] private GameObject proBotPrefab;
         [SerializeField] private GameObject neutralBotPrefab;
+        [SerializeField] private GameObject imitadoresBotPrefab;
         [SerializeField] private string spawnedBotsRootName = "SpawnedBots";
         [Space]
         [Header("Pickup Spawning")]
@@ -53,6 +55,9 @@ namespace KartGame.Core
         [SerializeField] private string spawnedCoinsRootName = "SpawnedCoins";
         [SerializeField] private string spawnedBananasRootName = "SpawnedBananas";
         [SerializeField] private bool logPickupSpawns;
+        [Header("Finish Line")]
+        [SerializeField] private GameObject finishLinePrefab;
+        [SerializeField] private bool spawnFinishLine = true;
         [Space]
         [SerializeField] private int lapsToWin = 3;
         [SerializeField] private bool drawGizmos = true;
@@ -123,19 +128,31 @@ namespace KartGame.Core
             {
                 neutralBotPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Karts/Kart_Neutral.prefab");
             }
+
+            if (imitadoresBotPrefab == null)
+            {
+                imitadoresBotPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Karts/Kart_imitadores.prefab");
+            }
+
+            if (finishLinePrefab == null)
+            {
+                finishLinePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Track/Track Props/Finish_Line_01.prefab");
+            }
 #endif
         }
 
         public int LapsToWin => Mathf.Max(1, lapsToWin);
         public int CheckpointCount => checkpoints?.Length ?? 0;
         public int SpawnPointCount => spawnPoints?.Length ?? 0;
-        public int NoobBotCount => Mathf.Max(0, noobBotCount);
-        public int ProBotCount => Mathf.Max(0, proBotCount);
-        public int NeutralBotCount => Mathf.Max(0, neutralBotCount);
-        public int TotalBotCount => NoobBotCount + ProBotCount + NeutralBotCount;
-        public GameObject NoobBotPrefab => noobBotPrefab;
-        public GameObject ProBotPrefab => proBotPrefab;
-        public GameObject NeutralBotPrefab => neutralBotPrefab;
+        public int NoobBotCount       => Mathf.Max(0, noobBotCount);
+        public int ProBotCount        => Mathf.Max(0, proBotCount);
+        public int NeutralBotCount    => Mathf.Max(0, neutralBotCount);
+        public int ImitadoresBotCount => Mathf.Max(0, imitadoresBotCount);
+        public int TotalBotCount      => NoobBotCount + ProBotCount + NeutralBotCount + ImitadoresBotCount;
+        public GameObject NoobBotPrefab       => noobBotPrefab;
+        public GameObject ProBotPrefab        => proBotPrefab;
+        public GameObject NeutralBotPrefab    => neutralBotPrefab;
+        public GameObject ImitadoresBotPrefab => imitadoresBotPrefab;
         public int MaxCoinsOnTrack => Mathf.Max(0, maxCoinsOnTrack);
         public int MaxBananasOnTrack => Mathf.Max(0, maxBananasOnTrack);
         public float CoinSpawnInterval => Mathf.Max(0.1f, coinSpawnInterval);
@@ -163,6 +180,7 @@ namespace KartGame.Core
             {
                 SyncChildCollections();
                 SpawnConfiguredBotsAtRuntime();
+                SpawnFinishLineIfNeeded();
             }
         }
 
@@ -248,11 +266,13 @@ namespace KartGame.Core
             lapsToWin = Mathf.Max(1, value);
         }
 
-        public void SetBotCounts(int noobCount, int proCount, int neutralCount)
+        public void SetBotCounts(int noobCount, int proCount, int neutralCount,
+            int imitadoresCount = 0)
         {
-            noobBotCount = Mathf.Max(0, noobCount);
-            proBotCount = Mathf.Max(0, proCount);
-            neutralBotCount = Mathf.Max(0, neutralCount);
+            noobBotCount      = Mathf.Max(0, noobCount);
+            proBotCount       = Mathf.Max(0, proCount);
+            neutralBotCount   = Mathf.Max(0, neutralCount);
+            imitadoresBotCount = Mathf.Max(0, imitadoresCount);
         }
 
         public void SetPickupSpawnEnabled(bool value)
@@ -407,7 +427,18 @@ namespace KartGame.Core
                 return;
             }
 
-            if (NoobBotCount <= 0 && ProBotCount <= 0 && NeutralBotCount <= 0)
+            // Apply lobby selection if the player came from BotSelectionUI
+            if (BotSelectionConfig.HasConfig)
+            {
+                SetBotCounts(
+                    BotSelectionConfig.NoobCount,
+                    BotSelectionConfig.ProCount,
+                    BotSelectionConfig.NeutralCount,
+                    BotSelectionConfig.ImitadoresCount);
+                BotSelectionConfig.Consume();
+            }
+
+            if (NoobBotCount <= 0 && ProBotCount <= 0 && NeutralBotCount <= 0 && ImitadoresBotCount <= 0)
             {
                 return;
             }
@@ -415,11 +446,123 @@ namespace KartGame.Core
             EnsureRuntimeBotsRoot();
 
             var spawnCursor = 0;
-            SpawnRuntimeBotFamily(NoobBotPrefab, "Kart_Noob", NoobBotCount, ref spawnCursor);
-            SpawnRuntimeBotFamily(ProBotPrefab, "Kart_Pro", ProBotCount, ref spawnCursor);
-            SpawnRuntimeBotFamily(NeutralBotPrefab, "Kart_Neutral", NeutralBotCount, ref spawnCursor);
+            SpawnRuntimeBotFamily(NoobBotPrefab,       "Kart_Noob",       NoobBotCount,       ref spawnCursor);
+            SpawnRuntimeBotFamily(ProBotPrefab,        "Kart_Pro",        ProBotCount,        ref spawnCursor);
+            SpawnRuntimeBotFamily(NeutralBotPrefab,    "Kart_Neutral",    NeutralBotCount,    ref spawnCursor);
+            SpawnRuntimeBotFamily(ImitadoresBotPrefab, "Kart_Imitadores", ImitadoresBotCount, ref spawnCursor);
 
             _runtimeBotsSpawned = true;
+        }
+
+        private void SpawnFinishLineIfNeeded()
+        {
+            if (!spawnFinishLine || checkpoints == null || checkpoints.Length == 0)
+            {
+                return;
+            }
+
+            if (GameObject.Find("FinishLine_Spawned") != null)
+            {
+                return;
+            }
+
+            var anchor = checkpoints[0];
+            if (anchor == null)
+            {
+                return;
+            }
+
+            var groundPos = SnapPositionToGround(anchor.position);
+
+            GameObject finishLineObject;
+            if (finishLinePrefab != null)
+            {
+                finishLineObject = Instantiate(finishLinePrefab, groundPos, anchor.rotation, transform);
+            }
+            else
+            {
+                finishLineObject = CreateFallbackFinishLine(groundPos, anchor.rotation);
+            }
+
+            if (finishLineObject == null)
+            {
+                return;
+            }
+
+            finishLineObject.name = "FinishLine_Spawned";
+
+            // Remove ALL colliders immediately (DestroyImmediate, not Destroy)
+            // so that karts cannot physically hit the finish line arch on any lap.
+            var cols = finishLineObject.GetComponentsInChildren<Collider>(true);
+            for (var i = 0; i < cols.Length; i++)
+            {
+                if (cols[i] != null)
+                {
+                    DestroyImmediate(cols[i]);
+                }
+            }
+        }
+
+        private static Vector3 SnapPositionToGround(Vector3 worldPos)
+        {
+            var rayOrigin = worldPos + Vector3.up * 30f;
+            if (Physics.Raycast(rayOrigin, Vector3.down, out var hit, 60f, ~0, QueryTriggerInteraction.Ignore))
+            {
+                return hit.point;
+            }
+
+            return worldPos;
+        }
+
+        private static GameObject CreateFallbackFinishLine(Vector3 position, Quaternion rotation)
+        {
+            var root = new GameObject("FinishLine_Spawned");
+            root.transform.SetPositionAndRotation(position, rotation);
+
+            var shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+
+            // Left and right posts
+            CreateFinishPost(root.transform, new Vector3(-5.5f, 3f, 0f), shader);
+            CreateFinishPost(root.transform, new Vector3(5.5f, 3f, 0f), shader);
+
+            // Horizontal crossbar
+            var bar = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            bar.name = "Crossbar";
+            bar.transform.SetParent(root.transform, false);
+            bar.transform.localPosition = new Vector3(0f, 5.8f, 0f);
+            bar.transform.localScale = new Vector3(11.5f, 0.45f, 0.45f);
+            ApplyMaterialColor(bar, Color.white, shader);
+
+            // Banner quad
+            var banner = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            banner.name = "Banner";
+            banner.transform.SetParent(root.transform, false);
+            banner.transform.localPosition = new Vector3(0f, 3f, 0f);
+            banner.transform.localScale = new Vector3(11f, 5.5f, 1f);
+            ApplyMaterialColor(banner, new Color(1f, 1f, 1f, 0.88f), shader);
+
+            return root;
+        }
+
+        private static void CreateFinishPost(Transform parent, Vector3 localPosition, Shader shader)
+        {
+            var post = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            post.name = "Post";
+            post.transform.SetParent(parent, false);
+            post.transform.localPosition = localPosition;
+            post.transform.localScale = new Vector3(0.35f, 3f, 0.35f);
+            ApplyMaterialColor(post, new Color(0.15f, 0.15f, 0.15f), shader);
+        }
+
+        private static void ApplyMaterialColor(GameObject go, Color color, Shader shader)
+        {
+            var renderer = go.GetComponent<MeshRenderer>();
+            if (renderer == null || shader == null)
+            {
+                return;
+            }
+
+            renderer.sharedMaterial = new Material(shader) { color = color };
         }
 
         private void SpawnRuntimeBotFamily(GameObject botPrefab, string botNamePrefix, int desiredCount, ref int spawnCursor)
