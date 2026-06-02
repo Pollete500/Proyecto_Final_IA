@@ -12,9 +12,9 @@ Kart AI Racing es un prototipo 3D low-poly de carreras arcade en el que un jugad
 
 El proyecto combina mecánicas de videojuego con sistemas de inteligencia artificial:
 
-1. Bots capaces de seguir el circuito mediante checkpoints y una base preparada para aprendizaje por refuerzo con Unity ML-Agents.
-2. Sistema de clasificación del comportamiento del jugador a partir de estadísticas de carrera.
-3. Sistema de power-ups con asignación dinámica según la posición del corredor.
+1. Bots de conducción controlados por un agente PPO entrenado con Unity ML-Agents (modelo ONNX desplegado en runtime).
+2. Bots de power-ups con dos cerebros intercambiables: lógica basada en reglas o un Random Forest entrenado para imitar al jugador humano.
+3. Clasificación del comportamiento del jugador al finalizar la carrera (Random Forest con 6 perfiles).
 
 La prioridad del proyecto es entregar un MVP funcional, demostrable y bien documentado.
 
@@ -28,7 +28,7 @@ La prioridad del proyecto es entregar un MVP funcional, demostrable y bien docum
 - Unity Input System
 - Unity ML-Agents
 - Rigidbody Physics
-- Python para entrenamiento y scripts auxiliares
+- Python para entrenamiento y scripts auxiliares (scikit-learn, pandas, joblib, skl2onnx)
 - GitHub para control de versiones
 
 ---
@@ -37,25 +37,45 @@ La prioridad del proyecto es entregar un MVP funcional, demostrable y bien docum
 
 ```text
 Assets/
-├── Scenes/
+├── Scenes/                         (escenas del proyecto: MainMenu, Test scene Pol, escenas de entrenamiento)
 ├── Scripts/
-│   ├── Core/
-│   ├── Kart/
-│   ├── UI/
+│   ├── Core/                       (RaceManager, LapManager, PositionManager, Checkpoint…)
+│   ├── Kart/                       (KartController, PlayerKartInput, AIKartInput, CameraFollow…)
+│   ├── PowerUps/                   (KartPowerUpBotBrain, RandomForestPowerUpBrain, PowerUpManager…)
 │   ├── AI/
-│   │   ├── Reinforcement/
-│   │   ├── Classification/
-│   │   └── PowerUps/
-│   └── Editor/
+│   │   └── Reinforcement/          (KartAgent y componentes ML-Agents)
+│   ├── Data/                       (PlayerLapDataRecorder, PlayerBehaviorRandomForestClassifier…)
+│   ├── UI/                         (MainMenuUI, RaceUI, ResultsScreen, UIIconRenderer)
+│   └── Editor/                     (herramientas de Editor: generación de escenas, reportes)
 ├── MLAgents/
+│   ├── Config/                     (kart_agent_config.yaml, kart_agent_imitation_config.yaml)
+│   └── TrainingLogs/               (runs de TensorBoard + modelos .onnx)
+├── Models/                         (player_behaviour_random_forest.onnx)
 ├── Data/
-├── Python/
+│   ├── powerups_sintetico.csv      (dataset semilla power-ups)
+│   ├── powerups_*_augmented.csv    (datasets augmentados: agresivo, pacifico)
+│   ├── player_classifier/          (dataset procesado del clasificador de jugador)
+│   ├── PlayerPowerUpInteractions/  (interacciones reales del jugador con power-ups)
+│   ├── playerdata/                 (CSV de partidas reales del jugador)
+│   ├── classifier_rules/           (modelos Random Forest serializados .joblib + .json)
+│   ├── EDA_powerups_sintetico/     (informe EDA)
+│   └── demos/                      (.demo files para imitation learning)
+├── Python/                         (scripts de EDA, augmentation, entrenamiento, exportación)
+│   └── player_classifier/          (notebooks de EDA y training + modelos joblib)
 ├── Prefabs/
 │   ├── Karts/
 │   ├── PowerUps/
 │   ├── Track/
 │   └── UI/
-└── Documentation/
+├── Informes power ups/             (reportes de evaluación in-game del sistema de power-ups)
+├── Informes powerups/              (reportes adicionales)
+├── Design Notes/                   (documentación técnica interna por módulo, 11 archivos .md)
+└── Modular Racing Circuit Lowpoly Free/  (asset del circuito)
+
+Documentación Proyecto/             (entregables finales del proyecto)
+├── Documentacion_Tecnica_Kart_AI_Racing.pdf
+├── Manual_Usuario_Kart_AI_Racing.pdf
+└── video.txt                       (enlace al vídeo de demostración)
 ```
 
 ---
@@ -113,10 +133,7 @@ Funciones principales:
 
 ### 3. Bots e inteligencia artificial
 
-Actualmente el proyecto incluye dos enfoques:
-
-- Bots funcionales mediante seguimiento de checkpoints.
-- Base de entrenamiento con Unity ML-Agents para aprendizaje por refuerzo.
+Los bots de conducción están controlados por un agente entrenado mediante aprendizaje por refuerzo con Unity ML-Agents y el algoritmo PPO. El modelo final se ha exportado a ONNX y se ejecuta en runtime dentro de Unity sin necesidad de Python.
 
 Scripts principales:
 
@@ -126,6 +143,14 @@ Scripts principales:
 - `TrainingSceneManager.cs`
 
 El agente de ML-Agents utiliza observaciones estructuradas como velocidad, dirección hacia el siguiente checkpoint, distancia al objetivo, progreso de checkpoints y sensores de raycast.
+
+Resultados de entrenamiento (mejor run, `kart_360_checkpoint_back`):
+
+- Reward inicial (40k steps): 10.6
+- Reward pico (120k steps): 76.5
+- Reward de convergencia (180k+ steps): 64.0
+
+El modelo final entrenado se distribuye dentro del proyecto y puede asignarse a cualquier kart mediante el componente Behavior Parameters.
 
 ---
 
@@ -146,6 +171,8 @@ Los bots utilizan dos cerebros de IA intercambiables:
 
 - `KartPowerUpBotBrain.cs`: lógica basada en reglas (proximidad a enemigos, obstáculos en ruta, posición).
 - `RandomForestPowerUpBrain.cs`: Random Forest entrenado para imitar el comportamiento del jugador humano.
+
+Los modelos Random Forest se entrenan en Python con scikit-learn (300 árboles, max_depth=10, class_weight=balanced), se serializan a JSON y se interpretan en runtime desde C# sin dependencias de ML.
 
 ---
 
@@ -306,8 +333,11 @@ Documentación Proyecto/
 
 Incluye:
 
-- `Manual_Usuario_Kart_AI_Racing.docx.pdf`: manual de usuario completo con instrucciones de instalación, controles, sistemas de juego y descripción de la IA.
+- `Documentacion_Tecnica_Kart_AI_Racing.pdf`: documentación técnica completa del proyecto (arquitectura, sistemas de IA, datasets, resultados).
+- `Manual_Usuario_Kart_AI_Racing.pdf`: manual de usuario completo con instrucciones de instalación, controles, sistemas de juego y descripción de la IA.
 - `video.txt`: enlace al vídeo de demostración en YouTube.
+
+Adicionalmente, en `Assets/Design Notes/` se conservan notas técnicas internas por módulo utilizadas durante el desarrollo.
 
 ---
 
@@ -323,8 +353,7 @@ Estado general:
 
 - Base jugable del kart implementada.
 - Sistema de checkpoints, vueltas y posiciones implementado.
-- Bots con seguimiento de checkpoints implementado.
-- Escena de entrenamiento ML-Agents preparada.
+- Bots de conducción con agente ML-Agents (PPO) entrenado y desplegado en ONNX.
 - Menú principal, HUD de carrera, modo espectador y pantalla de resultados implementados.
 - Sistema de power-ups completo (Banana, Concha, Seta, Estrella) con IA basada en reglas y Random Forest.
 - Clasificador de comportamiento del jugador implementado (Random Forest, 6 perfiles).
@@ -332,27 +361,21 @@ Estado general:
 - Manual de usuario final completado.
 - Vídeo de demostración completado.
 
-Sistemas pendientes o en desarrollo:
+Sistemas pendientes o de mejora futura:
 
-- Dataset final ampliado.
-- Resultados definitivos de entrenamiento ML-Agents.
-
----
-
-## Ramas de trabajo
-
-El desarrollo puede contener ramas específicas para funcionalidades concretas.
-
-- `main`: rama principal del proyecto.
-- `menu-and-cuentaatras`: rama centrada en menú, HUD, cuenta atrás y pantalla de resultados (ya fusionada en `main`).
-
-Cuando una funcionalidad de una rama esté comprobada y estable, debe fusionarse en `main`.
+- Dataset final ampliado con más muestras reales del jugador.
+- Resultados definitivos de entrenamiento ML-Agents en distintos circuitos.
 
 ---
 
 ## Autores
 
-Proyecto desarrollado como trabajo final del Máster de Inteligencia Artificial y Big Data.
+Proyecto desarrollado como trabajo final del Máster de Inteligencia Artificial y Big Data por:
+
+- Pol Panyella
+- Ronald Intriago
+- JiaJao Xu
+- Jordi Vidal
 
 ---
 
